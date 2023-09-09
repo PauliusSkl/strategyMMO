@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carmageddon.Forms", "Carmageddon\Carmageddon.Forms.csproj", "{C498843E-84B9-4A51-943A-0FED5869FC0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carmageddon.API", "Carmageddon.API\Carmageddon.API.csproj", "{678A7AF1-725E-475B-A082-BB9E591F3BBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C498843E-84B9-4A51-943A-0FED5869FC0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C498843E-84B9-4A51-943A-0FED5869FC0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C498843E-84B9-4A51-943A-0FED5869FC0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C498843E-84B9-4A51-943A-0FED5869FC0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{678A7AF1-725E-475B-A082-BB9E591F3BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{678A7AF1-725E-475B-A082-BB9E591F3BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{678A7AF1-725E-475B-A082-BB9E591F3BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{678A7AF1-725E-475B-A082-BB9E591F3BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C2C90BC7-6221-4D5C-8C56-3830C87A9C55}
+	EndGlobalSection
+EndGlobal
