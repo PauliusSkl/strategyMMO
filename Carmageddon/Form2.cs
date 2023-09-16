@@ -69,11 +69,6 @@ namespace Carmageddon
             InitializeComponent();
             shootingHandler = new RefinedShootingHandler();
             SetupBonuses();
-            comboBox1.Text = "--Select stats--";
-            comboBox1.Items.Add("Player count");
-            comboBox1.Items.Add("Battle duration");
-            comboBox1.Items.Add("Player names");
-            comboBox1.Items.Add("Total shots");
 
             ThreadPool.QueueUserWorkItem(HandleConsole, SynchronizationContext.Current);
             GetPlayerCount(_conn, _player);
@@ -573,7 +568,6 @@ namespace Carmageddon
                         break;
                 }
 
-                label4.Text = "Enemy grid cell pressed: " + cellPressed;
                 Debug.WriteLine("Enemy grid cell pressed: " + cellPressed);
 
                 if (shootingHandler.Weapon != null &&
@@ -615,7 +609,6 @@ namespace Carmageddon
             using (var bmpTemp = new Bitmap(Directory.GetCurrentDirectory() + "\\Resources\\500x500.png"))
             {
                 pictureBox1.Image = new Bitmap(bmpTemp);
-                pictureBox2.Image = new Bitmap(bmpTemp);
             }
         }
 
@@ -798,8 +791,6 @@ namespace Carmageddon
             button1.Visible = false;
             button2.Visible = false;
             button3.Visible = false;
-            button6.Visible = false;
-            button7.Visible = false;
             button8.Visible = false;
             button9.Visible = false;
             //var cars = _cars.ToList();
@@ -833,22 +824,12 @@ namespace Carmageddon
             DisplayBonus(shotInfo.Item2);
 
             Debug.WriteLine("New shot made: " + coords);
-            Image background;
-            using (var bmpTemp = new Bitmap(pictureBox2.Image))
-            {
-                background = new Bitmap(bmpTemp);
-            }
             string imgPath = Directory.GetCurrentDirectory() + $"\\Resources\\{shotInfo.Item1}.png";
             Image hitmark;
             using (var bmpTemp = new Bitmap(imgPath))
             {
                 hitmark = new Bitmap(bmpTemp);
             }
-            Graphics carImage = Graphics.FromImage(background);
-            carImage.DrawImage(hitmark, coordX, coordY);
-            pictureBox2.Image = background;
-
-
         }
 
         private void DisplayBonus(int bonus)
@@ -874,31 +855,6 @@ namespace Carmageddon
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            display = false;
-            displayShots = false;
-            switch (comboBox1.SelectedIndex)
-            {
-                case 0:
-                    stop = true;
-                    GetPlayerCount(_conn, _player);
-                    break;
-                case 1:
-                    stop = true;
-                    GetBattleDuration(_conn);
-                    break;
-                case 2:
-                    stop = true;
-                    GetPlayerNames(_conn);
-                    break;
-                case 3:
-                    stop = true;
-                    displayShots = true;
-                    GetTotalShots(_conn, false);
-                    break;
-            }
-        }
 
         public void LogMessage(string message, bool inline)
         {
@@ -930,6 +886,26 @@ namespace Carmageddon
             _playerGrid = originator.CarGrid;
             button10.Visible = false;
             CheckButtonVisibility();
+        }
+
+        private void upButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void downButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void leftButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rightButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

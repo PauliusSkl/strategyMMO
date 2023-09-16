@@ -32,6 +32,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.playerCountLabel = new System.Windows.Forms.Label();
+            this.labelPlayerCount = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // MainLabel
@@ -75,11 +77,29 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // playerCountLabel
+            // 
+            this.playerCountLabel.AutoSize = true;
+            this.playerCountLabel.Location = new System.Drawing.Point(33, 23);
+            this.playerCountLabel.Name = "playerCountLabel";
+            this.playerCountLabel.Size = new System.Drawing.Size(0, 15);
+            this.playerCountLabel.TabIndex = 4;
+            // 
+            // labelPlayerCount
+            // 
+            this.labelPlayerCount.AutoSize = true;
+            this.labelPlayerCount.Location = new System.Drawing.Point(313, 52);
+            this.labelPlayerCount.Name = "labelPlayerCount";
+            this.labelPlayerCount.Size = new System.Drawing.Size(0, 15);
+            this.labelPlayerCount.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1161, 417);
+            this.Controls.Add(this.labelPlayerCount);
+            this.Controls.Add(this.playerCountLabel);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
@@ -98,5 +118,7 @@
         private Button button1;
         private TextBox textBox1;
         private Button button2;
+        private Label playerCountLabel;
+        private Label labelPlayerCount;
     }
 }
