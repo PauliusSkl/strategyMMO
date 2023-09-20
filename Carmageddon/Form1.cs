@@ -12,6 +12,14 @@ namespace Carmageddon
             InitializeComponent();
         }
 
+        private async Task GetPlayerCount(HubConnection conn, Player player)
+        {
+            await foreach (var model in conn.StreamAsync<GameStatusModel>("GetPlayerCount", player))
+            {
+                labelPlayerCount.Text = "Connected players: " + model.PlayerCount.ToString();
+            }
+        }
+
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -20,19 +28,31 @@ namespace Carmageddon
         private async void button1_Click(object sender, EventArgs e)
         {
             var player = new Player() { Username = textBox1.Text };
-            this.Hide();
             var test = new HubConnectionSingleton();
             var conn = test.GetInstance();
-            var form = new Form2(conn, player);
-            form.FormClosed += (s, args) => this.Close();
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Resources\\background.png"))
+
+            await foreach (var model in conn.StreamAsync<GameStatusModel>("GetPlayerCount", player))
             {
-                using (var bmpTemp = new Bitmap(Directory.GetCurrentDirectory() + "\\Resources\\background.png"))
+                if (model.PlayerCount == 4)
                 {
-                    form.BackgroundImage = new Bitmap(bmpTemp);
+                    this.Hide();
+                    var form = new Form2(conn, player);
+                    form.FormClosed += (s, args) => this.Close();
+                    if (File.Exists(Directory.GetCurrentDirectory() + "\\Resources\\background.png"))
+                    {
+                        using (var bmpTemp = new Bitmap(Directory.GetCurrentDirectory() + "\\Resources\\background.png"))
+                        {
+                            form.BackgroundImage = new Bitmap(bmpTemp);
+                        }
+                    }
+                    form.Show();
                 }
+                else
+                {
+                    MessageBox.Show("Waiting for 4 players to connect.");
+                }
+                break;
             }
-            form.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
