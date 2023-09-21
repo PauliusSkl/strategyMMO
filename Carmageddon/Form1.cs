@@ -33,7 +33,7 @@ namespace Carmageddon
 
             await foreach (var model in conn.StreamAsync<GameStatusModel>("GetPlayerCount", player))
             {
-                if (model.PlayerCount == 4)
+                if (model.PlayerCount == 2)
                 {
                     this.Hide();
                     var form = new Form2(conn, player);

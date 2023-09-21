@@ -39,7 +39,7 @@ namespace Carmageddon
         private bool displayShots = false;
         private bool carsSent = false;
         private Stopwatch stopWatch = new();
-        private MachineGun? machinegun = null ;
+        private MachineGun? machinegun = null;
         private Cannon? cannon = null;
         private AbstractShootingHandler shootingHandler;
         private readonly ShotEventHandler _topLeftHandler = new TopLeftEventHandler();
@@ -78,7 +78,7 @@ namespace Carmageddon
         void SetupBonuses()
         {
             var rnd = new Random();
-            var bonuses = new List<(int, int)> { (-1, -1), (0, -1), (1, -1), (1, 1), (0, 1), (1, 0), (0, 0)};
+            var bonuses = new List<(int, int)> { (-1, -1), (0, -1), (1, -1), (1, 1), (0, 1), (1, 0), (0, 0) };
 
             var index = rnd.Next(6);
             TopLeftEventHandler.ShotBonus = bonuses[index];
@@ -122,7 +122,7 @@ namespace Carmageddon
                     case "shoot":
                         Console.WriteLine("\nEnter X coordinates:");
                         char coordsX = char.ToUpper(Console.ReadKey().KeyChar);
-                        if(coordsX < 'A' || coordsX > 'Z')
+                        if (coordsX < 'A' || coordsX > 'Z')
                         {
                             break;
                         }
@@ -191,7 +191,7 @@ namespace Carmageddon
         {
             await foreach (var model in conn.StreamAsync<GameStatusModel>("GetPlayerNames"))
             {
-                label8.Text = "Player names:\r\n"; 
+                label8.Text = "Player names:\r\n";
                 foreach (var name in model.PlayerNames)
                 {
                     label8.Text += name + "\r\n";
@@ -363,7 +363,7 @@ namespace Carmageddon
             else if (carsSent)
             {
                 var state = await CheckCarState(coordX, coordY);
-                if(state != string.Empty)
+                if (state != string.Empty)
                 {
                     label3.Text = "Car state is: " + state;
                 }
@@ -372,7 +372,7 @@ namespace Carmageddon
                     label3.Text = state;
                 }
             }
-            
+
             //label3.Text = "Your grid cell pressed: " + cellPressed;
             //Debug.WriteLine("Your grid cell pressed: " + cellPressed);
         }
@@ -382,7 +382,7 @@ namespace Carmageddon
             var smallCount = carList.Where(car => car.Health == 1).Count();
             var mediumCount = carList.Where(car => car.Health == 2).Count();
             var bigCount = carList.Where(car => car.Health == 3).Count();
-            if(smallCount == 3 && mediumCount == 2 && bigCount == 1)
+            if (smallCount == 3 && mediumCount == 2 && bigCount == 1)
                 button8.Visible = true;
             else
                 button8.Visible = false;
@@ -441,7 +441,8 @@ namespace Carmageddon
                     {
                         this.Invoke(new MethodInvoker(this.Hide));
                         var form = new Form4(message);
-                        this.Invoke((MethodInvoker)delegate () {
+                        this.Invoke((MethodInvoker)delegate ()
+                        {
                             form.Show();
                         });
                         break;
@@ -458,7 +459,7 @@ namespace Carmageddon
                 while (true)
                 {
                     var turn = await CheckWhichTurn();
-                    if(turn != "")
+                    if (turn != "")
                     {
                         this.Invoke((MethodInvoker)delegate ()
                         {
@@ -485,7 +486,7 @@ namespace Carmageddon
 
         private async void pictureBox2_Click(object sender, EventArgs e)
         {
-            if(turnMessage == "Your turn")
+            if (turnMessage == "Your turn")
             {
                 var mouseEventArgs = e as MouseEventArgs;
                 var coordX = mouseEventArgs.X;
@@ -596,7 +597,7 @@ namespace Carmageddon
                         break;
                     }
                 }
-            } 
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -616,7 +617,7 @@ namespace Carmageddon
         {
             var carCreator = new CarCreator();
             Car car;
-            if(previousCar != null && previousCar.Health == 1)
+            if (previousCar != null && previousCar.Health == 1)
             {
                 car = previousCar.MakeDeepCopy(CarSize.Small);
             }
@@ -693,7 +694,7 @@ namespace Carmageddon
         //mg
         private void button5_Click(object sender, EventArgs e)
         {
-            if(machinegun == null)
+            if (machinegun == null)
             {
                 initializeMachinegun();
             }
@@ -705,11 +706,11 @@ namespace Carmageddon
 
         private void updateShotCount()
         {
-            if(shootingHandler.Weapon is MachineGun)
+            if (shootingHandler.Weapon is MachineGun)
             {
                 label9.Text = "MG selected:\r\nShots left - " + (shootingHandler.Weapon.ShotsLeft < 0 ? 0 : shootingHandler.Weapon.ShotsLeft);
             }
-            else if(shootingHandler.Weapon is Cannon)
+            else if (shootingHandler.Weapon is Cannon)
             {
                 label9.Text = "Cannon selected:\r\nShots left - " + (shootingHandler.Weapon.ShotsLeft < 0 ? 0 : shootingHandler.Weapon.ShotsLeft);
             }
@@ -767,7 +768,7 @@ namespace Carmageddon
         private void button6_Click(object sender, EventArgs e)
         {
             Image previous = invoker.Undo();
-            if(_playerGrid.Cars.Count != 0)
+            if (_playerGrid.Cars.Count != 0)
             {
                 _playerGrid.Cars.RemoveAt(_playerGrid.Cars.Count - 1);
             }
@@ -819,7 +820,7 @@ namespace Carmageddon
 
         public async Task AddShot(string coords, int coordX, int coordY)
         {
-            var shotInfo = await shootingHandler.HandleShot(_topLeftHandler, coordX, coordY, _player.Username); 
+            var shotInfo = await shootingHandler.HandleShot(_topLeftHandler, coordX, coordY, _player.Username);
             updateShotCount();
             DisplayBonus(shotInfo.Item2);
 
@@ -858,7 +859,7 @@ namespace Carmageddon
 
         public void LogMessage(string message, bool inline)
         {
-            if(inline)
+            if (inline)
                 label5.Text = message;
             else
             {
@@ -870,7 +871,7 @@ namespace Carmageddon
 
         private void button9_Click(object sender, EventArgs e)
         {
-            originator.Invoker = (Invoker) invoker.Clone();
+            originator.Invoker = (Invoker)invoker.Clone();
             originator.Image = new Bitmap(pictureBox1.Image);
             originator.CarGrid = (Grid)_playerGrid.Clone();
 
@@ -888,24 +889,112 @@ namespace Carmageddon
             CheckButtonVisibility();
         }
 
+        private PictureBox selectedPictureBox;
+
+
         private void upButton_Click(object sender, EventArgs e)
         {
+            {
+                if (selectedPictureBox != null)
+                {
+                    selectedPictureBox.Location = new Point(selectedPictureBox.Location.X, selectedPictureBox.Location.Y - 50);
+                }
+            }
+
+            _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
 
         }
 
         private void downButton_Click(object sender, EventArgs e)
         {
 
+            if (selectedPictureBox != null)
+            {
+                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X, selectedPictureBox.Location.Y + 50);
+
+            }
+            _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
+
         }
 
         private void leftButton_Click(object sender, EventArgs e)
         {
+            if (selectedPictureBox != null)
+            {
+                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X - 50, selectedPictureBox.Location.Y);
+
+            }
+
+            _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
 
         }
 
-        private void rightButton_Click(object sender, EventArgs e)
+        private async void rightButton_Click(object sender, EventArgs e)
+        {
+            if (selectedPictureBox != null)
+            {
+                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X + 50, selectedPictureBox.Location.Y);
+            }
+            
+
+            //Cia kazkaip paupdatint su signalR kiekvienam zaidejui koordinates 
+
+            
+
+        }
+
+
+        private void pictureBox2_Click_1(object sender, EventArgs e)
+        {
+            selectedPictureBox = (PictureBox)sender;
+
+            this.HandleClickedPicture();
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+            selectedPictureBox = (PictureBox)sender;
+
+            this.HandleClickedPicture();
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            selectedPictureBox = (PictureBox)sender;
+
+            this.HandleClickedPicture();
+        }
+
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+            selectedPictureBox = (PictureBox)sender;
+
+
+            this.HandleClickedPicture();
+        }
+
+
+        private void HandleClickedPicture()
         {
 
+            upButton.Visible = true;
+            downButton.Visible = true;
+            leftButton.Visible = true;
+            rightButton.Visible = true;
+
+            selectedPictureBox.BorderStyle = BorderStyle.FixedSingle;
+            selectedPictureBox.BackColor = Color.Red;
+
+            foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
+            {
+                if (pb != selectedPictureBox)
+                {
+                    pb.BorderStyle = BorderStyle.FixedSingle;
+                    pb.BackColor = Color.White;
+                }
+            }
         }
+
     }
 }
+        

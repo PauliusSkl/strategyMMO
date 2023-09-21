@@ -44,6 +44,7 @@ namespace Carmageddon.API.Hubs
             }
         }
 
+
         public async IAsyncEnumerable<GameStatusModel> GetMovesCount(CancellationToken cancellationToken, bool playerShoot)
         {
             var gameStatus = new GameStatus(new MovesCount());
