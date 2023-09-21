@@ -6,5 +6,6 @@
         public DateTime BattleDuration { get; set; }
         public int MovesCount { get; set; }
         public List<string> PlayerNames { get; set; }
+
     }
 }

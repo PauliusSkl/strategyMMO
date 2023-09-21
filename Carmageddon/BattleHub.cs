@@ -8,6 +8,7 @@ namespace Carmageddon.Forms
         private HubConnection _connection = null;
         private const string URI = "https://localhost:7237/battle";
 
+
         public BattleHub()
         {
         }
@@ -26,5 +27,6 @@ namespace Carmageddon.Forms
 
             return _connection;
         }
+
     }
 }

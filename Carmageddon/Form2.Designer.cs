@@ -28,327 +28,387 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.upButton = new System.Windows.Forms.Button();
-            this.downButton = new System.Windows.Forms.Button();
-            this.leftButton = new System.Windows.Forms.Button();
-            this.rightButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            label1 = new Label();
+            label2 = new Label();
+            pictureBox1 = new PictureBox();
+            label3 = new Label();
+            button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
+            label5 = new Label();
+            label6 = new Label();
+            label7 = new Label();
+            label8 = new Label();
+            button4 = new Button();
+            button5 = new Button();
+            label9 = new Label();
+            button8 = new Button();
+            label10 = new Label();
+            timer1 = new System.Windows.Forms.Timer(components);
+            button9 = new Button();
+            button10 = new Button();
+            label11 = new Label();
+            label12 = new Label();
+            upButton = new Button();
+            downButton = new Button();
+            leftButton = new Button();
+            rightButton = new Button();
+            pictureBox2 = new PictureBox();
+            pictureBox3 = new PictureBox();
+            pictureBox4 = new PictureBox();
+            pictureBox5 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
+            SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(1308, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 15);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Game is on";
+            label1.AutoSize = true;
+            label1.BackColor = Color.Transparent;
+            label1.Location = new Point(1308, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(66, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Game is on";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(624, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(0, 15);
-            this.label2.TabIndex = 1;
+            label2.AutoSize = true;
+            label2.BackColor = Color.Transparent;
+            label2.Location = new Point(624, 40);
+            label2.Name = "label2";
+            label2.Size = new Size(0, 15);
+            label2.TabIndex = 1;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackgroundImage = global::Carmageddon.Forms.Properties.Resources._500x500;
-            this.pictureBox1.Location = new System.Drawing.Point(426, 11);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(497, 504);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 303;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            pictureBox1.BackgroundImage = Forms.Properties.Resources._500x500;
+            pictureBox1.Location = new Point(426, 11);
+            pictureBox1.Margin = new Padding(3, 2, 3, 2);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(497, 504);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 303;
+            pictureBox1.TabStop = false;
+            pictureBox1.Click += pictureBox1_Click;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(250, 571);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(0, 37);
-            this.label3.TabIndex = 305;
+            label3.AutoSize = true;
+            label3.BackColor = Color.Transparent;
+            label3.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Location = new Point(250, 571);
+            label3.Name = "label3";
+            label3.Size = new Size(0, 37);
+            label3.TabIndex = 305;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(326, 14);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(82, 22);
-            this.button1.TabIndex = 311;
-            this.button1.Text = "Small car";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            button1.Location = new Point(326, 14);
+            button1.Margin = new Padding(3, 2, 3, 2);
+            button1.Name = "button1";
+            button1.Size = new Size(82, 22);
+            button1.TabIndex = 311;
+            button1.Text = "Small car";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(299, 51);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 22);
-            this.button2.TabIndex = 312;
-            this.button2.Text = "Medium car";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            button2.Location = new Point(299, 51);
+            button2.Margin = new Padding(3, 2, 3, 2);
+            button2.Name = "button2";
+            button2.Size = new Size(109, 22);
+            button2.TabIndex = 312;
+            button2.Text = "Medium car";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(326, 88);
-            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(82, 22);
-            this.button3.TabIndex = 313;
-            this.button3.Text = "Big car";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            button3.Location = new Point(326, 88);
+            button3.Margin = new Padding(3, 2, 3, 2);
+            button3.Name = "button3";
+            button3.Size = new Size(82, 22);
+            button3.TabIndex = 313;
+            button3.Text = "Big car";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click_1;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Location = new System.Drawing.Point(104, 551);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(0, 15);
-            this.label5.TabIndex = 314;
+            label5.AutoSize = true;
+            label5.BackColor = Color.Transparent;
+            label5.Location = new Point(104, 551);
+            label5.Name = "label5";
+            label5.Size = new Size(0, 15);
+            label5.TabIndex = 314;
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Location = new System.Drawing.Point(227, 9);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(0, 15);
-            this.label6.TabIndex = 315;
+            label6.AutoSize = true;
+            label6.BackColor = Color.Transparent;
+            label6.Location = new Point(227, 9);
+            label6.Name = "label6";
+            label6.Size = new Size(0, 15);
+            label6.TabIndex = 315;
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.Location = new System.Drawing.Point(250, 49);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(0, 15);
-            this.label7.TabIndex = 316;
+            label7.AutoSize = true;
+            label7.BackColor = Color.Transparent;
+            label7.Location = new Point(250, 49);
+            label7.Name = "label7";
+            label7.Size = new Size(0, 15);
+            label7.TabIndex = 316;
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Location = new System.Drawing.Point(19, 40);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(0, 15);
-            this.label8.TabIndex = 317;
+            label8.AutoSize = true;
+            label8.BackColor = Color.Transparent;
+            label8.Location = new Point(19, 40);
+            label8.Name = "label8";
+            label8.Size = new Size(0, 15);
+            label8.TabIndex = 317;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(841, 519);
-            this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(82, 22);
-            this.button4.TabIndex = 318;
-            this.button4.Text = "Cannon";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            button4.Location = new Point(841, 519);
+            button4.Margin = new Padding(3, 2, 3, 2);
+            button4.Name = "button4";
+            button4.Size = new Size(82, 22);
+            button4.TabIndex = 318;
+            button4.Text = "Cannon";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(753, 519);
-            this.button5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(82, 22);
-            this.button5.TabIndex = 319;
-            this.button5.Text = "MG";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            button5.Location = new Point(753, 519);
+            button5.Margin = new Padding(3, 2, 3, 2);
+            button5.Name = "button5";
+            button5.Size = new Size(82, 22);
+            button5.TabIndex = 319;
+            button5.Text = "MG";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(615, 236);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(0, 15);
-            this.label9.TabIndex = 320;
+            label9.AutoSize = true;
+            label9.Location = new Point(615, 236);
+            label9.Name = "label9";
+            label9.Size = new Size(0, 15);
+            label9.TabIndex = 320;
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(426, 519);
-            this.button8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(82, 22);
-            this.button8.TabIndex = 323;
-            this.button8.Text = "Confirm";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            button8.Location = new Point(426, 519);
+            button8.Margin = new Padding(3, 2, 3, 2);
+            button8.Name = "button8";
+            button8.Size = new Size(82, 22);
+            button8.TabIndex = 323;
+            button8.Text = "Confirm";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
             // 
             // label10
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(15, 14);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(0, 15);
-            this.label10.TabIndex = 325;
+            label10.AutoSize = true;
+            label10.Location = new Point(15, 14);
+            label10.Name = "label10";
+            label10.Size = new Size(0, 15);
+            label10.TabIndex = 325;
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            timer1.Enabled = true;
+            timer1.Interval = 1000;
+            timer1.Tick += timer1_Tick;
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(2, 249);
-            this.button9.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(73, 22);
-            this.button9.TabIndex = 326;
-            this.button9.Text = "Save";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            button9.Location = new Point(2, 249);
+            button9.Margin = new Padding(3, 2, 3, 2);
+            button9.Name = "button9";
+            button9.Size = new Size(73, 22);
+            button9.TabIndex = 326;
+            button9.Text = "Save";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(2, 296);
-            this.button10.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(73, 22);
-            this.button10.TabIndex = 327;
-            this.button10.Text = "Restore";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Visible = false;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            button10.Location = new Point(2, 296);
+            button10.Margin = new Padding(3, 2, 3, 2);
+            button10.Name = "button10";
+            button10.Size = new Size(73, 22);
+            button10.TabIndex = 327;
+            button10.Text = "Restore";
+            button10.UseVisualStyleBackColor = true;
+            button10.Visible = false;
+            button10.Click += button10_Click;
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.Color.Transparent;
-            this.label11.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label11.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label11.Location = new System.Drawing.Point(889, 519);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(0, 32);
-            this.label11.TabIndex = 328;
+            label11.AutoSize = true;
+            label11.BackColor = Color.Transparent;
+            label11.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            label11.ForeColor = SystemColors.ControlText;
+            label11.Location = new Point(889, 519);
+            label11.Name = "label11";
+            label11.Size = new Size(0, 32);
+            label11.TabIndex = 328;
             // 
             // label12
             // 
-            this.label12.AutoSize = true;
-            this.label12.BackColor = System.Drawing.Color.Transparent;
-            this.label12.Location = new System.Drawing.Point(398, 55);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(0, 15);
-            this.label12.TabIndex = 329;
+            label12.AutoSize = true;
+            label12.BackColor = Color.Transparent;
+            label12.Location = new Point(398, 55);
+            label12.Name = "label12";
+            label12.Size = new Size(0, 15);
+            label12.TabIndex = 329;
             // 
             // upButton
             // 
-            this.upButton.Location = new System.Drawing.Point(1017, 228);
-            this.upButton.Name = "upButton";
-            this.upButton.Size = new System.Drawing.Size(75, 23);
-            this.upButton.TabIndex = 330;
-            this.upButton.Text = "↑";
-            this.upButton.UseVisualStyleBackColor = true;
-            this.upButton.Click += new System.EventHandler(this.upButton_Click);
+            upButton.AccessibleRole = AccessibleRole.None;
+            upButton.Location = new Point(1017, 228);
+            upButton.Name = "upButton";
+            upButton.Size = new Size(75, 23);
+            upButton.TabIndex = 330;
+            upButton.Text = "↑";
+            upButton.UseVisualStyleBackColor = true;
+            upButton.Visible = false;
+            upButton.Click += upButton_Click;
             // 
             // downButton
             // 
-            this.downButton.Location = new System.Drawing.Point(1017, 270);
-            this.downButton.Name = "downButton";
-            this.downButton.Size = new System.Drawing.Size(75, 23);
-            this.downButton.TabIndex = 331;
-            this.downButton.Text = "↓";
-            this.downButton.UseVisualStyleBackColor = true;
-            this.downButton.Click += new System.EventHandler(this.downButton_Click);
+            downButton.Location = new Point(1017, 270);
+            downButton.Name = "downButton";
+            downButton.Size = new Size(75, 23);
+            downButton.TabIndex = 331;
+            downButton.Text = "↓";
+            downButton.UseVisualStyleBackColor = true;
+            downButton.Visible = false;
+            downButton.Click += downButton_Click;
             // 
             // leftButton
             // 
-            this.leftButton.Location = new System.Drawing.Point(945, 249);
-            this.leftButton.Name = "leftButton";
-            this.leftButton.Size = new System.Drawing.Size(75, 23);
-            this.leftButton.TabIndex = 332;
-            this.leftButton.Text = "←";
-            this.leftButton.UseVisualStyleBackColor = true;
-            this.leftButton.Click += new System.EventHandler(this.leftButton_Click);
+            leftButton.Location = new Point(945, 249);
+            leftButton.Name = "leftButton";
+            leftButton.Size = new Size(75, 23);
+            leftButton.TabIndex = 332;
+            leftButton.Text = "←";
+            leftButton.UseVisualStyleBackColor = true;
+            leftButton.Visible = false;
+            leftButton.Click += leftButton_Click;
             // 
             // rightButton
             // 
-            this.rightButton.Location = new System.Drawing.Point(1089, 249);
-            this.rightButton.Name = "rightButton";
-            this.rightButton.Size = new System.Drawing.Size(75, 23);
-            this.rightButton.TabIndex = 333;
-            this.rightButton.Text = "→";
-            this.rightButton.UseVisualStyleBackColor = true;
-            this.rightButton.Click += new System.EventHandler(this.rightButton_Click);
+            rightButton.Location = new Point(1089, 249);
+            rightButton.Name = "rightButton";
+            rightButton.Size = new Size(75, 23);
+            rightButton.TabIndex = 333;
+            rightButton.Text = "→";
+            rightButton.UseVisualStyleBackColor = true;
+            rightButton.Visible = false;
+            rightButton.Click += rightButton_Click;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BackgroundImage = Forms.Properties.Resources.warrior_blue;
+            pictureBox2.Location = new Point(426, 14);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(50, 50);
+            pictureBox2.TabIndex = 334;
+            pictureBox2.TabStop = false;
+            pictureBox2.Click += pictureBox2_Click_1;
+            // 
+            // pictureBox3
+            // 
+            pictureBox3.BackgroundImage = Forms.Properties.Resources.warrior_yellow;
+            pictureBox3.Location = new Point(873, 14);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(50, 50);
+            pictureBox3.TabIndex = 335;
+            pictureBox3.TabStop = false;
+            pictureBox3.Click += pictureBox3_Click;
+            // 
+            // pictureBox4
+            // 
+            pictureBox4.BackgroundImage = Forms.Properties.Resources.warrior_pink;
+            pictureBox4.Location = new Point(426, 464);
+            pictureBox4.Name = "pictureBox4";
+            pictureBox4.Size = new Size(50, 50);
+            pictureBox4.TabIndex = 336;
+            pictureBox4.TabStop = false;
+            pictureBox4.Click += pictureBox4_Click;
+            // 
+            // pictureBox5
+            // 
+            pictureBox5.BackgroundImage = Forms.Properties.Resources.warriori_green;
+            pictureBox5.Location = new Point(873, 464);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(50, 50);
+            pictureBox5.TabIndex = 337;
+            pictureBox5.TabStop = false;
+            pictureBox5.Click += pictureBox5_Click;
             // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1386, 646);
-            this.Controls.Add(this.rightButton);
-            this.Controls.Add(this.leftButton);
-            this.Controls.Add(this.downButton);
-            this.Controls.Add(this.upButton);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.button10);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "Form2";
-            this.Tag = "B2";
-            this.Text = "Carmageddon";
-            this.Load += new System.EventHandler(this.Form2_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(1386, 646);
+            Controls.Add(pictureBox5);
+            Controls.Add(pictureBox4);
+            Controls.Add(pictureBox3);
+            Controls.Add(pictureBox2);
+            Controls.Add(rightButton);
+            Controls.Add(leftButton);
+            Controls.Add(downButton);
+            Controls.Add(upButton);
+            Controls.Add(label12);
+            Controls.Add(label11);
+            Controls.Add(button10);
+            Controls.Add(button9);
+            Controls.Add(label10);
+            Controls.Add(button8);
+            Controls.Add(label9);
+            Controls.Add(button5);
+            Controls.Add(button4);
+            Controls.Add(label8);
+            Controls.Add(label7);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(button3);
+            Controls.Add(button2);
+            Controls.Add(button1);
+            Controls.Add(label3);
+            Controls.Add(pictureBox1);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "Form2";
+            Tag = "B2";
+            Text = "Carmageddon";
+            Load += Form2_Load;
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -378,5 +438,9 @@
         private Button downButton;
         private Button leftButton;
         private Button rightButton;
+        private PictureBox pictureBox2;
+        private PictureBox pictureBox3;
+        private PictureBox pictureBox4;
+        private PictureBox pictureBox5;
     }
 }
