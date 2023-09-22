@@ -225,5 +225,11 @@ namespace Carmageddon.API.Hubs
             return false;
         }
 
+
+        public async Task UpdatePictureCoordinates(string pictureName, int x, int y)
+        {
+            await Clients.All.SendAsync("ReceivePictureCoordinates", pictureName, x, y);
+        }
+
     }
 }

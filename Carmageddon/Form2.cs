@@ -18,6 +18,7 @@ using Carmageddon.Forms.Memento;
 using Carmageddon.Forms.ChainOfResp.Mediator;
 using Carmageddon.Forms.Visitor;
 using Carmageddon.Forms;
+using System.Runtime.CompilerServices;
 
 namespace Carmageddon
 {
@@ -52,10 +53,13 @@ namespace Carmageddon
         private HubConnection _battleHub = new BattleHub().GetInstance();
         private string turnMessage = "";
         private bool turnMade = false;
-
+        
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
+
+
+
 
         public Form2(HubConnection conn, Player player)
         {
@@ -69,11 +73,35 @@ namespace Carmageddon
             InitializeComponent();
             shootingHandler = new RefinedShootingHandler();
             SetupBonuses();
-
             ThreadPool.QueueUserWorkItem(HandleConsole, SynchronizationContext.Current);
             GetPlayerCount(_conn, _player);
             button8.Visible = false;
+
+            _battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
+            {
+                var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
+                if (pictureToUpdate != null)
+                {
+                    pictureToUpdate.Location = new Point(x, y);
+                }
+
+            });
+            //GetPictureCords(conn);
         }
+        private async void GetPictureCords(HubConnection conn)
+        {
+            _battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
+              {
+                  MessageBox.Show(pictureName + x + y);
+                  var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
+                  if (pictureToUpdate != null)
+                  {
+                      pictureToUpdate.Location = new Point(x, y);
+                  }
+
+              });
+        }
+
 
         void SetupBonuses()
         {
@@ -891,59 +919,60 @@ namespace Carmageddon
 
         private PictureBox selectedPictureBox;
 
-
-        private void upButton_Click(object sender, EventArgs e)
+        private async void upButton_Click(object sender, EventArgs e)
         {
+            if (selectedPictureBox != null)
             {
-                if (selectedPictureBox != null)
+                int currentY = selectedPictureBox.Location.Y;
+                if (currentY - 50 >= 10)
                 {
                     selectedPictureBox.Location = new Point(selectedPictureBox.Location.X, selectedPictureBox.Location.Y - 50);
                 }
+                await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
             }
-
-            _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
-
+                
         }
 
-        private void downButton_Click(object sender, EventArgs e)
-        {
-
-            if (selectedPictureBox != null)
-            {
-                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X, selectedPictureBox.Location.Y + 50);
-
-            }
-            _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
-
-        }
-
-        private void leftButton_Click(object sender, EventArgs e)
+        private async void downButton_Click(object sender, EventArgs e)
         {
             if (selectedPictureBox != null)
             {
-                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X - 50, selectedPictureBox.Location.Y);
-
+                int currentY = selectedPictureBox.Location.Y;
+                if(currentY + 50 <= 470)
+                {
+                    selectedPictureBox.Location = new Point(selectedPictureBox.Location.X, selectedPictureBox.Location.Y + 50);
+                }
+                await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
             }
+            
+        }
 
-            _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
-
+        private async void leftButton_Click(object sender, EventArgs e)
+        {
+            if (selectedPictureBox != null)
+            {
+                int currentX = selectedPictureBox.Location.X;
+                if (currentX - 50 >= 420)
+                {
+                    selectedPictureBox.Location = new Point(selectedPictureBox.Location.X - 50, selectedPictureBox.Location.Y);
+                }
+                await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
+            }
+            
         }
 
         private async void rightButton_Click(object sender, EventArgs e)
         {
             if (selectedPictureBox != null)
             {
-                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X + 50, selectedPictureBox.Location.Y);
+                int currentX = selectedPictureBox.Location.X;
+                if (currentX + 50 <= 920)
+                {
+                    selectedPictureBox.Location = new Point(selectedPictureBox.Location.X + 50, selectedPictureBox.Location.Y);
+                }
+                await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
             }
-            
-
-            //Cia kazkaip paupdatint su signalR kiekvienam zaidejui koordinates 
-
-            
-
         }
-
-
         private void pictureBox2_Click_1(object sender, EventArgs e)
         {
             selectedPictureBox = (PictureBox)sender;
@@ -990,7 +1019,8 @@ namespace Carmageddon
                 if (pb != selectedPictureBox)
                 {
                     pb.BorderStyle = BorderStyle.FixedSingle;
-                    pb.BackColor = Color.White;
+                    pb.BackColor = Color.Transparent;
+
                 }
             }
         }
