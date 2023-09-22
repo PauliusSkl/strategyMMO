@@ -77,22 +77,21 @@ namespace Carmageddon
             GetPlayerCount(_conn, _player);
             button8.Visible = false;
 
-            _battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
-            {
-                var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
-                if (pictureToUpdate != null)
-                {
-                    pictureToUpdate.Location = new Point(x, y);
-                }
+            //_battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
+            //{
+            //    var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
+            //    if (pictureToUpdate != null)
+            //    {
+            //        pictureToUpdate.Location = new Point(x, y);
+            //    }
 
-            });
-            //GetPictureCords(conn);
+            //});
+            GetPictureCords(conn);
         }
-        private async void GetPictureCords(HubConnection conn)
+        private void GetPictureCords(HubConnection conn)
         {
             _battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
               {
-                  MessageBox.Show(pictureName + x + y);
                   var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
                   if (pictureToUpdate != null)
                   {
