@@ -1,3 +1,3 @@
 # strategyMMO
 
-LAbai geras zaidimas
+WarGame for 4 players using signalR
