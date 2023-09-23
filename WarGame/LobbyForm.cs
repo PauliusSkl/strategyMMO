@@ -11,11 +11,6 @@ public partial class LobbyForm : Form
         InitializeComponent();
     }
 
-    private void label1_Click(object sender, EventArgs e)
-    {
-
-    }
-
     private async void button1_Click(object sender, EventArgs e)
     {
         var player = new Player() { Username = textBox1.Text };
@@ -24,23 +19,23 @@ public partial class LobbyForm : Form
 
         await foreach (var model in conn.StreamAsync<GameStatusModel>("GetPlayerCount", player))
         {
-            if (model.PlayerCount == 2)
+            if (model.PlayerCount == 4)
             {
-                this.Hide();
                 var form = new GamePlayForm(conn, player);
-                form.FormClosed += (s, args) => this.Close();
+                form.FormClosed += (s, args) => Close();
                 if (File.Exists(Directory.GetCurrentDirectory() + "\\Resources\\background.png"))
                 {
                     using var bmpTemp = new Bitmap(Directory.GetCurrentDirectory() + "\\Resources\\background.png");
                     form.BackgroundImage = new Bitmap(bmpTemp);
                 }
+                Hide();
                 form.Show();
+                break;
             }
             else
             {
-                _ = MessageBox.Show("Waiting for 4 players to connect.");
+                MainLabel.Text = $"{model.PlayerCount}/4 players connected";
             }
-            break;
         }
     }
 }

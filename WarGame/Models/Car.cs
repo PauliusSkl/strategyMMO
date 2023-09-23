@@ -26,7 +26,7 @@ public abstract class Car : IPrototype
 
     public Car MakeShallowCopy()
     {
-        return (Car)this.MemberwiseClone();
+        return (Car)MemberwiseClone();
     }
 
     public Car MakeDeepCopy(CarSize size)
@@ -47,10 +47,10 @@ public abstract class Car : IPrototype
                 return null;
         }
 
-        car.Length = this.Length;
-        car.Health = this.Health;
-        car.Image = this.Image;
-        car.Coordinates = new CarPart[this.Coordinates.Length];
+        car.Length = Length;
+        car.Health = Health;
+        car.Image = Image;
+        car.Coordinates = new CarPart[Coordinates.Length];
         return car;
     }
 }

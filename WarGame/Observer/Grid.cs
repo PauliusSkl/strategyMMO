@@ -53,10 +53,10 @@ public class Grid : IGrid
     {
         return new Grid()
         {
-            cells = this.cells,
-            Cars = new List<Car>(this.Cars),
-            CarPlacer = this.CarPlacer,
-            State = this.State
+            cells = cells,
+            Cars = new List<Car>(Cars),
+            CarPlacer = CarPlacer,
+            State = State
         };
 
     }

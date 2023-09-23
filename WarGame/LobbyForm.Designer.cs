@@ -39,16 +39,15 @@
             // 
             MainLabel.AutoSize = true;
             MainLabel.Enabled = false;
-            MainLabel.Location = new Point(490, 7);
+            MainLabel.Location = new Point(495, 9);
             MainLabel.Name = "MainLabel";
             MainLabel.Size = new Size(162, 15);
             MainLabel.TabIndex = 0;
             MainLabel.Text = "Hello! Welcome to the Game!";
-            MainLabel.Click += label1_Click;
             // 
             // button1
             // 
-            button1.Location = new Point(533, 73);
+            button1.Location = new Point(536, 62);
             button1.Margin = new Padding(3, 2, 3, 2);
             button1.Name = "button1";
             button1.Size = new Size(82, 22);
@@ -81,7 +80,7 @@
             labelPlayerCount.Size = new Size(0, 15);
             labelPlayerCount.TabIndex = 5;
             // 
-            // Form1
+            // LobbyForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -92,7 +91,7 @@
             Controls.Add(button1);
             Controls.Add(MainLabel);
             Margin = new Padding(3, 2, 3, 2);
-            Name = "Form1";
+            Name = "LobbyForm";
             Text = "War Game";
             ResumeLayout(false);
             PerformLayout();

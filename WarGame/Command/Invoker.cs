@@ -40,11 +40,11 @@ public class Invoker
     {
         return new Invoker(_command)
         {
-            _command = this._command,
-            receiver = this.receiver,
+            _command = _command,
+            receiver = receiver,
             previousImages = new Stack<Image>(new Stack<Image>(previousImages)),
             _cars = new Stack<Car>(new Stack<Car>(_cars)),
-            count = this.count
+            count = count
         };
 
     }

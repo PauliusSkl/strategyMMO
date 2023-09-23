@@ -6,10 +6,10 @@ public class SmallCar : Car
 {
     public SmallCar(int health, int length, string image)
     {
-        this.Health = health;
-        this.Length = length;
-        this.Image = image;
-        this.Coordinates = new CarPart[length];
-        this.Context = new StateContext(new Healthy());
+        Health = health;
+        Length = length;
+        Image = image;
+        Coordinates = new CarPart[length];
+        Context = new StateContext(new Healthy());
     }
 }

@@ -416,9 +416,9 @@ public partial class GamePlayForm : Form, IConsoleLogger
                 var message = await CheckForEndGame();
                 if (message != "")
                 {
-                    _ = this.Invoke(new MethodInvoker(this.Hide));
+                    _ = Invoke(new MethodInvoker(Hide));
                     var form = new GameEndForm(message);
-                    _ = this.Invoke((MethodInvoker)delegate ()
+                    _ = Invoke((MethodInvoker)delegate ()
                     {
                         form.Show();
                     });
@@ -438,9 +438,9 @@ public partial class GamePlayForm : Form, IConsoleLogger
                 var turn = await CheckWhichTurn();
                 if (turn != "")
                 {
-                    _ = this.Invoke((MethodInvoker)delegate ()
+                    _ = Invoke((MethodInvoker)delegate ()
                     {
-                        this.label12.Text = turn;
+                        label12.Text = turn;
                     });
                     turnMessage = turn;
                     turnMade = false;
@@ -875,21 +875,21 @@ public partial class GamePlayForm : Form, IConsoleLogger
     {
         selectedPictureBox = (PictureBox)sender;
 
-        this.HandleClickedPicture();
+        HandleClickedPicture();
     }
 
     private void pictureBox4_Click(object sender, EventArgs e)
     {
         selectedPictureBox = (PictureBox)sender;
 
-        this.HandleClickedPicture();
+        HandleClickedPicture();
     }
 
     private void pictureBox3_Click(object sender, EventArgs e)
     {
         selectedPictureBox = (PictureBox)sender;
 
-        this.HandleClickedPicture();
+        HandleClickedPicture();
     }
 
     private void pictureBox5_Click(object sender, EventArgs e)
@@ -897,7 +897,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
         selectedPictureBox = (PictureBox)sender;
 
 
-        this.HandleClickedPicture();
+        HandleClickedPicture();
     }
 
     private void HandleClickedPicture()
@@ -910,7 +910,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
         selectedPictureBox.BorderStyle = BorderStyle.FixedSingle;
         selectedPictureBox.BackColor = Color.Red;
 
-        foreach (PictureBox pb in this.Controls.OfType<PictureBox>())
+        foreach (PictureBox pb in Controls.OfType<PictureBox>())
         {
             if (pb != selectedPictureBox)
             {
