@@ -1,76 +1,76 @@
 ﻿using Carmageddon.API.Iterator;
 using Carmageddon.API.Models;
 
-namespace Carmageddon.API
+namespace Carmageddon.API;
+
+public static class PlayersList
 {
-    public static class PlayersList
+    private static List<Player> _players = new List<Player>();
+
+    public static bool Exists(Player player)
     {
-        private static List<Player> _players = new List<Player>();
+        return _players.Any(x => x.Username == player.Username);
+    }
 
-        public static bool CheckIfExists(Player player)
+    public static void AddPlayer(Player player)
+    {
+        _players.Add(player);
+    }
+
+    public static List<Player> GetPlayers()
+    {
+        return _players;
+    }
+
+    public static Player GetEnemy(string username)
+    {
+        return _players.FirstOrDefault(x => x.Username != username);
+    }
+
+    public static Player GetPlayer(string username)
+    {
+        return _players.FirstOrDefault(x => x.Username == username);
+    }
+
+    public static List<Car> GetPlayerCars(string username)
+    {
+        return _players.FirstOrDefault(x => x.Username == username).Cars;
+    }
+
+    public static int GetCount()
+    {
+        return _players.Count;
+    }
+
+    public static List<string> GetPlayerNames()
+    {
+        var names = new List<string>();
+        foreach (var player in _players)
         {
-            return _players.Any(x => x.Username == player.Username);
+            names.Add(player.Username);
+        }
+        return names;
+    }
+
+    public static void AddPlayerCars(Player player, List<Car> cars)
+    {
+        if (!Exists(player))
+        {
+            return;
         }
 
-        public static void AddPlayer(Player player)
-        {
-            _players.Add(player);
-        }
+        var playerAggregate = new GameObjAggregate();
+        playerAggregate.ListToAggregate(_players);
+        var iterator = playerAggregate.CreateIterator();
 
-        public static List<Player> GetPlayers()
+        var user = (Player)iterator.First();
+        while (user != null)
         {
-            return _players;
-        }
-
-        public static Player GetEnemy(string username)
-        {
-            return _players.FirstOrDefault(x => x.Username != username);
-        }
-        public static Player GetPlayer(string username)
-        {
-            return _players.FirstOrDefault(x => x.Username == username);
-        }
-
-        public static List<Car> GetPlayerCars(string username)
-        {
-            return _players.FirstOrDefault(x => x.Username == username).Cars;
-        }
-
-        public static int GetCount()
-        {
-            return _players.Count;
-        }
-
-        public static List<string> GetPlayerNames()
-        {
-            var names = new List<string>();
-            foreach (var player in _players)
+            if (user.Username == player.Username)
             {
-                names.Add(player.Username);
+                user.Cars = cars;
             }
-            return names;
-        }
-
-        public static void AddPlayerCars(Player player, List<Car> cars)
-        {
-            if (!CheckIfExists(player))
-            {
-                return;
-            }
-
-            var playerAggregate = new GameObjAggregate();
-            playerAggregate.ListToAggregate(_players);
-            var iterator = playerAggregate.CreateIterator();
-
-            var user = (Player)iterator.First();
-            while(user != null)
-            {
-                if(user.Username == player.Username)
-                {
-                    user.Cars = cars;
-                }
-                user = (Player)iterator.Next();
-            }
+            user = (Player)iterator.Next();
         }
     }
 }

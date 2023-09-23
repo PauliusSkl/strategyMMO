@@ -1,24 +1,23 @@
+using Carmageddon.Forms;
 using Carmageddon.Forms.AbstractFactory;
 using Carmageddon.Forms.Adapter;
-using Carmageddon.Forms.Facade;
+using Carmageddon.Forms.Bridge__Shooting_;
+using Carmageddon.Forms.ChainOfResp;
+using Carmageddon.Forms.ChainOfResp.Mediator;
 using Carmageddon.Forms.Command;
+using Carmageddon.Forms.Facade;
 using Carmageddon.Forms.Factory;
+using Carmageddon.Forms.Interpreter;
+using Carmageddon.Forms.Memento;
 using Carmageddon.Forms.Models;
 using Carmageddon.Forms.Observer;
+using Carmageddon.Forms.TemplateMethod;
+using Carmageddon.Forms.Visitor;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using static Carmageddon.Forms.Models.Car;
-using Carmageddon.Forms.Bridge__Shooting_;
-using Carmageddon.Forms.TemplateMethod;
 using System.Runtime.InteropServices;
-using Carmageddon.Forms.Interpreter;
-using Carmageddon.Forms.ChainOfResp;
-using Carmageddon.Forms.Memento;
-using Carmageddon.Forms.ChainOfResp.Mediator;
-using Carmageddon.Forms.Visitor;
-using Carmageddon.Forms;
-using System.Runtime.CompilerServices;
+using static Carmageddon.Forms.Models.Car;
 
 namespace Carmageddon
 {
@@ -53,13 +52,10 @@ namespace Carmageddon
         private HubConnection _battleHub = new BattleHub().GetInstance();
         private string turnMessage = "";
         private bool turnMade = false;
-        
+
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
-
-
-
 
         public Form2(HubConnection conn, Player player)
         {
@@ -77,18 +73,10 @@ namespace Carmageddon
             GetPlayerCount(_conn, _player);
             button8.Visible = false;
 
-            //_battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
-            //{
-            //    var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
-            //    if (pictureToUpdate != null)
-            //    {
-            //        pictureToUpdate.Location = new Point(x, y);
-            //    }
-
-            //});
-            GetPictureCords(conn);
+            OnReceivePictureCoordinates(conn);
         }
-        private void GetPictureCords(HubConnection conn)
+
+        private void OnReceivePictureCoordinates(HubConnection conn)
         {
             _battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
               {
@@ -97,10 +85,8 @@ namespace Carmageddon
                   {
                       pictureToUpdate.Location = new Point(x, y);
                   }
-
               });
         }
-
 
         void SetupBonuses()
         {
@@ -185,23 +171,6 @@ namespace Carmageddon
             }
         }
 
-        private async Task GetBattleDuration(HubConnection conn)
-        {
-            stop = false;
-            display = true;
-            await foreach (var model in conn.StreamAsync<GameStatusModel>("GetBattleDuration"))
-            {
-                if (display)
-                {
-                    label8.Text = "Battle duration: " + model.BattleDuration.ToLongTimeString();
-                }
-                if (stop)
-                {
-                    break;
-                }
-            }
-        }
-
         private async Task GetTotalShots(HubConnection conn, bool playerShot)
         {
             await foreach (var model in conn.StreamAsync<GameStatusModel>("GetMovesCount", playerShot))
@@ -251,15 +220,12 @@ namespace Carmageddon
             Debug.WriteLine("test");
         }
 
-
         private async void pictureBox1_Click(object sender, EventArgs e)
         {
             var mouseEventArgs = e as MouseEventArgs;
             var coordX = mouseEventArgs.X;
             var coordY = mouseEventArgs.Y;
             var cellPressed = "";
-
-            //Debug.WriteLine(string.Format("X: {0} Y: {1}", coordX, coordY));
 
             switch (coordX)
             {
@@ -358,14 +324,12 @@ namespace Carmageddon
             }
             if (selectedCar != null)
             {
-                //_cars.Push(selectedCar);
                 (_, _, string image) = selectedCar.GetInfo();
                 Image background;
                 using (var bmpTemp = new Bitmap(pictureBox1.Image))
                 {
                     background = new Bitmap(bmpTemp);
                 }
-                //previousImages.Push(pictureBox1.Image);
                 string carpath = Directory.GetCurrentDirectory() + "\\Resources\\" + image;
                 Image car;
                 using (var bmpTemp = new Bitmap(carpath))
@@ -399,10 +363,8 @@ namespace Carmageddon
                     label3.Text = state;
                 }
             }
-
-            //label3.Text = "Your grid cell pressed: " + cellPressed;
-            //Debug.WriteLine("Your grid cell pressed: " + cellPressed);
         }
+
         private void CheckButtonVisibility()
         {
             var carList = invoker.CarStack().ToList();
@@ -418,7 +380,6 @@ namespace Carmageddon
             _ = (mediumCount == 2) ? button2.Visible = false : button2.Visible = true;
             _ = (bigCount == 1) ? button3.Visible = false : button3.Visible = true;
         }
-
 
         private async Task<string> CheckCarState(int coordX, int coordY)
         {
@@ -519,8 +480,6 @@ namespace Carmageddon
                 var coordX = mouseEventArgs.X;
                 var coordY = mouseEventArgs.Y;
                 var cellPressed = "";
-
-                //Debug.WriteLine(string.Format("X: {0} Y: {1}", coordX, coordY));
 
                 switch (coordX)
                 {
@@ -767,7 +726,6 @@ namespace Carmageddon
             }
         }
 
-
         private void initializeCannon()
         {
             var random = new Random();
@@ -883,7 +841,6 @@ namespace Carmageddon
             }
         }
 
-
         public void LogMessage(string message, bool inline)
         {
             if (inline)
@@ -929,7 +886,7 @@ namespace Carmageddon
                 }
                 await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
             }
-                
+
         }
 
         private async void downButton_Click(object sender, EventArgs e)
@@ -937,13 +894,13 @@ namespace Carmageddon
             if (selectedPictureBox != null)
             {
                 int currentY = selectedPictureBox.Location.Y;
-                if(currentY + 50 <= 470)
+                if (currentY + 50 <= 470)
                 {
                     selectedPictureBox.Location = new Point(selectedPictureBox.Location.X, selectedPictureBox.Location.Y + 50);
                 }
                 await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
             }
-            
+
         }
 
         private async void leftButton_Click(object sender, EventArgs e)
@@ -957,7 +914,7 @@ namespace Carmageddon
                 }
                 await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
             }
-            
+
         }
 
         private async void rightButton_Click(object sender, EventArgs e)
@@ -972,6 +929,7 @@ namespace Carmageddon
                 await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
             }
         }
+
         private void pictureBox2_Click_1(object sender, EventArgs e)
         {
             selectedPictureBox = (PictureBox)sender;
@@ -1001,10 +959,8 @@ namespace Carmageddon
             this.HandleClickedPicture();
         }
 
-
         private void HandleClickedPicture()
         {
-
             upButton.Visible = true;
             downButton.Visible = true;
             leftButton.Visible = true;
@@ -1023,7 +979,6 @@ namespace Carmageddon
                 }
             }
         }
-
     }
 }
-        
+

@@ -400,7 +400,7 @@
             MinimizeBox = false;
             Name = "Form2";
             Tag = "B2";
-            Text = "Carmageddon";
+            Text = "WarGame";
             Load += Form2_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
