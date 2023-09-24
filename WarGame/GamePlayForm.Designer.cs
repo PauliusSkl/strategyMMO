@@ -58,6 +58,9 @@
             pictureBox3 = new PictureBox();
             pictureBox4 = new PictureBox();
             pictureBox5 = new PictureBox();
+            healthLabel = new Label();
+            attackLabel = new Label();
+            rangeLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -358,13 +361,48 @@
             pictureBox5.TabStop = false;
             pictureBox5.Click += pictureBox5_Click;
             // 
-            // Form2
+            // healthLabel
+            // 
+            healthLabel.AutoSize = true;
+            healthLabel.Location = new Point(1054, 40);
+            healthLabel.Name = "healthLabel";
+            healthLabel.Size = new Size(38, 15);
+            healthLabel.TabIndex = 338;
+            healthLabel.Text = "label4";
+            healthLabel.Visible = false;
+            healthLabel.Click += healthLabel_Click;
+            // 
+            // attackLabel
+            // 
+            attackLabel.AutoSize = true;
+            attackLabel.Location = new Point(1054, 70);
+            attackLabel.Name = "attackLabel";
+            attackLabel.Size = new Size(38, 15);
+            attackLabel.TabIndex = 339;
+            attackLabel.Text = "label4";
+            attackLabel.Visible = false;
+            attackLabel.Click += label4_Click;
+            // 
+            // rangeLabel
+            // 
+            rangeLabel.AutoSize = true;
+            rangeLabel.Location = new Point(1054, 95);
+            rangeLabel.Name = "rangeLabel";
+            rangeLabel.Size = new Size(44, 15);
+            rangeLabel.TabIndex = 340;
+            rangeLabel.Text = "label13";
+            rangeLabel.Visible = false;
+            // 
+            // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(rangeLabel);
+            Controls.Add(attackLabel);
+            Controls.Add(healthLabel);
             Controls.Add(pictureBox5);
             Controls.Add(pictureBox4);
             Controls.Add(pictureBox3);
@@ -398,7 +436,7 @@
             Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "Form2";
+            Name = "GamePlayForm";
             Tag = "B2";
             Text = "WarGame";
             Load += Form2_Load;
@@ -442,5 +480,8 @@
         private PictureBox pictureBox3;
         private PictureBox pictureBox4;
         private PictureBox pictureBox5;
+        private Label healthLabel;
+        private Label attackLabel;
+        private Label rangeLabel;
     }
 }

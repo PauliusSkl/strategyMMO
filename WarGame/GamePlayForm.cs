@@ -26,6 +26,14 @@ public partial class GamePlayForm : Form, IConsoleLogger
     private readonly HubConnection _conn;
     private readonly Player _player;
     private WeaponFactory _weaponFactory;
+
+    //WARRIORS STUFF -------
+    private List<PictureBox> pictureBoxes = new List<PictureBox>();
+    private List<Warrior> warriors = new List<Warrior>();
+    //--------------------
+
+
+
     private Car selectedCar;
     private Car previousCar;
     private readonly IGrid _enemyGrid;
@@ -70,21 +78,97 @@ public partial class GamePlayForm : Form, IConsoleLogger
         _ = GetPlayerCount(_conn, _player);
         button8.Visible = false;
 
+
+        InitializeWarriors();
+        AddPictureBoxesToList();
+        DisplayWarriorsImages();
+
+
         OnReceivePictureCoordinates();
+        OnReceiveWarriorList();
+    }
+
+
+    private void AddPictureBoxesToList()
+    {
+        pictureBoxes.Add(pictureBox2);
+        pictureBoxes.Add(pictureBox3);
+        pictureBoxes.Add(pictureBox4);
+        pictureBoxes.Add(pictureBox5);
+    }
+    private void InitializeWarriors()
+    {
+        string[] pngs = { "green", "blue", "yellow", "pink" };
+
+        string imagesFolder = Path.Combine(Application.StartupPath, "Resources");
+
+        for (int i = 0; i < 4; i++)
+        {
+            warriors.Add(new Warrior
+            {
+                Health = 100,
+                Attack = 50,
+                Range = 50,
+                X = 0,
+                Y = 0,
+                Image = Path.Combine(imagesFolder, $"warrior_{pngs[i]}.png")
+                //Image = "./Resources/warrior_" + pngs[i] + ".png"
+            });
+        }
+    }
+    private void DisplayWarriorsImages()
+    {
+        for (int i = 0; i < pictureBoxes.Count; i++)
+        {
+            pictureBoxes[i].Image = Image.FromFile(warriors[i].Image);
+            warriors[i].X = pictureBoxes[i].Location.X;
+            warriors[i].Y = pictureBoxes[i].Location.Y;
+        }
     }
 
     private void OnReceivePictureCoordinates()
     {
         _ = _battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
-          {
-              var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
-              if (pictureToUpdate != null)
-              {
-                  pictureToUpdate.Location = new Point(x, y);
-              }
-          });
+        {
+            var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
+            if (pictureToUpdate != null)
+            {
+                Warrior warriorToUpdate = GetWarriorFromPictureBox(pictureToUpdate);
+
+                if (warriorToUpdate != null)
+                {
+                    warriorToUpdate.X = x;
+                    warriorToUpdate.Y = y;
+                }
+                pictureToUpdate.Location = new Point(x, y);
+            }
+        });
     }
 
+    private void OnReceiveWarriorList()
+    {
+        _ = _battleHub.On<LinkedList<Warrior>>("ReceiveWarriorsStats", (warriors) =>
+        {
+            for (int i = 0; i < warriors.Count; i++)
+            {
+                this.warriors[i].Health = warriors.ElementAt(i).Health;
+                this.warriors[i].Attack = warriors.ElementAt(i).Attack;
+                this.warriors[i].Range = warriors.ElementAt(i).Range;
+
+                if (this.warriors[i].Health <= 0)
+                {
+                    PictureBox deadPictureBox = pictureBoxes[i];
+
+                    this.Controls.Remove(deadPictureBox);
+
+                    this.warriors.RemoveAt(i);
+                    pictureBoxes.RemoveAt(i);
+
+                    deadPictureBox.Dispose();
+                }
+            }
+        });
+    }
     void SetupBonuses()
     {
         var rnd = new Random();
@@ -550,6 +634,8 @@ public partial class GamePlayForm : Form, IConsoleLogger
 
     private void button1_Click(object sender, EventArgs e)
     {
+
+
         var carCreator = new CarCreator();
         Car car;
         if (previousCar != null && previousCar.Health == 1)
@@ -569,6 +655,8 @@ public partial class GamePlayForm : Form, IConsoleLogger
         LogMessage(message, true);
         selectedCar = car;
     }
+
+
 
     private void button2_Click(object sender, EventArgs e)
     {
@@ -814,6 +902,36 @@ public partial class GamePlayForm : Form, IConsoleLogger
         CheckButtonVisibility();
     }
 
+    private Warrior CheckForCollision(Warrior attacker, int newX, int newY)
+    {
+        foreach (var enemy in warriors)
+        {
+            if (attacker == enemy)
+            {
+                continue;
+            }
+                
+            Rectangle attackerBounds = new Rectangle(newX, newY, 40, 40);
+
+            Rectangle defenderBounds = new Rectangle(enemy.X, enemy.Y, 40, 40);
+
+            if (attackerBounds.IntersectsWith(defenderBounds))
+            {
+                return enemy;
+            }
+        }
+
+        return null;
+    }
+    private Warrior GetWarriorFromPictureBox(PictureBox pictureBox)
+    {
+        int selectedIndex = pictureBoxes.IndexOf(pictureBox);
+        if (selectedIndex >= 0 && selectedIndex < warriors.Count)
+        {
+            return warriors[selectedIndex];
+        }
+        return null;
+    }
     private PictureBox selectedPictureBox;
 
     private async void upButton_Click(object sender, EventArgs e)
@@ -821,23 +939,26 @@ public partial class GamePlayForm : Form, IConsoleLogger
         if (selectedPictureBox != null)
         {
             int currentY = selectedPictureBox.Location.Y;
+            int currentX = selectedPictureBox.Location.X;
             if (currentY - 50 >= 10)
             {
-                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X, selectedPictureBox.Location.Y - 50);
+                int newY = currentY - 50;
+                handleBattle(selectedPictureBox, currentX, newY);
             }
             await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
         }
 
     }
-
     private async void downButton_Click(object sender, EventArgs e)
     {
         if (selectedPictureBox != null)
         {
             int currentY = selectedPictureBox.Location.Y;
+            int currentX = selectedPictureBox.Location.X;
             if (currentY + 50 <= 470)
             {
-                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X, selectedPictureBox.Location.Y + 50);
+                int newY = currentY + 50;
+                handleBattle(selectedPictureBox, currentX, newY);
             }
             await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
         }
@@ -849,9 +970,12 @@ public partial class GamePlayForm : Form, IConsoleLogger
         if (selectedPictureBox != null)
         {
             int currentX = selectedPictureBox.Location.X;
+            int currentY = selectedPictureBox.Location.Y;
             if (currentX - 50 >= 420)
             {
-                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X - 50, selectedPictureBox.Location.Y);
+                int newX = currentX - 50;
+
+                handleBattle(selectedPictureBox, newX, currentY);
             }
             await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
         }
@@ -863,17 +987,41 @@ public partial class GamePlayForm : Form, IConsoleLogger
         if (selectedPictureBox != null)
         {
             int currentX = selectedPictureBox.Location.X;
+            int currentY = selectedPictureBox.Location.Y;
             if (currentX + 50 <= 920)
             {
-                selectedPictureBox.Location = new Point(selectedPictureBox.Location.X + 50, selectedPictureBox.Location.Y);
+                int newX = currentX + 50;
+                handleBattle(selectedPictureBox, newX, currentY);
             }
             await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
+        }
+    }
+
+    private async void handleBattle(PictureBox currentWarrior, int X, int Y)
+    {
+        Warrior attackingWarrior = GetWarriorFromPictureBox(currentWarrior);
+        Warrior defendingWarrior = CheckForCollision(attackingWarrior, X, Y);
+
+        if (defendingWarrior != null)
+        {
+            defendingWarrior.Health -= attackingWarrior.Attack;
+
+            await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
+
+        }
+        else
+        {
+            currentWarrior.Location = new Point(X, Y);
         }
     }
 
     private void pictureBox2_Click_1(object sender, EventArgs e)
     {
         selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
+
+        DisplayStats(selectedIndex);
 
         HandleClickedPicture();
     }
@@ -882,12 +1030,20 @@ public partial class GamePlayForm : Form, IConsoleLogger
     {
         selectedPictureBox = (PictureBox)sender;
 
+        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
+
+        DisplayStats(selectedIndex);
+
         HandleClickedPicture();
     }
 
     private void pictureBox3_Click(object sender, EventArgs e)
     {
         selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
+
+        DisplayStats(selectedIndex);
 
         HandleClickedPicture();
     }
@@ -896,8 +1052,36 @@ public partial class GamePlayForm : Form, IConsoleLogger
     {
         selectedPictureBox = (PictureBox)sender;
 
+        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
+
+        DisplayStats(selectedIndex);
 
         HandleClickedPicture();
+    }
+
+    private void DisplayStats(int index)
+    {
+
+        if (index >= 0 && index < warriors.Count)
+        {
+            Warrior selectedWarrior = warriors[index];
+
+            int health = selectedWarrior.Health;
+            int attack = selectedWarrior.Attack;
+            int range = selectedWarrior.Range;
+            int X = selectedWarrior.X;
+            int Y = selectedWarrior.Y;
+
+            healthLabel.Text = $"Health: {health}";
+
+            attackLabel.Text = $"Attack: {attack}";
+
+            rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
+
+            healthLabel.Visible = true;
+            attackLabel.Visible = true;
+            rangeLabel.Visible = true;
+        }
     }
 
     private void HandleClickedPicture()
@@ -916,9 +1100,18 @@ public partial class GamePlayForm : Form, IConsoleLogger
             {
                 pb.BorderStyle = BorderStyle.FixedSingle;
                 pb.BackColor = Color.Transparent;
-
             }
         }
+    }
+
+    private void healthLabel_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void label4_Click(object sender, EventArgs e)
+    {
+
     }
 }
 

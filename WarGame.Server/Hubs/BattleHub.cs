@@ -1,6 +1,7 @@
 ﻿using WarGame.API.Models;
 using Microsoft.AspNetCore.SignalR;
 using System.Runtime.CompilerServices;
+using WarGame.Server.Models;
 
 namespace WarGame.API.Hubs;
 
@@ -226,5 +227,10 @@ public class BattleHub : Hub
     public async Task UpdatePictureCoordinates(string pictureName, int x, int y)
     {
         await Clients.All.SendAsync("ReceivePictureCoordinates", pictureName, x, y);
+    }
+
+    public async Task UpdateWarriorsStats(LinkedList<Warrior> warriors)
+    {
+        await Clients.All.SendAsync("ReceiveWarriorsStats", warriors);
     }
 }
