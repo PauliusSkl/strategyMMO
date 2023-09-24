@@ -229,7 +229,7 @@ public class BattleHub : Hub
         await Clients.All.SendAsync("ReceivePictureCoordinates", pictureName, x, y);
     }
 
-    public async Task UpdateWarriorsStats(LinkedList<Warrior> warriors)
+    public async Task UpdateWarriorsStats(LinkedList<Unit> warriors)
     {
         await Clients.All.SendAsync("ReceiveWarriorsStats", warriors);
     }
