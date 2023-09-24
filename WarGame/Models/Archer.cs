@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WarGame.Forms.Models
 {
-    public class Warrior : Unit
+    public class Archer : Unit
     {
-        public int Armor { get; set; }
+        public int Arrows { get; set; }
 
     }
 }

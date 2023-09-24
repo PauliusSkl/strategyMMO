@@ -29,7 +29,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
 
     //WARRIORS STUFF -------
     private List<PictureBox> pictureBoxes = new List<PictureBox>();
-    private List<Warrior> warriors = new List<Warrior>();
+    private List<Unit> warriors = new List<Unit>();
     //--------------------
 
 
@@ -133,7 +133,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
             var pictureToUpdate = Controls.OfType<PictureBox>().FirstOrDefault(p => p.Name == pictureName);
             if (pictureToUpdate != null)
             {
-                Warrior warriorToUpdate = GetWarriorFromPictureBox(pictureToUpdate);
+                Unit warriorToUpdate = GetWarriorFromPictureBox(pictureToUpdate);
 
                 if (warriorToUpdate != null)
                 {
@@ -147,7 +147,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
 
     private void OnReceiveWarriorList()
     {
-        _ = _battleHub.On<LinkedList<Warrior>>("ReceiveWarriorsStats", (warriors) =>
+        _ = _battleHub.On<LinkedList<Unit>>("ReceiveWarriorsStats", (warriors) =>
         {
             for (int i = 0; i < warriors.Count; i++)
             {
@@ -902,7 +902,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
         CheckButtonVisibility();
     }
 
-    private Warrior CheckForCollision(Warrior attacker, int newX, int newY)
+    private Unit CheckForCollision(Unit attacker, int newX, int newY)
     {
         foreach (var enemy in warriors)
         {
@@ -926,7 +926,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
         return null;
     }
 
-    private Warrior GetWarriorFromPictureBox(PictureBox pictureBox)
+    private Unit GetWarriorFromPictureBox(PictureBox pictureBox)
     {
         int selectedIndex = pictureBoxes.IndexOf(pictureBox);
         if (selectedIndex >= 0 && selectedIndex < warriors.Count)
@@ -1002,15 +1002,14 @@ public partial class GamePlayForm : Form, IConsoleLogger
 
     private async void handleBattle(PictureBox currentWarrior, int X, int Y)
     {
-        Warrior attackingWarrior = GetWarriorFromPictureBox(currentWarrior);
-        Warrior defendingWarrior = CheckForCollision(attackingWarrior, X, Y);
+        Unit attackingWarrior = GetWarriorFromPictureBox(currentWarrior);
+        Unit defendingWarrior = CheckForCollision(attackingWarrior, X, Y);
 
         if (defendingWarrior != null)
         {
             defendingWarrior.Health -= attackingWarrior.Attack;
 
             await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
-
         }
         else
         {
@@ -1067,7 +1066,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
 
         if (index >= 0 && index < warriors.Count)
         {
-            Warrior selectedWarrior = warriors[index];
+            Unit selectedWarrior = warriors[index];
 
             int health = selectedWarrior.Health;
             int attack = selectedWarrior.Attack;
