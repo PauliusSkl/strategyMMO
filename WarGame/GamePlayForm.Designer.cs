@@ -61,11 +61,13 @@
             healthLabel = new Label();
             attackLabel = new Label();
             rangeLabel = new Label();
+            pictureBox6 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -393,6 +395,15 @@
             rangeLabel.Text = "label13";
             rangeLabel.Visible = false;
             // 
+            // pictureBox6
+            // 
+            pictureBox6.Location = new Point(528, 70);
+            pictureBox6.Name = "pictureBox6";
+            pictureBox6.Size = new Size(50, 50);
+            pictureBox6.TabIndex = 341;
+            pictureBox6.TabStop = false;
+            pictureBox6.Click += pictureBox6_Click;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -400,6 +411,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(pictureBox6);
             Controls.Add(rangeLabel);
             Controls.Add(attackLabel);
             Controls.Add(healthLabel);
@@ -445,6 +457,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -483,5 +496,6 @@
         private Label healthLabel;
         private Label attackLabel;
         private Label rangeLabel;
+        private PictureBox pictureBox6;
     }
 }

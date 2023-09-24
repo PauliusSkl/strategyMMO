@@ -8,7 +8,6 @@ namespace WarGame.Forms.Models
 {
     public class Warrior : Unit
     {
-        public int Armor { get; set; }
 
     }
 }

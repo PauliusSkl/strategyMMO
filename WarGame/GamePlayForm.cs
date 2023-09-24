@@ -95,6 +95,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
         pictureBoxes.Add(pictureBox3);
         pictureBoxes.Add(pictureBox4);
         pictureBoxes.Add(pictureBox5);
+        pictureBoxes.Add(pictureBox6);
     }
     private void InitializeWarriors()
     {
@@ -106,8 +107,8 @@ public partial class GamePlayForm : Form, IConsoleLogger
         {
             warriors.Add(new Warrior
             {
-                Health = 100,
-                Attack = 50,
+                Health = 500,
+                Attack = 100,
                 Range = 1,
                 X = 0,
                 Y = 0,
@@ -115,6 +116,18 @@ public partial class GamePlayForm : Form, IConsoleLogger
                 //Image = "./Resources/warrior_" + pngs[i] + ".png"
             });
         }
+
+        warriors.Add(new Archer
+        {
+            Health = 200,
+            Attack = 50,
+            Range = 2,
+            X = 0,
+            Y = 0,
+            Arrows = 10,
+            Image = Path.Combine(imagesFolder, $"warrior_tank.png")
+            //Image = "./Resources/warrior_" + pngs[i] + ".png"
+        });
     }
     private void DisplayWarriorsImages()
     {
@@ -147,24 +160,24 @@ public partial class GamePlayForm : Form, IConsoleLogger
 
     private void OnReceiveWarriorList()
     {
-        _ = _battleHub.On<LinkedList<Unit>>("ReceiveWarriorsStats", (warriors) =>
+        _ = _battleHub.On<List<Unit>>("ReceiveWarriorsStats", (updatedWarriors) =>
         {
-            for (int i = 0; i < warriors.Count; i++)
+            for (int i = this.warriors.Count - 1; i >= 0; i--)
             {
-                this.warriors[i].Health = warriors.ElementAt(i).Health;
-                this.warriors[i].Attack = warriors.ElementAt(i).Attack;
-                this.warriors[i].Range = warriors.ElementAt(i).Range;
+                this.warriors[i].Health = updatedWarriors[i].Health;
+                this.warriors[i].Attack = updatedWarriors[i].Attack;
+                this.warriors[i].Range = updatedWarriors[i].Range;
 
                 if (this.warriors[i].Health <= 0)
                 {
-                    PictureBox deadPictureBox = pictureBoxes[i];
 
+                    PictureBox deadPictureBox = pictureBoxes[i];
                     this.Controls.Remove(deadPictureBox);
 
-                    this.warriors.RemoveAt(i);
-                    pictureBoxes.RemoveAt(i);
 
-                    deadPictureBox.Dispose();
+                    this.warriors.RemoveAt(i);
+
+                    this.pictureBoxes.RemoveAt(i);
                 }
             }
         });
@@ -910,8 +923,8 @@ public partial class GamePlayForm : Form, IConsoleLogger
             {
                 continue;
             }
-
-            int attackRange = (attacker.Range - 1) * 50;
+            int range = attacker.Range;
+            int attackRange = (range - 1) * 50;
 
             int distanceX = Math.Abs((newX + 25) - (enemy.X + 25));
             int distanceY = Math.Abs((newY + 25) - (enemy.Y + 25));
@@ -1074,10 +1087,19 @@ public partial class GamePlayForm : Form, IConsoleLogger
             int X = selectedWarrior.X;
             int Y = selectedWarrior.Y;
 
+
+
             healthLabel.Text = $"Health: {health}";
 
-            attackLabel.Text = $"Attack: {attack}";
-
+            
+            if (selectedWarrior is Archer)
+            {
+                attackLabel.Text = $"Arrows: ";
+            }
+            else
+            {
+                attackLabel.Text = $"Attack: {attack}";
+            }
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
 
             healthLabel.Visible = true;
@@ -1114,6 +1136,17 @@ public partial class GamePlayForm : Form, IConsoleLogger
     private void label4_Click(object sender, EventArgs e)
     {
 
+    }
+
+    private void pictureBox6_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
+
+        DisplayStats(selectedIndex);
+
+        HandleClickedPicture();
     }
 }
 

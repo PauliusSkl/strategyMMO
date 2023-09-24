@@ -5,6 +5,5 @@ namespace WarGame.Server.Models
 {
     public class Warrior : Unit
     {
-        public int Arrmor { get; set; }
     }
 }
