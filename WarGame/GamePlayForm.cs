@@ -108,7 +108,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
             {
                 Health = 100,
                 Attack = 50,
-                Range = 50,
+                Range = 1,
                 X = 0,
                 Y = 0,
                 Image = Path.Combine(imagesFolder, $"warrior_{pngs[i]}.png")
@@ -910,12 +910,14 @@ public partial class GamePlayForm : Form, IConsoleLogger
             {
                 continue;
             }
-                
-            Rectangle attackerBounds = new Rectangle(newX, newY, 40, 40);
 
-            Rectangle defenderBounds = new Rectangle(enemy.X, enemy.Y, 40, 40);
+            int attackRange = (attacker.Range - 1) * 50;
 
-            if (attackerBounds.IntersectsWith(defenderBounds))
+            int distanceX = Math.Abs((newX + 25) - (enemy.X + 25));
+            int distanceY = Math.Abs((newY + 25) - (enemy.Y + 25));
+
+
+            if ((distanceX <= attackRange + 25 && distanceY <= 25) || (distanceX <= 25 && distanceY <= attackRange + 25))
             {
                 return enemy;
             }
@@ -923,6 +925,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
 
         return null;
     }
+
     private Warrior GetWarriorFromPictureBox(PictureBox pictureBox)
     {
         int selectedIndex = pictureBoxes.IndexOf(pictureBox);
