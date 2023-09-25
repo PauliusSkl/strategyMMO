@@ -19,6 +19,7 @@ namespace WarGame.Forms.Models
 
         public int Speed { get; set; }
 
+        public string Color { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
 
     }
