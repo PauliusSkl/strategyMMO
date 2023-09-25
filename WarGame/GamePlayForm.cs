@@ -96,6 +96,9 @@ public partial class GamePlayForm : Form, IConsoleLogger
         pictureBoxes.Add(pictureBox4);
         pictureBoxes.Add(pictureBox5);
         pictureBoxes.Add(pictureBox6);
+        pictureBoxes.Add(pictureBox7);
+        pictureBoxes.Add(pictureBox8);
+        pictureBoxes.Add(pictureBox9);
     }
     private void InitializeWarriors()
     {
@@ -107,7 +110,7 @@ public partial class GamePlayForm : Form, IConsoleLogger
         {
             warriors.Add(new Warrior
             {
-                Health = 500,
+                Health = 200,
                 Attack = 100,
                 Range = 1,
                 X = 0,
@@ -117,17 +120,19 @@ public partial class GamePlayForm : Form, IConsoleLogger
             });
         }
 
-        warriors.Add(new Archer
+        for (int i = 0; i < 4; i++)
         {
-            Health = 200,
-            Attack = 50,
-            Range = 2,
-            X = 0,
-            Y = 0,
-            Arrows = 10,
-            Image = Path.Combine(imagesFolder, $"warrior_tank.png")
-            //Image = "./Resources/warrior_" + pngs[i] + ".png"
-        });
+            warriors.Add(new Archer
+            {
+                Health = 100,
+                Attack = 100,
+                Range = 2,
+                X = 0,
+                Y = 0,
+                Image = Path.Combine(imagesFolder, $"archer_{pngs[i]}.png")
+                //Image = "./Resources/warrior_" + pngs[i] + ".png"
+            });
+        }
     }
     private void DisplayWarriorsImages()
     {
@@ -1139,6 +1144,39 @@ public partial class GamePlayForm : Form, IConsoleLogger
     }
 
     private void pictureBox6_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
+
+        DisplayStats(selectedIndex);
+
+        HandleClickedPicture();
+    }
+
+    private void pictureBox7_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
+
+        DisplayStats(selectedIndex);
+
+        HandleClickedPicture();
+    }
+
+    private void pictureBox8_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
+
+        DisplayStats(selectedIndex);
+
+        HandleClickedPicture();
+    }
+
+    private void pictureBox9_Click(object sender, EventArgs e)
     {
         selectedPictureBox = (PictureBox)sender;
 

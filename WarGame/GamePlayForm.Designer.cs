@@ -62,6 +62,9 @@
             attackLabel = new Label();
             rangeLabel = new Label();
             pictureBox6 = new PictureBox();
+            pictureBox7 = new PictureBox();
+            pictureBox8 = new PictureBox();
+            pictureBox9 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -397,12 +400,39 @@
             // 
             // pictureBox6
             // 
-            pictureBox6.Location = new Point(528, 70);
+            pictureBox6.Location = new Point(476, 14);
             pictureBox6.Name = "pictureBox6";
             pictureBox6.Size = new Size(50, 50);
             pictureBox6.TabIndex = 341;
             pictureBox6.TabStop = false;
             pictureBox6.Click += pictureBox6_Click;
+            // 
+            // pictureBox7
+            // 
+            pictureBox7.Location = new Point(823, 14);
+            pictureBox7.Name = "pictureBox7";
+            pictureBox7.Size = new Size(50, 50);
+            pictureBox7.TabIndex = 342;
+            pictureBox7.TabStop = false;
+            pictureBox7.Click += pictureBox7_Click;
+            // 
+            // pictureBox8
+            // 
+            pictureBox8.Location = new Point(476, 464);
+            pictureBox8.Name = "pictureBox8";
+            pictureBox8.Size = new Size(50, 50);
+            pictureBox8.TabIndex = 343;
+            pictureBox8.TabStop = false;
+            pictureBox8.Click += pictureBox8_Click;
+            // 
+            // pictureBox9
+            // 
+            pictureBox9.Location = new Point(823, 464);
+            pictureBox9.Name = "pictureBox9";
+            pictureBox9.Size = new Size(50, 50);
+            pictureBox9.TabIndex = 344;
+            pictureBox9.TabStop = false;
+            pictureBox9.Click += pictureBox9_Click;
             // 
             // GamePlayForm
             // 
@@ -411,6 +441,9 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(pictureBox9);
+            Controls.Add(pictureBox8);
+            Controls.Add(pictureBox7);
             Controls.Add(pictureBox6);
             Controls.Add(rangeLabel);
             Controls.Add(attackLabel);
@@ -497,5 +530,8 @@
         private Label attackLabel;
         private Label rangeLabel;
         private PictureBox pictureBox6;
+        private PictureBox pictureBox7;
+        private PictureBox pictureBox8;
+        private PictureBox pictureBox9;
     }
 }
