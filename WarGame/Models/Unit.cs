@@ -21,10 +21,5 @@ namespace WarGame.Forms.Models
 
         public string Image { get; set; } = string.Empty;
 
-
-        public (int, int, int, int, int, string) GetInfo()
-        {
-            return (Health, Attack, Range, X, Y, Image);
-        }
     }
 }

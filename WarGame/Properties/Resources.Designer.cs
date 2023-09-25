@@ -133,6 +133,16 @@ namespace WarGame.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap warrior_tank {
+            get {
+                object obj = ResourceManager.GetObject("warrior_tank", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap warrior_yellow {
             get {
                 object obj = ResourceManager.GetObject("warrior_yellow", resourceCulture);

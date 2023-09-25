@@ -9,6 +9,5 @@ namespace WarGame.Forms.Models
     public class Archer : Unit
     {
         public int Arrows { get; set; }
-
     }
 }
