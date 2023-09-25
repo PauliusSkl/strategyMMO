@@ -73,6 +73,46 @@ namespace WarGame.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap archer_blue {
+            get {
+                object obj = ResourceManager.GetObject("archer_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap archer_green {
+            get {
+                object obj = ResourceManager.GetObject("archer_green", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap archer_pink {
+            get {
+                object obj = ResourceManager.GetObject("archer_pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap archer_yellow {
+            get {
+                object obj = ResourceManager.GetObject("archer_yellow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap background {
             get {
                 object obj = ResourceManager.GetObject("background", resourceCulture);
@@ -126,16 +166,6 @@ namespace WarGame.Forms.Properties {
         internal static System.Drawing.Bitmap warrior_pink {
             get {
                 object obj = ResourceManager.GetObject("warrior_pink", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap warrior_tank {
-            get {
-                object obj = ResourceManager.GetObject("warrior_tank", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
