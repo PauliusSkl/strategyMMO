@@ -32,11 +32,6 @@ public static class PlayersList
         return _players.FirstOrDefault(x => x.Username == username);
     }
 
-    public static List<Car> GetPlayerCars(string username)
-    {
-        return _players.FirstOrDefault(x => x.Username == username).Cars;
-    }
-
     public static int GetCount()
     {
         return _players.Count;
@@ -50,27 +45,5 @@ public static class PlayersList
             names.Add(player.Username);
         }
         return names;
-    }
-
-    public static void AddPlayerCars(Player player, List<Car> cars)
-    {
-        if (!Exists(player))
-        {
-            return;
-        }
-
-        var playerAggregate = new GameObjAggregate();
-        playerAggregate.ListToAggregate(_players);
-        var iterator = playerAggregate.CreateIterator();
-
-        var user = (Player)iterator.First();
-        while (user != null)
-        {
-            if (user.Username == player.Username)
-            {
-                user.Cars = cars;
-            }
-            user = (Player)iterator.Next();
-        }
     }
 }

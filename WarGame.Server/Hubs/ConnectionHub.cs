@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 using WarGame.API.Models;
 using WarGame.API.Strategy;
 
@@ -52,12 +51,5 @@ public class ConnectionHub : Hub
             yield return gameStatus.ExecuteStrategy(_gameStatusModel);
             await Task.Delay(1000, cancellationToken);
         }
-    }
-
-    public void SavePlayerCars(Player player, string carsJson)
-    {
-        var cars = JsonConvert.DeserializeObject<List<Car>>(carsJson);
-
-        PlayersList.AddPlayerCars(player, cars);
     }
 }

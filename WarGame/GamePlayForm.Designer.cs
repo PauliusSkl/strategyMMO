@@ -33,21 +33,13 @@
             label2 = new Label();
             pictureBox1 = new PictureBox();
             label3 = new Label();
-            button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
             label5 = new Label();
             label6 = new Label();
             label7 = new Label();
             label8 = new Label();
-            button4 = new Button();
-            button5 = new Button();
             label9 = new Label();
-            button8 = new Button();
             label10 = new Label();
             timer1 = new System.Windows.Forms.Timer(components);
-            button9 = new Button();
-            button10 = new Button();
             label11 = new Label();
             label12 = new Label();
             upButton = new Button();
@@ -65,12 +57,31 @@
             pictureBox7 = new PictureBox();
             pictureBox8 = new PictureBox();
             pictureBox9 = new PictureBox();
+            pictureBox10 = new PictureBox();
+            pictureBox11 = new PictureBox();
+            pictureBox12 = new PictureBox();
+            pictureBox13 = new PictureBox();
+            pictureBox14 = new PictureBox();
+            pictureBox15 = new PictureBox();
+            pictureBox16 = new PictureBox();
+            pictureBox17 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox7).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox8).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox9).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox12).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox13).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox14).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox15).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox16).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox17).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -114,39 +125,6 @@
             label3.Size = new Size(0, 37);
             label3.TabIndex = 305;
             // 
-            // button1
-            // 
-            button1.Location = new Point(326, 14);
-            button1.Margin = new Padding(3, 2, 3, 2);
-            button1.Name = "button1";
-            button1.Size = new Size(82, 22);
-            button1.TabIndex = 311;
-            button1.Text = "Small car";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(299, 51);
-            button2.Margin = new Padding(3, 2, 3, 2);
-            button2.Name = "button2";
-            button2.Size = new Size(109, 22);
-            button2.TabIndex = 312;
-            button2.Text = "Medium car";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
-            // 
-            // button3
-            // 
-            button3.Location = new Point(326, 88);
-            button3.Margin = new Padding(3, 2, 3, 2);
-            button3.Name = "button3";
-            button3.Size = new Size(82, 22);
-            button3.TabIndex = 313;
-            button3.Text = "Big car";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click_1;
-            // 
             // label5
             // 
             label5.AutoSize = true;
@@ -183,28 +161,6 @@
             label8.Size = new Size(0, 15);
             label8.TabIndex = 317;
             // 
-            // button4
-            // 
-            button4.Location = new Point(841, 519);
-            button4.Margin = new Padding(3, 2, 3, 2);
-            button4.Name = "button4";
-            button4.Size = new Size(82, 22);
-            button4.TabIndex = 318;
-            button4.Text = "Cannon";
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
-            // 
-            // button5
-            // 
-            button5.Location = new Point(753, 519);
-            button5.Margin = new Padding(3, 2, 3, 2);
-            button5.Name = "button5";
-            button5.Size = new Size(82, 22);
-            button5.TabIndex = 319;
-            button5.Text = "MG";
-            button5.UseVisualStyleBackColor = true;
-            button5.Click += button5_Click;
-            // 
             // label9
             // 
             label9.AutoSize = true;
@@ -213,17 +169,6 @@
             label9.Size = new Size(0, 15);
             label9.TabIndex = 320;
             // 
-            // button8
-            // 
-            button8.Location = new Point(426, 519);
-            button8.Margin = new Padding(3, 2, 3, 2);
-            button8.Name = "button8";
-            button8.Size = new Size(82, 22);
-            button8.TabIndex = 323;
-            button8.Text = "Confirm";
-            button8.UseVisualStyleBackColor = true;
-            button8.Click += button8_Click;
-            // 
             // label10
             // 
             label10.AutoSize = true;
@@ -231,35 +176,6 @@
             label10.Name = "label10";
             label10.Size = new Size(0, 15);
             label10.TabIndex = 325;
-            // 
-            // timer1
-            // 
-            timer1.Enabled = true;
-            timer1.Interval = 1000;
-            timer1.Tick += timer1_Tick;
-            // 
-            // button9
-            // 
-            button9.Location = new Point(2, 249);
-            button9.Margin = new Padding(3, 2, 3, 2);
-            button9.Name = "button9";
-            button9.Size = new Size(73, 22);
-            button9.TabIndex = 326;
-            button9.Text = "Save";
-            button9.UseVisualStyleBackColor = true;
-            button9.Click += button9_Click;
-            // 
-            // button10
-            // 
-            button10.Location = new Point(2, 296);
-            button10.Margin = new Padding(3, 2, 3, 2);
-            button10.Name = "button10";
-            button10.Size = new Size(73, 22);
-            button10.TabIndex = 327;
-            button10.Text = "Restore";
-            button10.UseVisualStyleBackColor = true;
-            button10.Visible = false;
-            button10.Click += button10_Click;
             // 
             // label11
             // 
@@ -349,7 +265,7 @@
             // pictureBox4
             // 
             pictureBox4.BackgroundImage = Forms.Properties.Resources.warrior_pink;
-            pictureBox4.Location = new Point(426, 464);
+            pictureBox4.Location = new Point(426, 462);
             pictureBox4.Name = "pictureBox4";
             pictureBox4.Size = new Size(50, 50);
             pictureBox4.TabIndex = 336;
@@ -359,7 +275,7 @@
             // pictureBox5
             // 
             pictureBox5.BackgroundImage = Forms.Properties.Resources.warriori_green;
-            pictureBox5.Location = new Point(873, 464);
+            pictureBox5.Location = new Point(873, 462);
             pictureBox5.Name = "pictureBox5";
             pictureBox5.Size = new Size(50, 50);
             pictureBox5.TabIndex = 337;
@@ -418,7 +334,7 @@
             // 
             // pictureBox8
             // 
-            pictureBox8.Location = new Point(476, 464);
+            pictureBox8.Location = new Point(476, 462);
             pictureBox8.Name = "pictureBox8";
             pictureBox8.Size = new Size(50, 50);
             pictureBox8.TabIndex = 343;
@@ -427,12 +343,84 @@
             // 
             // pictureBox9
             // 
-            pictureBox9.Location = new Point(823, 464);
+            pictureBox9.Location = new Point(823, 462);
             pictureBox9.Name = "pictureBox9";
             pictureBox9.Size = new Size(50, 50);
             pictureBox9.TabIndex = 344;
             pictureBox9.TabStop = false;
             pictureBox9.Click += pictureBox9_Click;
+            // 
+            // pictureBox10
+            // 
+            pictureBox10.Location = new Point(527, 14);
+            pictureBox10.Name = "pictureBox10";
+            pictureBox10.Size = new Size(50, 50);
+            pictureBox10.TabIndex = 345;
+            pictureBox10.TabStop = false;
+            pictureBox10.Click += pictureBox10_Click;
+            // 
+            // pictureBox11
+            // 
+            pictureBox11.Location = new Point(772, 14);
+            pictureBox11.Name = "pictureBox11";
+            pictureBox11.Size = new Size(50, 50);
+            pictureBox11.TabIndex = 346;
+            pictureBox11.TabStop = false;
+            pictureBox11.Click += pictureBox11_Click;
+            // 
+            // pictureBox12
+            // 
+            pictureBox12.Location = new Point(527, 462);
+            pictureBox12.Name = "pictureBox12";
+            pictureBox12.Size = new Size(50, 50);
+            pictureBox12.TabIndex = 347;
+            pictureBox12.TabStop = false;
+            pictureBox12.Click += pictureBox12_Click;
+            // 
+            // pictureBox13
+            // 
+            pictureBox13.Location = new Point(772, 462);
+            pictureBox13.Name = "pictureBox13";
+            pictureBox13.Size = new Size(50, 50);
+            pictureBox13.TabIndex = 348;
+            pictureBox13.TabStop = false;
+            pictureBox13.Click += pictureBox13_Click;
+            // 
+            // pictureBox14
+            // 
+            pictureBox14.Location = new Point(578, 14);
+            pictureBox14.Name = "pictureBox14";
+            pictureBox14.Size = new Size(50, 50);
+            pictureBox14.TabIndex = 349;
+            pictureBox14.TabStop = false;
+            pictureBox14.Click += pictureBox14_Click;
+            // 
+            // pictureBox15
+            // 
+            pictureBox15.Location = new Point(721, 14);
+            pictureBox15.Name = "pictureBox15";
+            pictureBox15.Size = new Size(50, 50);
+            pictureBox15.TabIndex = 350;
+            pictureBox15.TabStop = false;
+            pictureBox15.Click += pictureBox15_Click;
+            // 
+            // pictureBox16
+            // 
+            pictureBox16.Location = new Point(578, 462);
+            pictureBox16.Name = "pictureBox16";
+            pictureBox16.Size = new Size(50, 50);
+            pictureBox16.TabIndex = 351;
+            pictureBox16.TabStop = false;
+            pictureBox16.Click += pictureBox16_Click;
+            // 
+            // pictureBox17
+            // 
+            pictureBox17.Location = new Point(721, 462);
+            pictureBox17.Name = "pictureBox17";
+            pictureBox17.Size = new Size(50, 50);
+            pictureBox17.TabIndex = 352;
+            pictureBox17.TabStop = false;
+            pictureBox17.Click += pictureBox17_Click;
             // 
             // GamePlayForm
             // 
@@ -441,6 +429,14 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(pictureBox17);
+            Controls.Add(pictureBox16);
+            Controls.Add(pictureBox15);
+            Controls.Add(pictureBox14);
+            Controls.Add(pictureBox13);
+            Controls.Add(pictureBox12);
+            Controls.Add(pictureBox11);
+            Controls.Add(pictureBox10);
             Controls.Add(pictureBox9);
             Controls.Add(pictureBox8);
             Controls.Add(pictureBox7);
@@ -458,20 +454,12 @@
             Controls.Add(upButton);
             Controls.Add(label12);
             Controls.Add(label11);
-            Controls.Add(button10);
-            Controls.Add(button9);
             Controls.Add(label10);
-            Controls.Add(button8);
             Controls.Add(label9);
-            Controls.Add(button5);
-            Controls.Add(button4);
             Controls.Add(label8);
             Controls.Add(label7);
             Controls.Add(label6);
             Controls.Add(label5);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(button1);
             Controls.Add(label3);
             Controls.Add(pictureBox1);
             Controls.Add(label2);
@@ -491,8 +479,24 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox7).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox8).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox9).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox12).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox13).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox14).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox15).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox16).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox17).EndInit();
             ResumeLayout(false);
             PerformLayout();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            return;
         }
 
         #endregion
@@ -501,21 +505,13 @@
         private Label label2;
         private PictureBox pictureBox1;
         private Label label3;
-        private Button button1;
-        private Button button2;
-        private Button button3;
         private Label label5;
         private Label label6;
         private Label label7;
         private Label label8;
-        private Button button4;
-        private Button button5;
         private Label label9;
-        private Button button8;
         private Label label10;
         private System.Windows.Forms.Timer timer1;
-        private Button button9;
-        private Button button10;
         private Label label11;
         private Label label12;
         private Button upButton;
@@ -533,5 +529,13 @@
         private PictureBox pictureBox7;
         private PictureBox pictureBox8;
         private PictureBox pictureBox9;
+        private PictureBox pictureBox10;
+        private PictureBox pictureBox11;
+        private PictureBox pictureBox12;
+        private PictureBox pictureBox13;
+        private PictureBox pictureBox14;
+        private PictureBox pictureBox15;
+        private PictureBox pictureBox16;
+        private PictureBox pictureBox17;
     }
 }
