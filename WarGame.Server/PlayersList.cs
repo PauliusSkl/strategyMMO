@@ -1,5 +1,4 @@
-﻿using WarGame.API.Iterator;
-using WarGame.API.Models;
+﻿using Shared.Models;
 
 namespace WarGame.API;
 

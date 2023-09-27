@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using WarGame.API.Models;
+using Shared.Models;
 using WarGame.API.Strategy;
-
 namespace WarGame.API.Hubs;
+
 
 public class ConnectionHub : Hub
 {
