@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarGame.Forms", "WarGame\Wa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarGame.Server", "WarGame.Server\WarGame.Server.csproj", "{678A7AF1-725E-475B-A082-BB9E591F3BBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{5E56FBE7-01F8-4F95-8471-B0E5C6317F38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{678A7AF1-725E-475B-A082-BB9E591F3BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{678A7AF1-725E-475B-A082-BB9E591F3BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{678A7AF1-725E-475B-A082-BB9E591F3BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E56FBE7-01F8-4F95-8471-B0E5C6317F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E56FBE7-01F8-4F95-8471-B0E5C6317F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E56FBE7-01F8-4F95-8471-B0E5C6317F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E56FBE7-01F8-4F95-8471-B0E5C6317F38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

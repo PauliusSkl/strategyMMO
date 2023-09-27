@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.SignalR.Client;
-using System;
+using Shared.Models;
 using System.Runtime.InteropServices;
 using WarGame.Forms;
-using WarGame.Forms.Models;
 
 
 namespace WarGame;
@@ -200,7 +199,7 @@ public partial class GamePlayForm : Form
     {
         foreach (var enemy in warriors)
         {
-            if (attacker == enemy  || enemy.Color == attacker.Color)
+            if (attacker == enemy || enemy.Color == attacker.Color)
             {
                 continue;
             }
@@ -224,9 +223,9 @@ public partial class GamePlayForm : Form
 
     private bool CheckForTeammate(Unit attacker, int newX, int newY)
     {
-        foreach(var obstacle in warriors)
+        foreach (var obstacle in warriors)
         {
-            if(obstacle.Color != attacker.Color)
+            if (obstacle.Color != attacker.Color)
             {
                 continue;
             }

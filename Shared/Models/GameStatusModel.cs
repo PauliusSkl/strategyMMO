@@ -1,4 +1,4 @@
-﻿namespace WarGame.Forms.Models;
+﻿namespace Shared.Models;
 
 public class GameStatusModel
 {

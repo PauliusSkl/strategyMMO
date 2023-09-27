@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR.Client;
+using Shared.Models;
 using WarGame.Forms;
-using WarGame.Forms.Models;
 
 namespace WarGame;
 

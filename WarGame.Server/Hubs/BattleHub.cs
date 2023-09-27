@@ -1,7 +1,6 @@
-﻿using WarGame.API.Models;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
+using Shared.Models;
 using System.Runtime.CompilerServices;
-using WarGame.Server.Models;
 
 namespace WarGame.API.Hubs;
 
@@ -15,7 +14,6 @@ public class BattleHub : Hub
         }
 
         var player = PlayersList.GetPlayer(username);
-        player.Confirmed = true;
 
         yield return true;
 

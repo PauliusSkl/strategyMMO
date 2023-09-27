@@ -1,4 +1,4 @@
-﻿using WarGame.API.Models;
+﻿using Shared.Models;
 
 namespace WarGame.API.Strategy;
 
