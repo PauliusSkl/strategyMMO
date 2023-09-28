@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
+
 namespace Shared.Models
 {
     public class Water : Obstacle
@@ -18,6 +19,16 @@ namespace Shared.Models
             Y = y;
             SlowLevel = slowLevel;
             Image = "Resources/obstacle_water.png";
+        }
+
+        public override List<string> DisplayInfo()
+        {
+            List<string> info = new List<string>();
+            info.Add("Name: Water");
+            info.Add("Slow Level: " + SlowLevel.ToString());
+            info.Add("Cords: " + X.ToString() + ";" + Y.ToString());
+
+            return info;
         }
     }
 }

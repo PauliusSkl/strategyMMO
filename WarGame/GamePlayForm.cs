@@ -20,6 +20,9 @@ public partial class GamePlayForm : Form
     private List<Obstacle> obstacles = new List<Obstacle>();
     private List<PictureBox> pictureBoxesObstacles = new List<PictureBox>();
     private bool AddingObstacles = false;
+    private bool AddingWater = false;
+    private bool AddingMountain = false;
+    private bool AddingLava = false;
 
 
     private readonly HubConnection _battleHub = new BattleHub().GetInstance();
@@ -42,17 +45,6 @@ public partial class GamePlayForm : Form
 
         OnReceivePictureCoordinates();
         OnReceiveWarriorList();
-
-
-        ObstacleCreator obstacleCreator = new LavaCreator();
-        obstacles.Add(obstacleCreator.CreateObstacle(pictureBox18.Location.X, pictureBox18.Location.Y));
-        pictureBox18.Image = Image.FromFile(obstacles[0].Image);
-
-        obstacleCreator = new MountainCreator();
-        obstacles.Add(obstacleCreator.CreateObstacle(pictureBox19.Location.X, pictureBox19.Location.Y));
-        pictureBox19.Image = Image.FromFile(obstacles[1].Image);
-
-
 
     }
 
@@ -413,16 +405,7 @@ public partial class GamePlayForm : Form
 
 
             healthLabel.Text = $"Health: {health}";
-
-
-            if (selectedWarrior is Archer)
-            {
-                attackLabel.Text = $"Arrows: ";
-            }
-            else
-            {
-                attackLabel.Text = $"Attack: {attack}";
-            }
+            attackLabel.Text = $"Attack: {attack}";
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
 
             healthLabel.Visible = true;
@@ -593,164 +576,123 @@ public partial class GamePlayForm : Form
         HandleClickedPicture();
     }
 
-    private void button1_Click(object sender, EventArgs e)
+    private void Add_Lava(object sender, EventArgs e)
     {
         AddingObstacles = true;
+
+        AddingLava = true;
+
+        selectedGridPictureBox = pictureBox1;
     }
 
+    private void Add_Water(object sender, EventArgs e)
+    {
+
+        AddingObstacles = true;
+        AddingWater = true;
+        selectedGridPictureBox = pictureBox1;
+    }
+
+    private void Add_Mountain(object sender, EventArgs e)
+    {
+        AddingObstacles = true;
+        AddingMountain = true;
+        selectedGridPictureBox = pictureBox1;
+
+    }
+    private PictureBox selectedGridPictureBox;
+    private void pictureBox1_Click(object sender, EventArgs e)
+    {
+        if (AddingObstacles)
+        {
+            int gridSize = 50;
+            Point clickPosition = PointToClient(Cursor.Position);
+            int nearestX = (clickPosition.X - selectedGridPictureBox.Location.X) / gridSize * gridSize + selectedGridPictureBox.Location.X;
+            int nearestY = (clickPosition.Y - selectedGridPictureBox.Location.Y) / gridSize * gridSize + selectedGridPictureBox.Location.Y;
+
+            PictureBox newObstaclePictureBox = new PictureBox();
+            newObstaclePictureBox.Size = new Size(50, 50);
+            newObstaclePictureBox.Location = new Point(nearestX + 2, nearestY + 3);
+
+            ObstacleCreator obstacleCreator;
+
+            if (AddingLava)
+            {
+                newObstaclePictureBox.Click += LavaBox_Click;
+                obstacleCreator = new LavaCreator();
+                AddingLava = false;
+            }
+            else if (AddingWater)
+            {
+                newObstaclePictureBox.Click += WaterBox_Click;
+                obstacleCreator = new WaterCreator();
+                AddingWater = false;
+            }
+            else
+            {
+                newObstaclePictureBox.Click += MountainBox_Click;
+                obstacleCreator = new MountainCreator();
+                AddingMountain = false;
+            }
+
+            Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
+            obstacles.Add(obstacle);
+            newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
+            
 
 
-    //private async void pictureBox1_Click(object sender, EventArgs e)
-    //{
-    //    var mouseEventArgs = e as MouseEventArgs;
+            Controls.Add(newObstaclePictureBox);
+            newObstaclePictureBox.BringToFront();
 
-    //    var coordX = 0;
-    //    var coordY = 0;
+            pictureBoxesObstacles.Add(newObstaclePictureBox);
 
-    //    if (mouseEventArgs is not null)
-    //    {
-    //        coordX = mouseEventArgs.X;
-    //        coordY = mouseEventArgs.Y;
-    //    }
+            AddingObstacles = false;
+        }
+    }
 
-    //    var cellPressed = "";
+    private void DisplayObstacleInfo(int index)
+    {
+        if (index >= 0 && index < obstacles.Count)
+        {
+            Obstacle selectedObstacle = obstacles[index];
 
-    //    switch (coordX)
-    //    {
-    //        case < 50:
-    //            cellPressed += "A";
-    //            coordX = 0;
-    //            break;
-    //        case < 100:
-    //            cellPressed += "B";
-    //            coordX = 50;
-    //            break;
-    //        case < 150:
-    //            cellPressed += "C";
-    //            coordX = 100;
-    //            break;
-    //        case < 200:
-    //            cellPressed += "D";
-    //            coordX = 150;
-    //            break;
-    //        case < 250:
-    //            cellPressed += "E";
-    //            coordX = 200;
-    //            break;
-    //        case < 300:
-    //            cellPressed += "F";
-    //            coordX = 250;
-    //            break;
-    //        case < 350:
-    //            cellPressed += "G";
-    //            coordX = 300;
-    //            break;
-    //        case < 400:
-    //            cellPressed += "H";
-    //            coordX = 350;
-    //            break;
-    //        case < 450:
-    //            cellPressed += "I";
-    //            coordX = 400;
-    //            break;
-    //        case < 501:
-    //            cellPressed += "J";
-    //            coordX = 450;
-    //            break;
-    //        default:
-    //            cellPressed += "A";
-    //            coordX = 0;
-    //            break;
-    //    }
+            List<string> info = selectedObstacle.DisplayInfo();
 
-    //    switch (coordY)
-    //    {
-    //        case < 50:
-    //            cellPressed += "1";
-    //            coordY = 0;
-    //            break;
-    //        case < 100:
-    //            cellPressed += "2";
-    //            coordY = 50;
-    //            break;
-    //        case < 150:
-    //            cellPressed += "3";
-    //            coordY = 100;
-    //            break;
-    //        case < 200:
-    //            cellPressed += "4";
-    //            coordY = 150;
-    //            break;
-    //        case < 250:
-    //            cellPressed += "5";
-    //            coordY = 200;
-    //            break;
-    //        case < 300:
-    //            cellPressed += "6";
-    //            coordY = 250;
-    //            break;
-    //        case < 350:
-    //            cellPressed += "7";
-    //            coordY = 300;
-    //            break;
-    //        case < 400:
-    //            cellPressed += "8";
-    //            coordY = 350;
-    //            break;
-    //        case < 450:
-    //            cellPressed += "9";
-    //            coordY = 400;
-    //            break;
-    //        case < 501:
-    //            cellPressed += "10";
-    //            coordY = 450;
-    //            break;
-    //        default:
-    //            cellPressed += "1";
-    //            coordY = 0;
-    //            break;
-    //    }
-    //    if (selectedCar != null)
-    //    {
-    //        (_, _, string image) = selectedCar.GetInfo();
-    //        Image background;
-    //        using (var bmpTemp = new Bitmap(pictureBox1.Image))
-    //        {
-    //            background = new Bitmap(bmpTemp);
-    //        }
-    //        string carpath = Directory.GetCurrentDirectory() + "\\Resources\\" + image;
-    //        Image car;
-    //        using (var bmpTemp = new Bitmap(carpath))
-    //        {
-    //            car = new Bitmap(bmpTemp);
-    //        }
-    //        if (rotate)
-    //            car.RotateFlip(RotateFlipType.Rotate90FlipX);
-    //        getCarCoordinates(coordX, coordY);
-    //        var successful = _playerGrid.AddCar(selectedCar);
-    //        if (successful)
-    //        {
-    //            invoker.AddCar(selectedCar, pictureBox1.Image);
-    //            Graphics carImage = Graphics.FromImage(background);
-    //            carImage.DrawImage(car, coordX, coordY);
-    //            pictureBox1.Image = background;
-    //            selectedCar = null;
-    //            label5.Text = "";
-    //            CheckButtonVisibility();
-    //        }
-    //    }
-    //    else if (carsSent)
-    //    {
-    //        var state = await CheckCarState(coordX, coordY);
-    //        if (state != string.Empty)
-    //        {
-    //            label3.Text = "Car state is: " + state;
-    //        }
-    //        else
-    //        {
-    //            label3.Text = state;
-    //        }
-    //    }
-    //}
+            healthLabel.Text = info[0];
+            attackLabel.Text = info[1];
+            rangeLabel.Text = info[2];
+
+            healthLabel.Visible = true;
+            attackLabel.Visible = true;
+            rangeLabel.Visible = true;
+        }
+    }
+
+    private void LavaBox_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
+
+        DisplayObstacleInfo(selectedIndex);
+    }
+
+    private void WaterBox_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
+
+        DisplayObstacleInfo(selectedIndex);
+    }
+
+    private void MountainBox_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
+
+        DisplayObstacleInfo(selectedIndex);
+    }
 }
 

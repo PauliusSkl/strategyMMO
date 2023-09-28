@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Shared.Models
 {
     public abstract class Obstacle
@@ -22,5 +23,7 @@ namespace Shared.Models
         public int Y { get; set; }
 
         public string Image { get; set; } = string.Empty;
+
+        public abstract List<string> DisplayInfo();
     }
 }
