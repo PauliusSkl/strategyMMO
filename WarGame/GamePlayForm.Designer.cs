@@ -65,6 +65,9 @@
             pictureBox15 = new PictureBox();
             pictureBox16 = new PictureBox();
             pictureBox17 = new PictureBox();
+            pictureBox18 = new PictureBox();
+            pictureBox19 = new PictureBox();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -82,6 +85,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox15).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox16).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox17).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox18).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox19).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -422,6 +427,32 @@
             pictureBox17.TabStop = false;
             pictureBox17.Click += pictureBox17_Click;
             // 
+            // pictureBox18
+            // 
+            pictureBox18.Location = new Point(628, 214);
+            pictureBox18.Name = "pictureBox18";
+            pictureBox18.Size = new Size(50, 50);
+            pictureBox18.TabIndex = 353;
+            pictureBox18.TabStop = false;
+            // 
+            // pictureBox19
+            // 
+            pictureBox19.Location = new Point(678, 214);
+            pictureBox19.Name = "pictureBox19";
+            pictureBox19.Size = new Size(50, 50);
+            pictureBox19.TabIndex = 354;
+            pictureBox19.TabStop = false;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(128, 104);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 355;
+            button1.Text = "AddLava";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -429,6 +460,9 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(button1);
+            Controls.Add(pictureBox19);
+            Controls.Add(pictureBox18);
             Controls.Add(pictureBox17);
             Controls.Add(pictureBox16);
             Controls.Add(pictureBox15);
@@ -490,6 +524,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox15).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox16).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox17).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox18).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox19).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -537,5 +573,8 @@
         private PictureBox pictureBox15;
         private PictureBox pictureBox16;
         private PictureBox pictureBox17;
+        private PictureBox pictureBox18;
+        private PictureBox pictureBox19;
+        private Button button1;
     }
 }

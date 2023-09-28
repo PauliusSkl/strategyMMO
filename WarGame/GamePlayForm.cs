@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Shared.Models;
+using Shared.Models.Factory;
 using System.Runtime.InteropServices;
 using WarGame.Forms;
 
@@ -15,6 +16,10 @@ public partial class GamePlayForm : Form
     private List<PictureBox> pictureBoxes = new List<PictureBox>();
     private List<Unit> warriors = new List<Unit>();
     //--------------------
+
+    private List<Obstacle> obstacles = new List<Obstacle>();
+    private List<PictureBox> pictureBoxesObstacles = new List<PictureBox>();
+    private bool AddingObstacles = false;
 
 
     private readonly HubConnection _battleHub = new BattleHub().GetInstance();
@@ -37,6 +42,18 @@ public partial class GamePlayForm : Form
 
         OnReceivePictureCoordinates();
         OnReceiveWarriorList();
+
+
+        ObstacleCreator obstacleCreator = new LavaCreator();
+        obstacles.Add(obstacleCreator.CreateObstacle(pictureBox18.Location.X, pictureBox18.Location.Y));
+        pictureBox18.Image = Image.FromFile(obstacles[0].Image);
+
+        obstacleCreator = new MountainCreator();
+        obstacles.Add(obstacleCreator.CreateObstacle(pictureBox19.Location.X, pictureBox19.Location.Y));
+        pictureBox19.Image = Image.FromFile(obstacles[1].Image);
+
+
+
     }
 
 
@@ -574,6 +591,11 @@ public partial class GamePlayForm : Form
         DisplayStats(selectedIndex);
 
         HandleClickedPicture();
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+        AddingObstacles = true;
     }
 
 
