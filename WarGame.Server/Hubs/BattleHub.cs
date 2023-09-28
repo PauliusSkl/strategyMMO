@@ -29,4 +29,16 @@ public class BattleHub : Hub
     {
         await Clients.All.SendAsync("ReceiveWarriorsStats", warriors);
     }
+
+
+    //😭
+    //public async Task UpdateObstaclesOnGrid(List<Obstacle> obstacles)
+    //{
+    //    await Clients.Others.SendAsync("ReceiveObstaclesOnGrid", obstacles);
+    //}
+
+    public async Task UpdateObstaclesOnGrid(int x, int y, string type)
+    {
+        await Clients.Others.SendAsync("ReceiveObstaclesOnGrid", x, y, type);
+    }
 }

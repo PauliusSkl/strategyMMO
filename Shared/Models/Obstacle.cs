@@ -10,14 +10,6 @@ namespace Shared.Models
 {
     public abstract class Obstacle
     {
-        public enum ObstacleType
-        {
-            lava,
-            water,
-            mountain,
-        }
-
-
         public int X { get; set; }
 
         public int Y { get; set; }
