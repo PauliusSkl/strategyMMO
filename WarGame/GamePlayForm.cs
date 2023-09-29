@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.VisualBasic.ApplicationServices;
 using Shared.Models;
+using Shared.Models.Factory;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using WarGame.Forms;
 
 
@@ -15,6 +18,16 @@ public partial class GamePlayForm : Form
     private List<PictureBox> pictureBoxes = new List<PictureBox>();
     private List<Unit> warriors = new List<Unit>();
     //--------------------
+
+    //Obstacle stuff
+    private List<Obstacle> obstaclesPlaces = new List<Obstacle>();
+    private List<PictureBox> pictureBoxesObstacles = new List<PictureBox>();
+
+
+    private bool AddingObstacles = false;
+    private bool AddingWater = false;
+    private bool AddingMountain = false;
+    private bool AddingLava = false;
 
 
     private readonly HubConnection _battleHub = new BattleHub().GetInstance();
@@ -34,9 +47,11 @@ public partial class GamePlayForm : Form
         AddPictureBoxesToList();
         DisplayWarriorsImages();
 
-
+        
         OnReceivePictureCoordinates();
         OnReceiveWarriorList();
+
+        OnReceiveObstacles();
     }
 
 
@@ -76,7 +91,6 @@ public partial class GamePlayForm : Form
                 Y = 0,
                 Color = pngs[i],
                 Image = Path.Combine(imagesFolder, $"warrior_{pngs[i]}.png")
-                //Image = "./Resources/warrior_" + pngs[i] + ".png"
             });
         }
 
@@ -91,7 +105,6 @@ public partial class GamePlayForm : Form
                 Y = 0,
                 Color = pngs[i],
                 Image = Path.Combine(imagesFolder, $"archer_{pngs[i]}.png")
-                //Image = "./Resources/warrior_" + pngs[i] + ".png"
             });
         }
         for (int i = 0; i < 4; i++)
@@ -105,7 +118,6 @@ public partial class GamePlayForm : Form
                 Y = 0,
                 Color = pngs[i],
                 Image = Path.Combine(imagesFolder, $"mage_{pngs[i]}.png")
-                //Image = "./Resources/warrior_" + pngs[i] + ".png"
             });
         }
 
@@ -134,6 +146,81 @@ public partial class GamePlayForm : Form
         }
     }
 
+    //PLANAS TAIP IMPLEMENTUOT BUVO
+    //private void OnReceiveObstacles()
+    //{
+    //    _ = _battleHub.On<List<Obstacle>>("ReceiveObstaclesOnGrid", (newObstacles) =>
+    //    {
+    //        MessageBox.Show("Received obstacles");
+    //    });
+    //}
+
+
+    //LEBAI BAD IMPLEMENTUOTA NES NENORI PRIIMTI OBSTACLES MASYVO :(((((((((((((((
+    private void OnReceiveObstacles()
+    {
+        _ = _battleHub.On<int, int, string>("ReceiveObstaclesOnGrid", (x, y, type) =>
+        {
+
+            Obstacle obstacle = CreateObstacleFromType(x, y, type);
+
+            obstaclesPlaces.Add(obstacle);
+
+
+            PictureBox newObstaclePictureBox = new PictureBox();
+
+            newObstaclePictureBox.Size = new Size(50, 50);
+
+            newObstaclePictureBox.Location = new Point(x, y);
+
+            newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
+
+            if (obstacle is Lava)
+            {
+                newObstaclePictureBox.Click += LavaBox_Click;
+            }
+            else if (obstacle is Water)
+            {
+                newObstaclePictureBox.Click += WaterBox_Click;
+            }
+            else if (obstacle is Mountain)
+            {
+                newObstaclePictureBox.Click += MountainBox_Click;
+            }
+
+            Controls.Add(newObstaclePictureBox);
+
+            newObstaclePictureBox.BringToFront();
+
+            newObstaclePictureBox.Visible = true;
+
+            pictureBoxesObstacles.Add(newObstaclePictureBox);
+        });
+    }
+    //LEBAI BAD IMPLEMENTUOTA NES NENORI PRIIMTI OBSTACLES MASYVO :(((((((((((((((
+    private Obstacle CreateObstacleFromType(int x, int y, string type)
+    {
+        ObstacleCreator obstacleCreator;
+
+        switch (type)
+        {
+            case "Shared.Models.Lava":
+                obstacleCreator = new LavaCreator();
+                break;
+            case "Shared.Models.Water":
+                obstacleCreator = new WaterCreator();
+                break;
+            case "Shared.Models.Mountain":
+                obstacleCreator = new MountainCreator();
+                break;
+            default:
+                obstacleCreator = new LavaCreator();
+                break;
+        }
+
+        return obstacleCreator.CreateObstacle(x, y);
+    }
+
     private void OnReceivePictureCoordinates()
     {
         _ = _battleHub.On<string, int, int>("ReceivePictureCoordinates", (pictureName, x, y) =>
@@ -149,6 +236,7 @@ public partial class GamePlayForm : Form
                     warriorToUpdate.Y = y;
                 }
                 pictureToUpdate.Location = new Point(x, y);
+
             }
         });
     }
@@ -243,6 +331,24 @@ public partial class GamePlayForm : Form
         return false;
     }
 
+    private Obstacle CheckForObstacle(Unit attacker, int newX, int newY)
+    {
+        foreach (var obstacle in obstaclesPlaces)
+        {
+
+            Rectangle attackerBounds = new Rectangle(newX, newY, 40, 40);
+
+            Rectangle obstacleBounds = new Rectangle(obstacle.X, obstacle.Y, 40, 40);
+
+            if (attackerBounds.IntersectsWith(obstacleBounds))
+            {
+                return obstacle;
+            }
+        }
+
+        return null ;
+    }
+
     private Unit GetWarriorFromPictureBox(PictureBox pictureBox)
     {
         int selectedIndex = pictureBoxes.IndexOf(pictureBox);
@@ -324,18 +430,23 @@ public partial class GamePlayForm : Form
 
         bool team8 = CheckForTeammate(attackingWarrior, X, Y);
 
+        Obstacle obstacle = CheckForObstacle(attackingWarrior, X, Y);
+
         if (defendingWarrior != null)
         {
             defendingWarrior.Health -= attackingWarrior.Attack;
 
             await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
+
         }
-        else if (!team8)
+        else if (!team8 && (obstacle == null))
         {
             currentWarrior.Location = new Point(X, Y);
         }
-    }
 
+        //Galima handlit pagal obstacle ka daryt pvz obstacle typas mountain ir current warrioras archeris tai gali atakuot bet jei magas negali nor abu du rango
+    }
+    
     private void pictureBox2_Click_1(object sender, EventArgs e)
     {
         selectedPictureBox = (PictureBox)sender;
@@ -396,16 +507,7 @@ public partial class GamePlayForm : Form
 
 
             healthLabel.Text = $"Health: {health}";
-
-
-            if (selectedWarrior is Archer)
-            {
-                attackLabel.Text = $"Arrows: ";
-            }
-            else
-            {
-                attackLabel.Text = $"Attack: {attack}";
-            }
+            attackLabel.Text = $"Attack: {attack}";
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
 
             healthLabel.Visible = true;
@@ -576,159 +678,132 @@ public partial class GamePlayForm : Form
         HandleClickedPicture();
     }
 
+    private void Add_Lava(object sender, EventArgs e)
+    {
+        AddingObstacles = true;
+
+        AddingLava = true;
+
+        selectedGridPictureBox = pictureBox1;
+    }
+
+    private void Add_Water(object sender, EventArgs e)
+    {
+
+        AddingObstacles = true;
+        AddingWater = true;
+        selectedGridPictureBox = pictureBox1;
+    }
+
+    private void Add_Mountain(object sender, EventArgs e)
+    {
+        AddingObstacles = true;
+        AddingMountain = true;
+        selectedGridPictureBox = pictureBox1;
+
+    }
+    private PictureBox selectedGridPictureBox;
+    private async void pictureBox1_Click(object sender, EventArgs e)
+    {
+        if (AddingObstacles)
+        {
+
+            int gridSize = 50;
+            Point clickPosition = PointToClient(Cursor.Position);
+            int nearestX = (clickPosition.X - selectedGridPictureBox.Location.X) / gridSize * gridSize + selectedGridPictureBox.Location.X;
+            int nearestY = (clickPosition.Y - selectedGridPictureBox.Location.Y) / gridSize * gridSize + selectedGridPictureBox.Location.Y;
+
+            PictureBox newObstaclePictureBox = new PictureBox();
+            newObstaclePictureBox.Size = new Size(50, 50);
+            newObstaclePictureBox.Location = new Point(nearestX + 2, nearestY + 3);
+
+            ObstacleCreator obstacleCreator;
+
+            if (AddingLava)
+            {
+                newObstaclePictureBox.Click += LavaBox_Click;
+                obstacleCreator = new LavaCreator();
+                AddingLava = false;
+            }
+            else if (AddingWater)
+            {
+                newObstaclePictureBox.Click += WaterBox_Click;
+                obstacleCreator = new WaterCreator();
+                AddingWater = false;
+            }
+            else
+            {
+                newObstaclePictureBox.Click += MountainBox_Click;
+                obstacleCreator = new MountainCreator();
+                AddingMountain = false;
+
+            }
+
+            Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
 
 
-    //private async void pictureBox1_Click(object sender, EventArgs e)
-    //{
-    //    var mouseEventArgs = e as MouseEventArgs;
+            obstaclesPlaces.Add(obstacle);
+            //await _battleHub.SendAsync("UpdateObstaclesOnGrid", obstaclesPlaces); // Neveike taip :( labai idomus bugas ne veikia pries idedant i masyva
+            await _battleHub.SendAsync("UpdateObstaclesOnGrid", obstacle.X, obstacle.Y, obstacle.GetType().ToString());
 
-    //    var coordX = 0;
-    //    var coordY = 0;
 
-    //    if (mouseEventArgs is not null)
-    //    {
-    //        coordX = mouseEventArgs.X;
-    //        coordY = mouseEventArgs.Y;
-    //    }
+            newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
+            
 
-    //    var cellPressed = "";
 
-    //    switch (coordX)
-    //    {
-    //        case < 50:
-    //            cellPressed += "A";
-    //            coordX = 0;
-    //            break;
-    //        case < 100:
-    //            cellPressed += "B";
-    //            coordX = 50;
-    //            break;
-    //        case < 150:
-    //            cellPressed += "C";
-    //            coordX = 100;
-    //            break;
-    //        case < 200:
-    //            cellPressed += "D";
-    //            coordX = 150;
-    //            break;
-    //        case < 250:
-    //            cellPressed += "E";
-    //            coordX = 200;
-    //            break;
-    //        case < 300:
-    //            cellPressed += "F";
-    //            coordX = 250;
-    //            break;
-    //        case < 350:
-    //            cellPressed += "G";
-    //            coordX = 300;
-    //            break;
-    //        case < 400:
-    //            cellPressed += "H";
-    //            coordX = 350;
-    //            break;
-    //        case < 450:
-    //            cellPressed += "I";
-    //            coordX = 400;
-    //            break;
-    //        case < 501:
-    //            cellPressed += "J";
-    //            coordX = 450;
-    //            break;
-    //        default:
-    //            cellPressed += "A";
-    //            coordX = 0;
-    //            break;
-    //    }
+            Controls.Add(newObstaclePictureBox);
+            newObstaclePictureBox.BringToFront();
 
-    //    switch (coordY)
-    //    {
-    //        case < 50:
-    //            cellPressed += "1";
-    //            coordY = 0;
-    //            break;
-    //        case < 100:
-    //            cellPressed += "2";
-    //            coordY = 50;
-    //            break;
-    //        case < 150:
-    //            cellPressed += "3";
-    //            coordY = 100;
-    //            break;
-    //        case < 200:
-    //            cellPressed += "4";
-    //            coordY = 150;
-    //            break;
-    //        case < 250:
-    //            cellPressed += "5";
-    //            coordY = 200;
-    //            break;
-    //        case < 300:
-    //            cellPressed += "6";
-    //            coordY = 250;
-    //            break;
-    //        case < 350:
-    //            cellPressed += "7";
-    //            coordY = 300;
-    //            break;
-    //        case < 400:
-    //            cellPressed += "8";
-    //            coordY = 350;
-    //            break;
-    //        case < 450:
-    //            cellPressed += "9";
-    //            coordY = 400;
-    //            break;
-    //        case < 501:
-    //            cellPressed += "10";
-    //            coordY = 450;
-    //            break;
-    //        default:
-    //            cellPressed += "1";
-    //            coordY = 0;
-    //            break;
-    //    }
-    //    if (selectedCar != null)
-    //    {
-    //        (_, _, string image) = selectedCar.GetInfo();
-    //        Image background;
-    //        using (var bmpTemp = new Bitmap(pictureBox1.Image))
-    //        {
-    //            background = new Bitmap(bmpTemp);
-    //        }
-    //        string carpath = Directory.GetCurrentDirectory() + "\\Resources\\" + image;
-    //        Image car;
-    //        using (var bmpTemp = new Bitmap(carpath))
-    //        {
-    //            car = new Bitmap(bmpTemp);
-    //        }
-    //        if (rotate)
-    //            car.RotateFlip(RotateFlipType.Rotate90FlipX);
-    //        getCarCoordinates(coordX, coordY);
-    //        var successful = _playerGrid.AddCar(selectedCar);
-    //        if (successful)
-    //        {
-    //            invoker.AddCar(selectedCar, pictureBox1.Image);
-    //            Graphics carImage = Graphics.FromImage(background);
-    //            carImage.DrawImage(car, coordX, coordY);
-    //            pictureBox1.Image = background;
-    //            selectedCar = null;
-    //            label5.Text = "";
-    //            CheckButtonVisibility();
-    //        }
-    //    }
-    //    else if (carsSent)
-    //    {
-    //        var state = await CheckCarState(coordX, coordY);
-    //        if (state != string.Empty)
-    //        {
-    //            label3.Text = "Car state is: " + state;
-    //        }
-    //        else
-    //        {
-    //            label3.Text = state;
-    //        }
-    //    }
-    //}
+            pictureBoxesObstacles.Add(newObstaclePictureBox);
+
+            AddingObstacles = false;
+        }
+       
+    }
+
+    private void DisplayObstacleInfo(int index)
+    {
+        if (index >= 0 && index < obstaclesPlaces.Count)
+        {
+            Obstacle selectedObstacle = obstaclesPlaces[index];
+
+            List<string> info = selectedObstacle.DisplayInfo();
+
+            healthLabel.Text = info[0];
+            attackLabel.Text = info[1];
+            rangeLabel.Text = info[2];
+
+            healthLabel.Visible = true;
+            attackLabel.Visible = true;
+            rangeLabel.Visible = true;
+        }
+    }
+
+    private void LavaBox_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
+
+        DisplayObstacleInfo(selectedIndex);
+    }
+
+    private void WaterBox_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
+
+        DisplayObstacleInfo(selectedIndex);
+    }
+
+    private void MountainBox_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
+
+        int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
+
+        DisplayObstacleInfo(selectedIndex);
+    }
 }
 

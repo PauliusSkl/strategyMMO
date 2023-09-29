@@ -65,6 +65,9 @@
             pictureBox15 = new PictureBox();
             pictureBox16 = new PictureBox();
             pictureBox17 = new PictureBox();
+            AddLava = new Button();
+            AddWater = new Button();
+            AddMountain = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -422,6 +425,36 @@
             pictureBox17.TabStop = false;
             pictureBox17.Click += pictureBox17_Click;
             // 
+            // AddLava
+            // 
+            AddLava.Location = new Point(29, 67);
+            AddLava.Name = "AddLava";
+            AddLava.Size = new Size(75, 23);
+            AddLava.TabIndex = 355;
+            AddLava.Text = "AddLava";
+            AddLava.UseVisualStyleBackColor = true;
+            AddLava.Click += Add_Lava;
+            // 
+            // AddWater
+            // 
+            AddWater.Location = new Point(130, 67);
+            AddWater.Name = "AddWater";
+            AddWater.Size = new Size(75, 23);
+            AddWater.TabIndex = 356;
+            AddWater.Text = "AddWater";
+            AddWater.UseVisualStyleBackColor = true;
+            AddWater.Click += Add_Water;
+            // 
+            // AddMountain
+            // 
+            AddMountain.Location = new Point(231, 67);
+            AddMountain.Name = "AddMountain";
+            AddMountain.Size = new Size(75, 23);
+            AddMountain.TabIndex = 357;
+            AddMountain.Text = "AddMountain";
+            AddMountain.UseVisualStyleBackColor = true;
+            AddMountain.Click += Add_Mountain;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -429,6 +462,9 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(AddMountain);
+            Controls.Add(AddWater);
+            Controls.Add(AddLava);
             Controls.Add(pictureBox17);
             Controls.Add(pictureBox16);
             Controls.Add(pictureBox15);
@@ -494,10 +530,7 @@
             PerformLayout();
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            return;
-        }
+
 
         #endregion
 
@@ -537,5 +570,8 @@
         private PictureBox pictureBox15;
         private PictureBox pictureBox16;
         private PictureBox pictureBox17;
+        private Button AddLava;
+        private Button AddWater;
+        private Button AddMountain;
     }
 }
