@@ -69,6 +69,8 @@
             AddWater = new Button();
             AddMountain = new Button();
             ChangeStrategy = new Button();
+            killsLabel = new Label();
+            upgradedLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -466,6 +468,26 @@
             ChangeStrategy.UseVisualStyleBackColor = true;
             ChangeStrategy.Click += ChangeStrategy_Click;
             // 
+            // killsLabel
+            // 
+            killsLabel.AutoSize = true;
+            killsLabel.Location = new Point(1054, 122);
+            killsLabel.Name = "killsLabel";
+            killsLabel.Size = new Size(55, 15);
+            killsLabel.TabIndex = 359;
+            killsLabel.Text = "killsLabel";
+            killsLabel.Visible = false;
+            // 
+            // upgradedLabel
+            // 
+            upgradedLabel.AutoSize = true;
+            upgradedLabel.Location = new Point(1054, 148);
+            upgradedLabel.Name = "upgradedLabel";
+            upgradedLabel.Size = new Size(86, 15);
+            upgradedLabel.TabIndex = 360;
+            upgradedLabel.Text = "upgradedLabel";
+            upgradedLabel.Visible = false;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -473,6 +495,8 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(upgradedLabel);
+            Controls.Add(killsLabel);
             Controls.Add(ChangeStrategy);
             Controls.Add(AddMountain);
             Controls.Add(AddWater);
@@ -586,5 +610,7 @@
         private Button AddWater;
         private Button AddMountain;
         private Button ChangeStrategy;
+        private Label killsLabel;
+        private Label upgradedLabel;
     }
 }

@@ -8,7 +8,7 @@ namespace Shared.Models.AbstractUnitFactory
 {
     public class UpgradedUnitFactory : UnitFactory
     {
-        public Unit CreateArcher(string color)
+        public Unit CreateArcher(string color, int x, int y)
         {
             return new Unit
             {
@@ -17,13 +17,16 @@ namespace Shared.Models.AbstractUnitFactory
                 Attack = 100,
                 Range = 3,
                 Speed = 1,
-                X = 0,
-                Y = 0,
+                Kills = 2,
+                Upgraded = true,
+                X = x,
+                Y = y,
+                Type = "Archer",
                 Color = color,
             };
         }
 
-        public Unit CreateWarrior(string color)
+        public Unit CreateWarrior(string color, int x, int y)
         {
             return new Unit
             {
@@ -32,13 +35,16 @@ namespace Shared.Models.AbstractUnitFactory
                 Attack = 100,
                 Range = 1,
                 Speed = 1,
-                X = 0,
-                Y = 0,
+                Kills = 2,
+                Upgraded = true,
+                X = x,
+                Y = y,
+                Type = "Warrior",
                 Color = color,
             };
         }
 
-        public Unit CreateMage(string color)
+        public Unit CreateMage(string color, int x, int y)
         {
             return new Unit
             {
@@ -47,13 +53,16 @@ namespace Shared.Models.AbstractUnitFactory
                 Attack = 200,
                 Range = 2,
                 Speed = 1,
-                X = 0,
-                Y = 0,
+                Kills = 2,
+                Upgraded = true,
+                X = x,
+                Y = y,
+                Type = "Mage",
                 Color = color,
             };
         }
 
-        public Unit CreateTank(string color)
+        public Unit CreateTank(string color, int x, int y)
         {
             return new Unit
             {
@@ -62,8 +71,11 @@ namespace Shared.Models.AbstractUnitFactory
                 Attack = 10,
                 Range = 1,
                 Speed = 1,
-                X = 0,
-                Y = 0,
+                Kills = 2,
+                Upgraded = true,
+                X = x,
+                Y = y,
+                Type = "Tank",
                 Color = color,
             };
         }
