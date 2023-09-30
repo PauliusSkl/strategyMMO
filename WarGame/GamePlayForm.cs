@@ -424,33 +424,38 @@ public partial class GamePlayForm : Form
     private async void handleBattle(PictureBox currentWarrior, int X, int Y)
     {
         Unit attackingWarrior = GetWarriorFromPictureBox(currentWarrior);
-        Unit defendingWarrior = CheckForCollision(attackingWarrior, X, Y);
-
-        bool team8 = CheckForTeammate(attackingWarrior, X, Y);
-
-        Obstacle obstacle = CheckForObstacle(attackingWarrior, X, Y);
-        List<Obstacle> applyEffect = CheckAroundForObstacles(attackingWarrior);
-
-        if (applyEffect != null)
+        if (attackingWarrior != null)
         {
-            foreach (var item in applyEffect)
+            Unit defendingWarrior = CheckForCollision(attackingWarrior, X, Y);
+
+            bool team8 = CheckForTeammate(attackingWarrior, X, Y);
+
+            Obstacle obstacle = CheckForObstacle(attackingWarrior, X, Y);
+
+            List<Obstacle> applyEffect = CheckAroundForObstacles(attackingWarrior);
+
+            if (applyEffect != null)
             {
-                item.ApplyEffect(attackingWarrior);
+                foreach (var item in applyEffect)
+                {
+                    item.ApplyEffect(attackingWarrior);
+                }
             }
+
+            if (defendingWarrior != null)
+            {
+                defendingWarrior.Health -= attackingWarrior.Attack;
+
+
+            }
+            else if (!team8 && (obstacle == null))
+            {
+                currentWarrior.Location = new Point(X, Y);
+            }
+
+            await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
         }
-
-        if (defendingWarrior != null)
-        {
-            defendingWarrior.Health -= attackingWarrior.Attack;
-
-
-        }
-        else if (!team8 && (obstacle == null))
-        {
-            currentWarrior.Location = new Point(X, Y);
-        }
-
-        await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
+        
         //Galima handlit pagal obstacle ka daryt pvz obstacle typas mountain ir current warrioras archeris tai gali atakuot bet jei magas negali nor abu du rango
     }
 
@@ -749,7 +754,6 @@ public partial class GamePlayForm : Form
     {
         if (AddingObstacles)
         {
-
             int gridSize = 50;
             Point clickPosition = PointToClient(Cursor.Position);
             int nearestX = (clickPosition.X - selectedGridPictureBox.Location.X) / gridSize * gridSize + selectedGridPictureBox.Location.X;
@@ -782,7 +786,6 @@ public partial class GamePlayForm : Form
             }
 
             Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
-
 
             obstaclesPlaces.Add(obstacle);
             //await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstaclesPlaces); // Neveike taip :( labai idomus bugas nes veikia pries idedant i masyva
