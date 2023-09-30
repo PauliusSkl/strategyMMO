@@ -8,9 +8,9 @@ namespace Shared.Models.AbstractUnitFactory
 {
     public interface UnitFactory
     {
-        Unit CreateArcher(string color);
-        Unit CreateWarrior(string color);
-        Unit CreateMage(string color);
-        Unit CreateTank(string color);
+        Unit CreateArcher(string color, int x, int y);
+        Unit CreateWarrior(string color, int x, int y);
+        Unit CreateMage(string color, int x, int y);
+        Unit CreateTank(string color, int x, int y);
     }
 }

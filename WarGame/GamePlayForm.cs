@@ -5,6 +5,7 @@ using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Factory;
 using Shared.Models.Strategy;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WarGame.Forms;
 
@@ -93,7 +94,9 @@ public partial class GamePlayForm : Form
         for (int i = 0; i < pngs.Length; i++)
         {
             string color = pngs[i];
-            Unit warrior = _basicUnitFactory.CreateWarrior(color);
+            int x = 0;
+            int y = 0;
+            Unit warrior = _basicUnitFactory.CreateWarrior(color, x, y);
             warrior.Image = Path.Combine(imagesFolder, $"warrior_{color}.png");
 
             warriors.Add(warrior);
@@ -102,7 +105,9 @@ public partial class GamePlayForm : Form
         for (int i = 0; i < pngs.Length; i++)
         {
             string color = pngs[i];
-            Unit archer = _basicUnitFactory.CreateArcher(color);
+            int x = 0;
+            int y = 0;
+            Unit archer = _basicUnitFactory.CreateArcher(color, x, y);
             archer.Image = Path.Combine(imagesFolder, $"archer_{color}.png");
 
             warriors.Add(archer);
@@ -111,7 +116,9 @@ public partial class GamePlayForm : Form
         for (int i = 0; i < pngs.Length; i++)
         {
             string color = pngs[i];
-            Unit mage = _basicUnitFactory.CreateMage(color);
+            int x = 0;
+            int y = 0;
+            Unit mage = _basicUnitFactory.CreateMage(color, x, y);
             mage.Image = Path.Combine(imagesFolder, $"mage_{color}.png");
 
             warriors.Add(mage);
@@ -120,7 +127,9 @@ public partial class GamePlayForm : Form
         for (int i = 0; i < pngs.Length; i++)
         {
             string color = pngs[i];
-            Unit tank = _basicUnitFactory.CreateTank(color);
+            int x = 0;
+            int y = 0;
+            Unit tank = _basicUnitFactory.CreateTank(color, x, y);
             tank.Image = Path.Combine(imagesFolder, $"tank_{color}.png");
 
             warriors.Add(tank);
@@ -138,9 +147,10 @@ public partial class GamePlayForm : Form
 
     private void OnReceiveStrategies()
     {
-       _ = _battleHub.On("InitiateChange", () => {
-           ChangeAllStrats();
-       });
+        _ = _battleHub.On("InitiateChange", () =>
+        {
+            ChangeAllStrats();
+        });
     }
 
 
@@ -241,6 +251,7 @@ public partial class GamePlayForm : Form
 
     private void OnReceiveWarriorList()
     {
+        string imagesFolder = Path.Combine(Application.StartupPath, "Resources");
         _ = _battleHub.On<List<Unit>>("ReceiveWarriorsStats", (updatedWarriors) =>
         {
             for (int i = this.warriors.Count - 1; i >= 0; i--)
@@ -259,6 +270,53 @@ public partial class GamePlayForm : Form
                     this.warriors.RemoveAt(i);
 
                     this.pictureBoxes.RemoveAt(i);
+                }
+                if (this.warriors[i].Kills == 2 && this.warriors[i].Upgraded == false)
+                {
+                    if (warriors[i].Type == "Warrior")
+                    {
+                        string color = warriors[i].Color;
+                        int x = warriors[i].X;
+                        int y = warriors[i].Y;
+                        int kills = warriors[i].Kills;
+                        Unit warrior = _upgradedUnitFactory.CreateWarrior(color, x, y);
+                        warrior.Image = Path.Combine(imagesFolder, $"warrior_{color}.png");
+
+                        warriors[i] = warrior;
+                    }
+                    if (warriors[i].Type == "Archer")
+                    {
+                        string color = warriors[i].Color;
+                        int x = warriors[i].X;
+                        int y = warriors[i].Y;
+                        int kills = warriors[i].Kills;
+                        Unit archer = _upgradedUnitFactory.CreateArcher(color, x, y);
+                        archer.Image = Path.Combine(imagesFolder, $"archer_{color}.png");
+
+                        warriors[i] = archer;
+                    }
+                    if (warriors[i].Type == "Mage")
+                    {
+                        string color = warriors[i].Color;
+                        int x = warriors[i].X;
+                        int y = warriors[i].Y;
+                        int kills = warriors[i].Kills;
+                        Unit mage = _upgradedUnitFactory.CreateMage(color, x, y);
+                        mage.Image = Path.Combine(imagesFolder, $"mage_{color}.png");
+
+                        warriors[i] = mage;
+                    }
+                    if (warriors[i].Type == "Tank")
+                    {
+                        string color = warriors[i].Color;
+                        int x = warriors[i].X;
+                        int y = warriors[i].Y;
+                        int kills = warriors[i].Kills;
+                        Unit tank = _upgradedUnitFactory.CreateTank(color, x, y);
+                        tank.Image = Path.Combine(imagesFolder, $"tank_{color}.png");
+
+                        warriors[i] = tank;
+                    }
                 }
             }
         });
@@ -442,8 +500,10 @@ public partial class GamePlayForm : Form
         if (defendingWarrior != null)
         {
             defendingWarrior.Health -= attackingWarrior.Attack;
-
-
+            if (defendingWarrior.Health <= 0)
+            {
+                attackingWarrior.Kills = attackingWarrior.Kills + 1;
+            }
         }
         else if (!team8 && (obstacle == null))
         {
@@ -543,6 +603,8 @@ public partial class GamePlayForm : Form
             int health = selectedWarrior.Health;
             int attack = selectedWarrior.Attack;
             int range = selectedWarrior.Range;
+            int kills = selectedWarrior.Kills;
+            bool upgraded = selectedWarrior.Upgraded;
             int X = selectedWarrior.X;
             int Y = selectedWarrior.Y;
 
@@ -551,10 +613,21 @@ public partial class GamePlayForm : Form
             healthLabel.Text = $"Health: {health}";
             attackLabel.Text = $"Attack: {attack}";
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
+            killsLabel.Text = $"Kills: {kills}";
+            if (upgraded==true)
+            {
+                upgradedLabel.Text = "Upgraded";
+            }
+            else
+            {
+                upgradedLabel.Text = "";
+            }
 
             healthLabel.Visible = true;
             attackLabel.Visible = true;
             rangeLabel.Visible = true;
+            killsLabel.Visible = true;
+            upgradedLabel.Visible = true;
         }
     }
 
@@ -851,8 +924,8 @@ public partial class GamePlayForm : Form
 
     private void ChangeStrategy_Click(object sender, EventArgs e)
     {
-       initialClient = true;
-       ChangeAllStrats();
+        initialClient = true;
+        ChangeAllStrats();
     }
 
     private async void ChangeAllStrats()
