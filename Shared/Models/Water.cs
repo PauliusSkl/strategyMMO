@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Models.Strategy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,16 +20,30 @@ namespace Shared.Models
             Y = y;
             SlowLevel = slowLevel;
             Image = "Resources/obstacle_water.png";
+            _effectStrategy = new BuffEffect();
         }
 
         public override List<string> DisplayInfo()
         {
             List<string> info = new List<string>();
             info.Add("Name: Water");
-            info.Add("Slow Level: " + SlowLevel.ToString());
+            info.Add("Strategy: " + _effectStrategy.GetType());
             info.Add("Cords: " + X.ToString() + ";" + Y.ToString());
 
             return info;
+        }
+
+        public override void SetEffectStrategy(IEffectStrategy effectStrategy)
+        {
+           this._effectStrategy = effectStrategy;
+        }
+
+        public override void ApplyEffect(Unit unit)
+        {
+            if (_effectStrategy != null)
+            {
+                this._effectStrategy.ApplyEffect(unit);
+            }
         }
     }
 }

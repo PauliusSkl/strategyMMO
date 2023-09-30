@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using Shared.Models;
 using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Factory;
+using Shared.Models.Strategy;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using WarGame.Forms;
@@ -14,17 +15,19 @@ public partial class GamePlayForm : Form
 {
     private readonly HubConnection _conn;
     private readonly Player _player;
-    private readonly UnitFactory _basicUnitFactory; 
+    private readonly UnitFactory _basicUnitFactory;
     private readonly UnitFactory _upgradedUnitFactory;
     //WARRIORS STUFF -------
     private List<PictureBox> pictureBoxes = new List<PictureBox>();
     private List<Unit> warriors = new List<Unit>();
     //--------------------
 
+    //private List<IEffectStrategy> effectStrategies = new List<IEffectStrategy>();
+    private List<string> strats = new List<string>();
     //Obstacle stuff
     private List<Obstacle> obstaclesPlaces = new List<Obstacle>();
     private List<PictureBox> pictureBoxesObstacles = new List<PictureBox>();
-
+    bool initialClient = false;
 
     private bool AddingObstacles = false;
     private bool AddingWater = false;
@@ -42,7 +45,7 @@ public partial class GamePlayForm : Form
     {
         _conn = conn;
         _player = player;
-        _basicUnitFactory = new BasicUnitFactory(); 
+        _basicUnitFactory = new BasicUnitFactory();
         _upgradedUnitFactory = new UpgradedUnitFactory();
 
         InitializeComponent();
@@ -52,11 +55,13 @@ public partial class GamePlayForm : Form
         AddPictureBoxesToList();
         DisplayWarriorsImages();
 
-        
+
         OnReceivePictureCoordinates();
         OnReceiveWarriorList();
 
         OnReceiveObstacles();
+        OnReceiveStrategies();
+        //OnReceiveObstacless();
     }
 
 
@@ -131,10 +136,18 @@ public partial class GamePlayForm : Form
         }
     }
 
+    private void OnReceiveStrategies()
+    {
+       _ = _battleHub.On("InitiateChange", () => {
+           ChangeAllStrats();
+       });
+    }
+
+
     //PLANAS TAIP IMPLEMENTUOT BUVO
-    //private void OnReceiveObstacles()
+    //private void OnReceiveObstacless()
     //{
-    //    _ = _battleHub.On<List<Obstacle>>("ReceiveObstaclesOnGrid", (newObstacles) =>
+    //    _ = _battleHub.On<List<Obstacle>>("ReceiveObstaclesOnGrids", (newObstacles) =>
     //    {
     //        MessageBox.Show("Received obstacles");
     //    });
@@ -331,7 +344,7 @@ public partial class GamePlayForm : Form
             }
         }
 
-        return null ;
+        return null;
     }
 
     private Unit GetWarriorFromPictureBox(PictureBox pictureBox)
@@ -416,10 +429,20 @@ public partial class GamePlayForm : Form
         bool team8 = CheckForTeammate(attackingWarrior, X, Y);
 
         Obstacle obstacle = CheckForObstacle(attackingWarrior, X, Y);
+        List<Obstacle> applyEffect = CheckAroundForObstacles(attackingWarrior);
+
+        if (applyEffect != null)
+        {
+            foreach (var item in applyEffect)
+            {
+                item.ApplyEffect(attackingWarrior);
+            }
+        }
+
         if (defendingWarrior != null)
         {
             defendingWarrior.Health -= attackingWarrior.Attack;
-            await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
+
 
         }
         else if (!team8 && (obstacle == null))
@@ -427,9 +450,45 @@ public partial class GamePlayForm : Form
             currentWarrior.Location = new Point(X, Y);
         }
 
+        await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
         //Galima handlit pagal obstacle ka daryt pvz obstacle typas mountain ir current warrioras archeris tai gali atakuot bet jei magas negali nor abu du rango
     }
-    
+
+    private List<Obstacle> CheckAroundForObstacles(Unit warrior)
+    {
+        int gridSize = 50;
+        Obstacle obstacle;
+        List<Obstacle> obstaclesAround = new List<Obstacle>();
+
+        obstacle = CheckForObstacle(warrior, warrior.X, warrior.Y - gridSize);
+        if (obstacle != null)
+        {
+            obstaclesAround.Add(obstacle);
+        }
+
+
+        obstacle = CheckForObstacle(warrior, warrior.X, warrior.Y + gridSize);
+        if (obstacle != null)
+        {
+            obstaclesAround.Add(obstacle);
+        }
+
+        obstacle = CheckForObstacle(warrior, warrior.X - gridSize, warrior.Y);
+        if (obstacle != null)
+        {
+            obstaclesAround.Add(obstacle);
+        }
+
+        obstacle = CheckForObstacle(warrior, warrior.X + gridSize, warrior.Y);
+        if (obstacle != null)
+        {
+            obstaclesAround.Add(obstacle);
+        }
+
+        return obstaclesAround;
+
+    }
+
     private void pictureBox2_Click_1(object sender, EventArgs e)
     {
         selectedPictureBox = (PictureBox)sender;
@@ -726,12 +785,13 @@ public partial class GamePlayForm : Form
 
 
             obstaclesPlaces.Add(obstacle);
-            //await _battleHub.SendAsync("UpdateObstaclesOnGrid", obstaclesPlaces); // Neveike taip :( labai idomus bugas ne veikia pries idedant i masyva
+            //await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstaclesPlaces); // Neveike taip :( labai idomus bugas nes veikia pries idedant i masyva
+
             await _battleHub.SendAsync("UpdateObstaclesOnGrid", obstacle.X, obstacle.Y, obstacle.GetType().ToString());
 
 
             newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
-            
+
 
 
             Controls.Add(newObstaclePictureBox);
@@ -741,7 +801,7 @@ public partial class GamePlayForm : Form
 
             AddingObstacles = false;
         }
-       
+
     }
 
     private void DisplayObstacleInfo(int index)
@@ -787,6 +847,40 @@ public partial class GamePlayForm : Form
         int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
 
         DisplayObstacleInfo(selectedIndex);
+    }
+
+    private void ChangeStrategy_Click(object sender, EventArgs e)
+    {
+       initialClient = true;
+       ChangeAllStrats();
+    }
+
+    private async void ChangeAllStrats()
+    {
+        IEffectStrategy debbuf = new DebuffEffect();
+        IEffectStrategy buff = new BuffEffect();
+
+        foreach (var obstacle in obstaclesPlaces)
+        {
+            if (obstacle._effectStrategy is null)
+            {
+                return;
+            }
+            else if (obstacle._effectStrategy is DebuffEffect)
+            {
+                obstacle.SetEffectStrategy(buff);
+            }
+            else
+            {
+                obstacle.SetEffectStrategy(debbuf);
+            }
+        }
+
+        if (initialClient)
+        {
+            await _battleHub.SendAsync("ChangeStrategies");
+            initialClient = false;
+        }
     }
 }
 

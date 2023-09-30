@@ -68,6 +68,7 @@
             AddLava = new Button();
             AddWater = new Button();
             AddMountain = new Button();
+            ChangeStrategy = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -455,6 +456,16 @@
             AddMountain.UseVisualStyleBackColor = true;
             AddMountain.Click += Add_Mountain;
             // 
+            // ChangeStrategy
+            // 
+            ChangeStrategy.Location = new Point(104, 438);
+            ChangeStrategy.Name = "ChangeStrategy";
+            ChangeStrategy.Size = new Size(138, 23);
+            ChangeStrategy.TabIndex = 358;
+            ChangeStrategy.Text = "ChangeStrategy";
+            ChangeStrategy.UseVisualStyleBackColor = true;
+            ChangeStrategy.Click += ChangeStrategy_Click;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -462,6 +473,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(ChangeStrategy);
             Controls.Add(AddMountain);
             Controls.Add(AddWater);
             Controls.Add(AddLava);
@@ -573,5 +585,6 @@
         private Button AddLava;
         private Button AddWater;
         private Button AddMountain;
+        private Button ChangeStrategy;
     }
 }

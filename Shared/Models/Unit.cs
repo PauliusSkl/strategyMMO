@@ -1,7 +1,11 @@
 ﻿namespace Shared.Models;
 public class Unit
 {
+    
     public int Health { get; set; }
+
+    public int MaxHealth { get; set; }
+
     public int Attack { get; set; }
 
     public int Range { get; set; }
@@ -11,6 +15,8 @@ public class Unit
     public int Y { get; set; }
 
     public int Speed { get; set; }
+
+    public bool affected { get; set; } = false;
 
     public string Color { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
