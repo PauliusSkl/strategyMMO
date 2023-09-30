@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Models.Strategy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -10,6 +11,7 @@ namespace Shared.Models
     public class Mountain : Obstacle
     {
         public int Height { get; set; }
+        
 
         public Mountain(int x, int y, int height)
         {
@@ -17,16 +19,27 @@ namespace Shared.Models
             Y = y;
             Height = height;
             Image = "Resources/obstacle_mountain.png";
+            _effectStrategy = null;
         }
 
         public override List<string> DisplayInfo()
         {
             List<string> info = new List<string>();
             info.Add("Name: Mountain");
-            info.Add("Height: " + Height.ToString());
+            info.Add("Strategy: No strategy");
             info.Add("Cords: " + X.ToString() + ";" + Y.ToString());
 
             return info;
         }
+
+        public override void SetEffectStrategy(IEffectStrategy effectStrategy)
+        {
+            return;
         }
+
+        public override void ApplyEffect(Unit unit)
+        {
+            return;
+        }
+    }
 }

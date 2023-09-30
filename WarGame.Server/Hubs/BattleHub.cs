@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Shared.Models;
+using Shared.Models.Strategy;
 using System.Runtime.CompilerServices;
 
 namespace WarGame.API.Hubs;
@@ -32,10 +33,16 @@ public class BattleHub : Hub
 
 
     //😭
-    //public async Task UpdateObstaclesOnGrid(List<Obstacle> obstacles)
+    //public async Task UpdateObstaclesOnGrids(List<Obstacle> obstacles)
     //{
-    //    await Clients.Others.SendAsync("ReceiveObstaclesOnGrid", obstacles);
+    //    await Clients.Others.SendAsync("ReceiveObstaclesOnGrids", obstacles);
     //}
+
+
+    public async Task ChangeStrategies()
+    {
+        await Clients.Others.SendAsync("InitiateChange");
+    }
 
     public async Task UpdateObstaclesOnGrid(int x, int y, string type)
     {

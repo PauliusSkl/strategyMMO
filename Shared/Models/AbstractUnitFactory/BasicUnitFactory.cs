@@ -13,6 +13,7 @@ namespace Shared.Models.AbstractUnitFactory
             return new Unit
             {
                 Health = 50,
+                MaxHealth = 50,
                 Attack = 50,
                 Range = 2,
                 Speed = 1,
@@ -27,6 +28,7 @@ namespace Shared.Models.AbstractUnitFactory
             return new Unit
             {
                 Health = 200,
+                MaxHealth = 200,
                 Attack = 50,
                 Range = 1,
                 Speed = 1,
@@ -41,6 +43,7 @@ namespace Shared.Models.AbstractUnitFactory
             return new Unit
             {
                 Health = 50,
+                MaxHealth = 50,
                 Attack = 100,
                 Range = 2,
                 Speed = 1,
@@ -55,6 +58,7 @@ namespace Shared.Models.AbstractUnitFactory
             return new Unit
             {
                 Health = 300,
+                MaxHealth = 300,
                 Attack = 10,
                 Range = 1,
                 Speed = 1,
