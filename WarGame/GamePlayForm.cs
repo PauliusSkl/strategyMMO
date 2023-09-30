@@ -504,6 +504,7 @@ public partial class GamePlayForm : Form
             {
                 defendingWarrior.Health -= attackingWarrior.Attack;
 
+
             }
             else if (!team8 && (obstacle == null))
             {
