@@ -503,7 +503,10 @@ public partial class GamePlayForm : Form
             if (defendingWarrior != null)
             {
                 defendingWarrior.Health -= attackingWarrior.Attack;
-
+                if (defendingWarrior.Health <= 0)
+                {
+                    attackingWarrior.Kills = attackingWarrior.Kills + 1;
+                }
 
             }
             else if (!team8 && (obstacle == null))
@@ -825,7 +828,6 @@ public partial class GamePlayForm : Form
     {
         if (AddingObstacles)
         {
-
             int gridSize = 50;
             Point clickPosition = PointToClient(Cursor.Position);
             int nearestX = (clickPosition.X - selectedGridPictureBox.Location.X) / gridSize * gridSize + selectedGridPictureBox.Location.X;
@@ -858,7 +860,6 @@ public partial class GamePlayForm : Form
             }
 
             Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
-
 
             obstaclesPlaces.Add(obstacle);
             //await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstaclesPlaces); // Neveike taip :( labai idomus bugas nes veikia pries idedant i masyva
