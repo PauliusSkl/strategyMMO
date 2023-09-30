@@ -157,4 +157,37 @@
   <data name="archer_yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\archer_yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="mage_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mage_blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mage_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mage_green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mage_pink" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mage_pink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mage_yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mage_yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tank_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tank_blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tank_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tank_green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tank_pink" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tank_pink.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tank_yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tank_yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="obstacle_lava" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\obstacle_lava.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="obstacle_mountain" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\obstacle_mountain.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="obstacle_water" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\obstacle_water.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

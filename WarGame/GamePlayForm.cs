@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualBasic.ApplicationServices;
 using Shared.Models;
+using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Factory;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -13,7 +14,8 @@ public partial class GamePlayForm : Form
 {
     private readonly HubConnection _conn;
     private readonly Player _player;
-
+    private readonly UnitFactory _basicUnitFactory; 
+    private readonly UnitFactory _upgradedUnitFactory;
     //WARRIORS STUFF -------
     private List<PictureBox> pictureBoxes = new List<PictureBox>();
     private List<Unit> warriors = new List<Unit>();
@@ -40,6 +42,9 @@ public partial class GamePlayForm : Form
     {
         _conn = conn;
         _player = player;
+        _basicUnitFactory = new BasicUnitFactory(); 
+        _upgradedUnitFactory = new UpgradedUnitFactory();
+
         InitializeComponent();
 
 
@@ -79,61 +84,41 @@ public partial class GamePlayForm : Form
         string[] pngs = { "green", "blue", "yellow", "pink" };
 
         string imagesFolder = Path.Combine(Application.StartupPath, "Resources");
+        //Basic Warriors
+        for (int i = 0; i < pngs.Length; i++)
+        {
+            string color = pngs[i];
+            Unit warrior = _basicUnitFactory.CreateWarrior(color);
+            warrior.Image = Path.Combine(imagesFolder, $"warrior_{color}.png");
 
-        for (int i = 0; i < 4; i++)
-        {
-            warriors.Add(new Warrior
-            {
-                Health = 200,
-                Attack = 50,
-                Range = 1,
-                X = 0,
-                Y = 0,
-                Color = pngs[i],
-                Image = Path.Combine(imagesFolder, $"warrior_{pngs[i]}.png")
-            });
+            warriors.Add(warrior);
         }
+        //Basic Archers
+        for (int i = 0; i < pngs.Length; i++)
+        {
+            string color = pngs[i];
+            Unit archer = _basicUnitFactory.CreateArcher(color);
+            archer.Image = Path.Combine(imagesFolder, $"archer_{color}.png");
 
-        for (int i = 0; i < 4; i++)
-        {
-            warriors.Add(new Archer
-            {
-                Health = 50,
-                Attack = 50,
-                Range = 2,
-                X = 0,
-                Y = 0,
-                Color = pngs[i],
-                Image = Path.Combine(imagesFolder, $"archer_{pngs[i]}.png")
-            });
+            warriors.Add(archer);
         }
-        for (int i = 0; i < 4; i++)
+        //Basic Mages
+        for (int i = 0; i < pngs.Length; i++)
         {
-            warriors.Add(new Mage
-            {
-                Health = 50,
-                Attack = 100,
-                Range = 2,
-                X = 0,
-                Y = 0,
-                Color = pngs[i],
-                Image = Path.Combine(imagesFolder, $"mage_{pngs[i]}.png")
-            });
-        }
+            string color = pngs[i];
+            Unit mage = _basicUnitFactory.CreateMage(color);
+            mage.Image = Path.Combine(imagesFolder, $"mage_{color}.png");
 
-        for (int i = 0; i < 4; i++)
+            warriors.Add(mage);
+        }
+        //Basic Tanks
+        for (int i = 0; i < pngs.Length; i++)
         {
-            warriors.Add(new Tank
-            {
-                Health = 300,
-                Attack = 10,
-                Range = 1,
-                X = 0,
-                Y = 0,
-                Color = pngs[i],
-                Image = Path.Combine(imagesFolder, $"tank_{pngs[i]}.png")
-                //Image = "./Resources/warrior_" + pngs[i] + ".png"
-            });
+            string color = pngs[i];
+            Unit tank = _basicUnitFactory.CreateTank(color);
+            tank.Image = Path.Combine(imagesFolder, $"tank_{color}.png");
+
+            warriors.Add(tank);
         }
     }
     private void DisplayWarriorsImages()
@@ -431,11 +416,9 @@ public partial class GamePlayForm : Form
         bool team8 = CheckForTeammate(attackingWarrior, X, Y);
 
         Obstacle obstacle = CheckForObstacle(attackingWarrior, X, Y);
-
         if (defendingWarrior != null)
         {
             defendingWarrior.Health -= attackingWarrior.Attack;
-
             await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
 
         }
