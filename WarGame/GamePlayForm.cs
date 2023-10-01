@@ -36,6 +36,8 @@ public partial class GamePlayForm : Form
     private bool AddingLava = false;
 
     private string PlayerColor;
+    int MovementCount = 0;
+
 
     private readonly HubConnection _battleHub = new BattleHub().GetInstance();
 
@@ -52,19 +54,20 @@ public partial class GamePlayForm : Form
 
         InitializeComponent();
 
-        SetPLayerInfo(player);
-
 
         InitializeWarriors();
         AddPictureBoxesToList();
         DisplayWarriorsImages();
 
+        SetPLayerMoves(player);
+        SetPLayerInfo(player);
 
         OnReceivePictureCoordinates();
         OnReceiveWarriorList();
 
         OnReceiveObstacles();
         OnReceiveStrategies();
+        OnAllTurnsEnded();
         //OnReceiveObstacless();
 
 
@@ -76,6 +79,36 @@ public partial class GamePlayForm : Form
         PlayerColor = player.Color;
         label4.Text = "Team: " + player.Color;
         label4.ForeColor = Color.FromName(player.Color);
+    }
+
+    private void SetPLayerMoves(Player player)
+    {
+        foreach (var warrior in warriors)
+        {
+            if (warrior.Color == player.Color)
+            {
+                MovementCount += warrior.Speed;
+            }
+        }
+
+        label13.Text = "Moves left: " + MovementCount;
+    }
+
+    private async void UpdateLabelInfo()
+    {
+        MovementCount--;
+        label13.Text = "Moves left: " + MovementCount;
+
+        if(MovementCount == 0)
+        {
+            upButton.Visible = false;
+            downButton.Visible = false;
+            leftButton.Visible = false;
+            rightButton.Visible = false;
+
+            await _conn.SendAsync("NewTurn");
+        }
+        
     }
     private void AddPictureBoxesToList()
     {
@@ -161,6 +194,14 @@ public partial class GamePlayForm : Form
         }
     }
 
+
+    private void OnAllTurnsEnded()
+    {
+        _ = _conn.On("ReceiveNewTurn", () =>
+        {
+            SetPLayerMoves(_player);
+        });
+    }
     private void OnReceiveStrategies()
     {
         _ = _battleHub.On("InitiateChange", () =>
@@ -499,6 +540,7 @@ public partial class GamePlayForm : Form
 
     private async void handleBattle(PictureBox currentWarrior, int X, int Y)
     {
+        bool hasMoved = false;
         Unit attackingWarrior = GetWarriorFromPictureBox(currentWarrior);
         if (attackingWarrior != null)
         {
@@ -516,6 +558,7 @@ public partial class GamePlayForm : Form
                 {
                     item.ApplyEffect(attackingWarrior);
                 }
+                hasMoved = true;
             }
 
             if (defendingWarrior != null)
@@ -525,17 +568,21 @@ public partial class GamePlayForm : Form
                 {
                     attackingWarrior.Kills = attackingWarrior.Kills + 1;
                 }
-
+                hasMoved = true;
             }
             else if (!team8 && (obstacle == null))
             {
                 currentWarrior.Location = new Point(X, Y);
+                hasMoved = true;
             }
 
             await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
         }
 
-        //Galima handlit pagal obstacle ka daryt pvz obstacle typas mountain ir current warrioras archeris tai gali atakuot bet jei magas negali nor abu du rango
+        if (hasMoved)
+        {
+            UpdateLabelInfo();
+        }
     }
 
     private List<Obstacle> CheckAroundForObstacles(Unit warrior)
@@ -639,7 +686,7 @@ public partial class GamePlayForm : Form
 
         Unit warrior = GetWarriorFromPictureBox(selectedPictureBox);
 
-        if (warrior.Color == PlayerColor)
+        if (warrior.Color == PlayerColor && MovementCount > 0)
         {
             upButton.Visible = true;
             downButton.Visible = true;

@@ -72,6 +72,7 @@
             killsLabel = new Label();
             upgradedLabel = new Label();
             label4 = new Label();
+            label13 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -475,11 +476,21 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 30F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.Location = new Point(1034, 371);
+            label4.Location = new Point(988, 411);
             label4.Name = "label4";
             label4.Size = new Size(130, 54);
             label4.TabIndex = 361;
             label4.Text = "label4";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 30F, FontStyle.Regular, GraphicsUnit.Point);
+            label13.Location = new Point(988, 316);
+            label13.Name = "label13";
+            label13.Size = new Size(152, 54);
+            label13.TabIndex = 362;
+            label13.Text = "label13";
             // 
             // GamePlayForm
             // 
@@ -488,6 +499,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(label13);
             Controls.Add(label4);
             Controls.Add(upgradedLabel);
             Controls.Add(killsLabel);
@@ -607,5 +619,6 @@
         private Label killsLabel;
         private Label upgradedLabel;
         private Label label4;
+        private Label label13;
     }
 }

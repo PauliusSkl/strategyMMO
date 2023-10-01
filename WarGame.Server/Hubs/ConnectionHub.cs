@@ -8,6 +8,8 @@ public class ConnectionHub : Hub
 {
     private static readonly string[] AvailableColors = { "green", "blue", "yellow", "pink" };
     private static int _colorIndex = 0;
+    private static int turnsEnded = 0;
+
 
     private static readonly GameStatusModel _gameStatusModel = new()
     {
@@ -60,6 +62,16 @@ public class ConnectionHub : Hub
         {
             yield return gameStatus.ExecuteStrategy(_gameStatusModel);
             await Task.Delay(1000, cancellationToken);
+        }
+    }
+
+    public async Task NewTurn()
+    {
+        turnsEnded++;
+        if (turnsEnded == 4)
+        {
+            await Clients.All.SendAsync("ReceiveNewTurn");
+            turnsEnded = 0;
         }
     }
 }
