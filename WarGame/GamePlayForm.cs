@@ -51,6 +51,8 @@ public partial class GamePlayForm : Form
 
         InitializeComponent();
 
+        SetPLayerInfo(player);
+
 
         InitializeWarriors();
         AddPictureBoxesToList();
@@ -63,9 +65,17 @@ public partial class GamePlayForm : Form
         OnReceiveObstacles();
         OnReceiveStrategies();
         //OnReceiveObstacless();
+
+
+
     }
 
+    private void SetPLayerInfo(Player player)
+    {
 
+        label4.Text = "Komanda: " + player.Color;
+        label4.ForeColor = Color.FromName(player.Color);
+    }
     private void AddPictureBoxesToList()
     {
         pictureBoxes.Add(pictureBox2);
@@ -620,7 +630,7 @@ public partial class GamePlayForm : Form
             attackLabel.Text = $"Attack: {attack}";
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
             killsLabel.Text = $"Kills: {kills}";
-            if (upgraded==true)
+            if (upgraded == true)
             {
                 upgradedLabel.Text = "Upgraded";
             }
@@ -958,6 +968,12 @@ public partial class GamePlayForm : Form
             await _battleHub.SendAsync("ChangeStrategies");
             initialClient = false;
         }
+    }
+
+    private void label4_Click_1(object sender, EventArgs e)
+    {
+
+
     }
 }
 
