@@ -6,6 +6,9 @@ namespace WarGame.API.Hubs;
 
 public class ConnectionHub : Hub
 {
+    private static readonly string[] AvailableColors = { "green", "blue", "yellow", "pink" };
+    private static int _colorIndex = 0;
+
     private static readonly GameStatusModel _gameStatusModel = new()
     {
         PlayerCount = 0,
@@ -14,6 +17,13 @@ public class ConnectionHub : Hub
         PlayerNames = new List<string>()
     };
 
+    public async Task GetLastColor()
+    {
+        string colorToSet = AvailableColors[_colorIndex];
+        _colorIndex++;
+
+        await Clients.Caller.SendAsync("ReceiveColor", colorToSet);
+    }
     public async IAsyncEnumerable<GameStatusModel> GetPlayerCount(CancellationToken cancellationToken, Player player)
     {
         var gameStatus = new GameStatus(new PlayerCount());

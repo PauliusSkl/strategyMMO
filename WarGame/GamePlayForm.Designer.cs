@@ -71,6 +71,7 @@
             ChangeStrategy = new Button();
             killsLabel = new Label();
             upgradedLabel = new Label();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -256,7 +257,6 @@
             pictureBox2.Size = new Size(50, 50);
             pictureBox2.TabIndex = 334;
             pictureBox2.TabStop = false;
-            pictureBox2.Click += pictureBox2_Click_1;
             // 
             // pictureBox3
             // 
@@ -266,7 +266,6 @@
             pictureBox3.Size = new Size(50, 50);
             pictureBox3.TabIndex = 335;
             pictureBox3.TabStop = false;
-            pictureBox3.Click += pictureBox3_Click;
             // 
             // pictureBox4
             // 
@@ -276,7 +275,6 @@
             pictureBox4.Size = new Size(50, 50);
             pictureBox4.TabIndex = 336;
             pictureBox4.TabStop = false;
-            pictureBox4.Click += pictureBox4_Click;
             // 
             // pictureBox5
             // 
@@ -286,7 +284,6 @@
             pictureBox5.Size = new Size(50, 50);
             pictureBox5.TabIndex = 337;
             pictureBox5.TabStop = false;
-            pictureBox5.Click += pictureBox5_Click;
             // 
             // healthLabel
             // 
@@ -297,7 +294,6 @@
             healthLabel.TabIndex = 338;
             healthLabel.Text = "label4";
             healthLabel.Visible = false;
-            healthLabel.Click += healthLabel_Click;
             // 
             // attackLabel
             // 
@@ -308,7 +304,6 @@
             attackLabel.TabIndex = 339;
             attackLabel.Text = "label4";
             attackLabel.Visible = false;
-            attackLabel.Click += label4_Click;
             // 
             // rangeLabel
             // 
@@ -327,7 +322,6 @@
             pictureBox6.Size = new Size(50, 50);
             pictureBox6.TabIndex = 341;
             pictureBox6.TabStop = false;
-            pictureBox6.Click += pictureBox6_Click;
             // 
             // pictureBox7
             // 
@@ -336,7 +330,6 @@
             pictureBox7.Size = new Size(50, 50);
             pictureBox7.TabIndex = 342;
             pictureBox7.TabStop = false;
-            pictureBox7.Click += pictureBox7_Click;
             // 
             // pictureBox8
             // 
@@ -345,7 +338,6 @@
             pictureBox8.Size = new Size(50, 50);
             pictureBox8.TabIndex = 343;
             pictureBox8.TabStop = false;
-            pictureBox8.Click += pictureBox8_Click;
             // 
             // pictureBox9
             // 
@@ -354,7 +346,6 @@
             pictureBox9.Size = new Size(50, 50);
             pictureBox9.TabIndex = 344;
             pictureBox9.TabStop = false;
-            pictureBox9.Click += pictureBox9_Click;
             // 
             // pictureBox10
             // 
@@ -363,7 +354,6 @@
             pictureBox10.Size = new Size(50, 50);
             pictureBox10.TabIndex = 345;
             pictureBox10.TabStop = false;
-            pictureBox10.Click += pictureBox10_Click;
             // 
             // pictureBox11
             // 
@@ -372,7 +362,6 @@
             pictureBox11.Size = new Size(50, 50);
             pictureBox11.TabIndex = 346;
             pictureBox11.TabStop = false;
-            pictureBox11.Click += pictureBox11_Click;
             // 
             // pictureBox12
             // 
@@ -381,7 +370,6 @@
             pictureBox12.Size = new Size(50, 50);
             pictureBox12.TabIndex = 347;
             pictureBox12.TabStop = false;
-            pictureBox12.Click += pictureBox12_Click;
             // 
             // pictureBox13
             // 
@@ -390,7 +378,6 @@
             pictureBox13.Size = new Size(50, 50);
             pictureBox13.TabIndex = 348;
             pictureBox13.TabStop = false;
-            pictureBox13.Click += pictureBox13_Click;
             // 
             // pictureBox14
             // 
@@ -399,7 +386,6 @@
             pictureBox14.Size = new Size(50, 50);
             pictureBox14.TabIndex = 349;
             pictureBox14.TabStop = false;
-            pictureBox14.Click += pictureBox14_Click;
             // 
             // pictureBox15
             // 
@@ -408,7 +394,6 @@
             pictureBox15.Size = new Size(50, 50);
             pictureBox15.TabIndex = 350;
             pictureBox15.TabStop = false;
-            pictureBox15.Click += pictureBox15_Click;
             // 
             // pictureBox16
             // 
@@ -417,7 +402,6 @@
             pictureBox16.Size = new Size(50, 50);
             pictureBox16.TabIndex = 351;
             pictureBox16.TabStop = false;
-            pictureBox16.Click += pictureBox16_Click;
             // 
             // pictureBox17
             // 
@@ -426,7 +410,6 @@
             pictureBox17.Size = new Size(50, 50);
             pictureBox17.TabIndex = 352;
             pictureBox17.TabStop = false;
-            pictureBox17.Click += pictureBox17_Click;
             // 
             // AddLava
             // 
@@ -488,6 +471,16 @@
             upgradedLabel.Text = "upgradedLabel";
             upgradedLabel.Visible = false;
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 30F, FontStyle.Regular, GraphicsUnit.Point);
+            label4.Location = new Point(1034, 371);
+            label4.Name = "label4";
+            label4.Size = new Size(130, 54);
+            label4.TabIndex = 361;
+            label4.Text = "label4";
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -495,6 +488,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(label4);
             Controls.Add(upgradedLabel);
             Controls.Add(killsLabel);
             Controls.Add(ChangeStrategy);
@@ -612,5 +606,6 @@
         private Button ChangeStrategy;
         private Label killsLabel;
         private Label upgradedLabel;
+        private Label label4;
     }
 }

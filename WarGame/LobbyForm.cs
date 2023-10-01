@@ -17,6 +17,13 @@ public partial class LobbyForm : Form
         var test = new HubConnectionSingleton();
         var conn = test.GetInstance();
 
+        conn.SendAsync("GetLastColor");
+
+        conn.On<string>("ReceiveColor", (color) =>
+        {
+            player.Color = color;
+        });
+
         await foreach (var model in conn.StreamAsync<GameStatusModel>("GetPlayerCount", player))
         {
             if (model.PlayerCount == 4)

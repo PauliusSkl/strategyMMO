@@ -24,7 +24,7 @@ public partial class GamePlayForm : Form
     //--------------------
 
     //private List<IEffectStrategy> effectStrategies = new List<IEffectStrategy>();
-    private List<string> strats = new List<string>();
+
     //Obstacle stuff
     private List<Obstacle> obstaclesPlaces = new List<Obstacle>();
     private List<PictureBox> pictureBoxesObstacles = new List<PictureBox>();
@@ -35,6 +35,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
+    private string PlayerColor;
 
     private readonly HubConnection _battleHub = new BattleHub().GetInstance();
 
@@ -51,6 +52,8 @@ public partial class GamePlayForm : Form
 
         InitializeComponent();
 
+        SetPLayerInfo(player);
+
 
         InitializeWarriors();
         AddPictureBoxesToList();
@@ -63,9 +66,17 @@ public partial class GamePlayForm : Form
         OnReceiveObstacles();
         OnReceiveStrategies();
         //OnReceiveObstacless();
+
+
+
     }
 
-
+    private void SetPLayerInfo(Player player)
+    {
+        PlayerColor = player.Color;
+        label4.Text = "Team: " + player.Color;
+        label4.ForeColor = Color.FromName(player.Color);
+    }
     private void AddPictureBoxesToList()
     {
         pictureBoxes.Add(pictureBox2);
@@ -84,6 +95,11 @@ public partial class GamePlayForm : Form
         pictureBoxes.Add(pictureBox15);
         pictureBoxes.Add(pictureBox16);
         pictureBoxes.Add(pictureBox17);
+
+        foreach (var pictureBox in pictureBoxes)
+        {
+            pictureBox.Click += clickablePictureBox;
+        }
     }
     private void InitializeWarriors()
     {
@@ -420,6 +436,7 @@ public partial class GamePlayForm : Form
     {
         if (selectedPictureBox != null)
         {
+
             int currentY = selectedPictureBox.Location.Y;
             int currentX = selectedPictureBox.Location.X;
             if (currentY - 50 >= 10)
@@ -435,6 +452,7 @@ public partial class GamePlayForm : Form
     {
         if (selectedPictureBox != null)
         {
+
             int currentY = selectedPictureBox.Location.Y;
             int currentX = selectedPictureBox.Location.X;
             if (currentY + 50 <= 470)
@@ -555,50 +573,6 @@ public partial class GamePlayForm : Form
 
     }
 
-    private void pictureBox2_Click_1(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox4_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox3_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox5_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
     private void DisplayStats(int index)
     {
 
@@ -614,13 +588,11 @@ public partial class GamePlayForm : Form
             int X = selectedWarrior.X;
             int Y = selectedWarrior.Y;
 
-
-
             healthLabel.Text = $"Health: {health}";
             attackLabel.Text = $"Attack: {attack}";
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
             killsLabel.Text = $"Kills: {kills}";
-            if (upgraded==true)
+            if (upgraded == true)
             {
                 upgradedLabel.Text = "Upgraded";
             }
@@ -639,11 +611,6 @@ public partial class GamePlayForm : Form
 
     private void HandleClickedPicture()
     {
-        upButton.Visible = true;
-        downButton.Visible = true;
-        leftButton.Visible = true;
-        rightButton.Visible = true;
-
         selectedPictureBox.BorderStyle = BorderStyle.FixedSingle;
         selectedPictureBox.BackColor = Color.Red;
 
@@ -657,147 +624,33 @@ public partial class GamePlayForm : Form
         }
     }
 
-    private void healthLabel_Click(object sender, EventArgs e)
+    private void clickablePictureBox(object sender, EventArgs e)
     {
+        upButton.Visible = false;
+        downButton.Visible = false;
+        leftButton.Visible = false;
+        rightButton.Visible = false;
 
-    }
-
-    private void label4_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void pictureBox6_Click(object sender, EventArgs e)
-    {
         selectedPictureBox = (PictureBox)sender;
 
         int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
 
         DisplayStats(selectedIndex);
 
-        HandleClickedPicture();
-    }
+        Unit warrior = GetWarriorFromPictureBox(selectedPictureBox);
 
-    private void pictureBox7_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox8_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
+        if (warrior.Color == PlayerColor)
+        {
+            upButton.Visible = true;
+            downButton.Visible = true;
+            leftButton.Visible = true;
+            rightButton.Visible = true;
+        }
 
         HandleClickedPicture();
+
     }
 
-    private void pictureBox9_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox10_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox11_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox13_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox12_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox14_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox15_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox16_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
-
-    private void pictureBox17_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxes.IndexOf(selectedPictureBox);
-
-        DisplayStats(selectedIndex);
-
-        HandleClickedPicture();
-    }
 
     private void Add_Lava(object sender, EventArgs e)
     {
