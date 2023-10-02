@@ -9,6 +9,7 @@ public class ConnectionHub : Hub
     private static readonly string[] AvailableColors = { "green", "blue", "yellow", "pink" };
     private static int _colorIndex = 0;
     private static int turnsEnded = 0;
+    private static int readyCount = 0;
 
 
     private static readonly GameStatusModel _gameStatusModel = new()
@@ -23,8 +24,21 @@ public class ConnectionHub : Hub
     {
         string colorToSet = AvailableColors[_colorIndex];
         _colorIndex++;
-
+        if(_colorIndex == 4)
+        {
+            _colorIndex = 0;
+        }
         await Clients.Caller.SendAsync("ReceiveColor", colorToSet);
+    }
+
+    public async Task InitiateGameStart()
+    {
+        readyCount++;
+        if (readyCount == 4)
+        {
+            await Clients.All.SendAsync("ReceiveGameStart");
+            readyCount = 0;
+        }
     }
     public async IAsyncEnumerable<GameStatusModel> GetPlayerCount(CancellationToken cancellationToken, Player player)
     {

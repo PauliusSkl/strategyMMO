@@ -22,7 +22,7 @@ public partial class GamePlayForm : Form
     private List<PictureBox> pictureBoxes = new List<PictureBox>();
     private List<Unit> warriors = new List<Unit>();
     //--------------------
-
+    bool gameStart = false;
     //private List<IEffectStrategy> effectStrategies = new List<IEffectStrategy>();
 
     //Obstacle stuff
@@ -35,7 +35,8 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private string PlayerColor;
+    private int ObstacleCount = 2;
+
     int MovementCount = 0;
 
 
@@ -61,6 +62,7 @@ public partial class GamePlayForm : Form
 
         SetPLayerMoves(player);
         SetPLayerInfo(player);
+        UpdateObstacleCountLabel();
 
         OnReceivePictureCoordinates();
         OnReceiveWarriorList();
@@ -68,15 +70,14 @@ public partial class GamePlayForm : Form
         OnReceiveObstacles();
         OnReceiveStrategies();
         OnAllTurnsEnded();
-        //OnReceiveObstacless();
 
-
+        OnReciveGameStart();
+        //OnReceiveObstacless(); //Palikau kad buga parodyt
 
     }
 
     private void SetPLayerInfo(Player player)
     {
-        PlayerColor = player.Color;
         label4.Text = "Team: " + player.Color;
         label4.ForeColor = Color.FromName(player.Color);
     }
@@ -93,13 +94,39 @@ public partial class GamePlayForm : Form
 
         label13.Text = "Moves left: " + MovementCount;
     }
+    private void UpdateObstacleCountLabel()
+    {
+        label14.Text = "Game not started";
+        obstacleCountLabel.Text = "Obstacles to place: " + ObstacleCount;
+
+
+        if (ObstacleCount == 0)
+        {
+            _conn.SendAsync("InitiateGameStart");
+        }
+
+    }
+
+    private void OnReciveGameStart()
+    {
+        _ = _conn.On("ReceiveGameStart", () =>
+        {
+            gameStart = true;
+
+            label14.Text = "Game started";
+            obstacleCountLabel.Visible = false;
+            AddLava.Visible = false;
+            AddWater.Visible = false;
+            AddMountain.Visible = false;
+        });
+    }
 
     private async void UpdateLabelInfo()
     {
         MovementCount--;
         label13.Text = "Moves left: " + MovementCount;
 
-        if(MovementCount == 0)
+        if (MovementCount == 0)
         {
             upButton.Visible = false;
             downButton.Visible = false;
@@ -108,10 +135,11 @@ public partial class GamePlayForm : Form
 
             await _conn.SendAsync("NewTurn");
         }
-        
+
     }
     private void AddPictureBoxesToList()
     {
+        //uff
         pictureBoxes.Add(pictureBox2);
         pictureBoxes.Add(pictureBox3);
         pictureBoxes.Add(pictureBox4);
@@ -240,18 +268,7 @@ public partial class GamePlayForm : Form
 
             newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
 
-            if (obstacle is Lava)
-            {
-                newObstaclePictureBox.Click += LavaBox_Click;
-            }
-            else if (obstacle is Water)
-            {
-                newObstaclePictureBox.Click += WaterBox_Click;
-            }
-            else if (obstacle is Mountain)
-            {
-                newObstaclePictureBox.Click += MountainBox_Click;
-            }
+            newObstaclePictureBox.Click += Obstacle_Click;
 
             Controls.Add(newObstaclePictureBox);
 
@@ -386,16 +403,6 @@ public partial class GamePlayForm : Form
         pictureBox1.Image = new Bitmap(bmpTemp);
     }
 
-    private async Task<bool> ConfirmUser()
-    {
-        var confimed = false;
-        await foreach (bool result in _battleHub.StreamAsync<bool>("ConfirmPlayer", _player.Username))
-        {
-            confimed = result;
-            break;
-        }
-        return confimed;
-    }
     private Unit CheckForCollision(Unit attacker, int newX, int newY)
     {
         foreach (var enemy in warriors)
@@ -420,7 +427,6 @@ public partial class GamePlayForm : Form
 
         return null;
     }
-
 
     private bool CheckForTeammate(Unit attacker, int newX, int newY)
     {
@@ -686,7 +692,7 @@ public partial class GamePlayForm : Form
 
         Unit warrior = GetWarriorFromPictureBox(selectedPictureBox);
 
-        if (warrior.Color == PlayerColor && MovementCount > 0)
+        if (warrior.Color == _player.Color && MovementCount > 0 && gameStart)
         {
             upButton.Visible = true;
             downButton.Visible = true;
@@ -695,32 +701,39 @@ public partial class GamePlayForm : Form
         }
 
         HandleClickedPicture();
-
     }
 
 
     private void Add_Lava(object sender, EventArgs e)
     {
-        AddingObstacles = true;
+        if (ObstacleCount > 0)
+        {
+            AddingObstacles = true;
 
-        AddingLava = true;
+            AddingLava = true;
 
-        selectedGridPictureBox = pictureBox1;
+            selectedGridPictureBox = pictureBox1;
+        }
     }
 
     private void Add_Water(object sender, EventArgs e)
     {
-
-        AddingObstacles = true;
-        AddingWater = true;
-        selectedGridPictureBox = pictureBox1;
+        if (ObstacleCount > 0)
+        {
+            AddingObstacles = true;
+            AddingWater = true;
+            selectedGridPictureBox = pictureBox1;
+        }
     }
 
     private void Add_Mountain(object sender, EventArgs e)
     {
-        AddingObstacles = true;
-        AddingMountain = true;
-        selectedGridPictureBox = pictureBox1;
+        if (ObstacleCount > 0)
+        {
+            AddingObstacles = true;
+            AddingMountain = true;
+            selectedGridPictureBox = pictureBox1;
+        }
 
     }
     private PictureBox selectedGridPictureBox;
@@ -735,29 +748,27 @@ public partial class GamePlayForm : Form
 
             PictureBox newObstaclePictureBox = new PictureBox();
             newObstaclePictureBox.Size = new Size(50, 50);
-            newObstaclePictureBox.Location = new Point(nearestX + 2, nearestY + 3);
+            newObstaclePictureBox.Location = new Point(nearestX + 1, nearestY + 3);
 
             ObstacleCreator obstacleCreator;
 
             if (AddingLava)
             {
-                newObstaclePictureBox.Click += LavaBox_Click;
                 obstacleCreator = new LavaCreator();
                 AddingLava = false;
             }
             else if (AddingWater)
             {
-                newObstaclePictureBox.Click += WaterBox_Click;
                 obstacleCreator = new WaterCreator();
                 AddingWater = false;
             }
             else
             {
-                newObstaclePictureBox.Click += MountainBox_Click;
                 obstacleCreator = new MountainCreator();
                 AddingMountain = false;
-
             }
+
+            newObstaclePictureBox.Click += Obstacle_Click;
 
             Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
 
@@ -777,6 +788,8 @@ public partial class GamePlayForm : Form
             pictureBoxesObstacles.Add(newObstaclePictureBox);
 
             AddingObstacles = false;
+            ObstacleCount--;
+            UpdateObstacleCountLabel();
         }
 
     }
@@ -799,25 +812,7 @@ public partial class GamePlayForm : Form
         }
     }
 
-    private void LavaBox_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
-
-        DisplayObstacleInfo(selectedIndex);
-    }
-
-    private void WaterBox_Click(object sender, EventArgs e)
-    {
-        selectedPictureBox = (PictureBox)sender;
-
-        int selectedIndex = pictureBoxesObstacles.IndexOf(selectedPictureBox);
-
-        DisplayObstacleInfo(selectedIndex);
-    }
-
-    private void MountainBox_Click(object sender, EventArgs e)
+    private void Obstacle_Click(object sender, EventArgs e)
     {
         selectedPictureBox = (PictureBox)sender;
 
