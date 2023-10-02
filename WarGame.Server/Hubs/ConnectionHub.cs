@@ -24,7 +24,10 @@ public class ConnectionHub : Hub
     {
         string colorToSet = AvailableColors[_colorIndex];
         _colorIndex++;
-
+        if(_colorIndex == 4)
+        {
+            _colorIndex = 0;
+        }
         await Clients.Caller.SendAsync("ReceiveColor", colorToSet);
     }
 

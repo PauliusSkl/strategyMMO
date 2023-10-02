@@ -74,6 +74,7 @@
             label4 = new Label();
             label13 = new Label();
             obstacleCountLabel = new Label();
+            label14 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -147,7 +148,7 @@
             // 
             label6.AutoSize = true;
             label6.BackColor = Color.Transparent;
-            label6.Location = new Point(227, 9);
+            label6.Location = new Point(234, 117);
             label6.Name = "label6";
             label6.Size = new Size(0, 15);
             label6.TabIndex = 315;
@@ -156,7 +157,7 @@
             // 
             label7.AutoSize = true;
             label7.BackColor = Color.Transparent;
-            label7.Location = new Point(250, 49);
+            label7.Location = new Point(257, 157);
             label7.Name = "label7";
             label7.Size = new Size(0, 15);
             label7.TabIndex = 316;
@@ -415,7 +416,7 @@
             // 
             // AddLava
             // 
-            AddLava.Location = new Point(29, 67);
+            AddLava.Location = new Point(36, 175);
             AddLava.Name = "AddLava";
             AddLava.Size = new Size(75, 23);
             AddLava.TabIndex = 355;
@@ -425,7 +426,7 @@
             // 
             // AddWater
             // 
-            AddWater.Location = new Point(130, 67);
+            AddWater.Location = new Point(137, 175);
             AddWater.Name = "AddWater";
             AddWater.Size = new Size(75, 23);
             AddWater.TabIndex = 356;
@@ -435,7 +436,7 @@
             // 
             // AddMountain
             // 
-            AddMountain.Location = new Point(231, 67);
+            AddMountain.Location = new Point(238, 175);
             AddMountain.Name = "AddMountain";
             AddMountain.Size = new Size(75, 23);
             AddMountain.TabIndex = 357;
@@ -497,11 +498,21 @@
             // 
             obstacleCountLabel.AutoSize = true;
             obstacleCountLabel.Font = new Font("Segoe UI", 28F, FontStyle.Regular, GraphicsUnit.Point);
-            obstacleCountLabel.Location = new Point(12, 4);
+            obstacleCountLabel.Location = new Point(19, 112);
             obstacleCountLabel.Name = "obstacleCountLabel";
             obstacleCountLabel.Size = new Size(141, 51);
             obstacleCountLabel.TabIndex = 363;
             obstacleCountLabel.Text = "label14";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Segoe UI", 30F, FontStyle.Regular, GraphicsUnit.Point);
+            label14.Location = new Point(25, 40);
+            label14.Name = "label14";
+            label14.Size = new Size(152, 54);
+            label14.TabIndex = 364;
+            label14.Text = "label14";
             // 
             // GamePlayForm
             // 
@@ -510,6 +521,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(label14);
             Controls.Add(obstacleCountLabel);
             Controls.Add(label13);
             Controls.Add(label4);
@@ -633,5 +645,6 @@
         private Label label4;
         private Label label13;
         private Label obstacleCountLabel;
+        private Label label14;
     }
 }

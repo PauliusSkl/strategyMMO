@@ -70,7 +70,7 @@ public partial class GamePlayForm : Form
         OnReceiveObstacles();
         OnReceiveStrategies();
         OnAllTurnsEnded();
-        
+
         OnReciveGameStart();
         //OnReceiveObstacless(); //Palikau kad buga parodyt
 
@@ -96,21 +96,28 @@ public partial class GamePlayForm : Form
     }
     private void UpdateObstacleCountLabel()
     {
-
+        label14.Text = "Game not started";
         obstacleCountLabel.Text = "Obstacles to place: " + ObstacleCount;
 
-        if(ObstacleCount == 0)
+
+        if (ObstacleCount == 0)
         {
             _conn.SendAsync("InitiateGameStart");
         }
 
     }
-   
+
     private void OnReciveGameStart()
     {
         _ = _conn.On("ReceiveGameStart", () =>
         {
             gameStart = true;
+
+            label14.Text = "Game started";
+            obstacleCountLabel.Visible = false;
+            AddLava.Visible = false;
+            AddWater.Visible = false;
+            AddMountain.Visible = false;
         });
     }
 
@@ -741,7 +748,7 @@ public partial class GamePlayForm : Form
 
             PictureBox newObstaclePictureBox = new PictureBox();
             newObstaclePictureBox.Size = new Size(50, 50);
-            newObstaclePictureBox.Location = new Point(nearestX + 2, nearestY + 3);
+            newObstaclePictureBox.Location = new Point(nearestX + 1, nearestY + 3);
 
             ObstacleCreator obstacleCreator;
 
