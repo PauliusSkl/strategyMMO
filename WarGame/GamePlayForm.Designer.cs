@@ -73,6 +73,7 @@
             upgradedLabel = new Label();
             label4 = new Label();
             label13 = new Label();
+            obstacleCountLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -492,6 +493,16 @@
             label13.TabIndex = 362;
             label13.Text = "label13";
             // 
+            // obstacleCountLabel
+            // 
+            obstacleCountLabel.AutoSize = true;
+            obstacleCountLabel.Font = new Font("Segoe UI", 28F, FontStyle.Regular, GraphicsUnit.Point);
+            obstacleCountLabel.Location = new Point(12, 4);
+            obstacleCountLabel.Name = "obstacleCountLabel";
+            obstacleCountLabel.Size = new Size(141, 51);
+            obstacleCountLabel.TabIndex = 363;
+            obstacleCountLabel.Text = "label14";
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -499,6 +510,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(obstacleCountLabel);
             Controls.Add(label13);
             Controls.Add(label4);
             Controls.Add(upgradedLabel);
@@ -620,5 +632,6 @@
         private Label upgradedLabel;
         private Label label4;
         private Label label13;
+        private Label obstacleCountLabel;
     }
 }

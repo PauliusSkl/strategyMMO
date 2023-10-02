@@ -9,19 +9,19 @@ public class BattleHub : Hub
 {
 
     
-    public async IAsyncEnumerable<bool> ConfirmPlayer([EnumeratorCancellation] CancellationToken cancellationToken, string username)
-    {
-        if (username == null)
-        {
-            yield return false;
-        }
+    //public async IAsyncEnumerable<bool> ConfirmPlayer([EnumeratorCancellation] CancellationToken cancellationToken, string username)
+    //{
+    //    if (username == null)
+    //    {
+    //        yield return false;
+    //    }
 
-        var player = PlayersList.GetPlayer(username);
+    //    var player = PlayersList.GetPlayer(username);
 
-        yield return true;
+    //    yield return true;
 
-        await Task.Delay(1000, cancellationToken);
-    }
+    //    await Task.Delay(1000, cancellationToken);
+    //}
 
     public async Task UpdatePictureCoordinates(string pictureName, int x, int y)
     {
