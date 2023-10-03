@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Shared.Models;
-using Shared.Models.Strategy;
-using System.Runtime.CompilerServices;
 
 namespace WarGame.API.Hubs;
 
 public class BattleHub : Hub
 {
 
-    
+
     //public async IAsyncEnumerable<bool> ConfirmPlayer([EnumeratorCancellation] CancellationToken cancellationToken, string username)
     //{
     //    if (username == null)
@@ -39,7 +37,6 @@ public class BattleHub : Hub
     {
         await Clients.Others.SendAsync("ReceiveObstaclesOnGrids", obstacles);
     }
-
 
     public async Task ChangeStrategies()
     {

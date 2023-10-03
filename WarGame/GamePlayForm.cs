@@ -1,3 +1,12 @@
+using Microsoft.AspNetCore.SignalR.Client;
+using Shared.Models;
+using Shared.Models.AbstractUnitFactory;
+using Shared.Models.Factory;
+using Shared.Models.Strategy;
+using System.Runtime.InteropServices;
+using System.Text.Json;
+using WarGame.Forms;
+
 namespace WarGame;
 
 public partial class GamePlayForm : Form

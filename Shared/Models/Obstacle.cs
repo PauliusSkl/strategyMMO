@@ -1,10 +1,5 @@
 ﻿using Shared.Models.Strategy;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 
 namespace Shared.Models
@@ -20,6 +15,7 @@ namespace Shared.Models
 
         public abstract List<string> DisplayInfo();
 
+        [JsonIgnore]
         public IEffectStrategy _effectStrategy { get; set; }
         public abstract void SetEffectStrategy(IEffectStrategy effectStrategy);
 
