@@ -1,16 +1,3 @@
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.VisualBasic.ApplicationServices;
-using Shared.Models;
-using Shared.Models.AbstractUnitFactory;
-using Shared.Models.Factory;
-using Shared.Models.Strategy;
-using System.Runtime.InteropServices;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using WarGame.Forms;
-
-
 namespace WarGame;
 
 public partial class GamePlayForm : Form
@@ -336,17 +323,6 @@ public partial class GamePlayForm : Form
                 this.warriors[i].Attack = updatedWarriors[i].Attack;
                 this.warriors[i].Range = updatedWarriors[i].Range;
 
-                if (this.warriors[i].Health <= 0)
-                {
-
-                    PictureBox deadPictureBox = pictureBoxes[i];
-                    this.Controls.Remove(deadPictureBox);
-
-
-                    this.warriors.RemoveAt(i);
-
-                    this.pictureBoxes.RemoveAt(i);
-                }
                 if (this.warriors[i].Kills == 2 && this.warriors[i].Upgraded == false)
                 {
                     if (warriors[i].Type == "Warrior")
@@ -393,6 +369,17 @@ public partial class GamePlayForm : Form
 
                         warriors[i] = tank;
                     }
+                }
+                if (this.warriors[i].Health <= 0)
+                {
+
+                    PictureBox deadPictureBox = pictureBoxes[i];
+                    this.Controls.Remove(deadPictureBox);
+
+
+                    this.warriors.RemoveAt(i);
+
+                    this.pictureBoxes.RemoveAt(i);
                 }
             }
         });
@@ -774,7 +761,7 @@ public partial class GamePlayForm : Form
 
             Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
 
-            
+
             var obstacleJson = JsonSerializer.Serialize(obstacle);
 
             await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstacleJson);
