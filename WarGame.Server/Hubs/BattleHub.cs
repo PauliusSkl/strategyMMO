@@ -35,10 +35,10 @@ public class BattleHub : Hub
 
 
     //😭
-    //public async Task UpdateObstaclesOnGrids(List<Obstacle> obstacles)
-    //{
-    //    await Clients.Others.SendAsync("ReceiveObstaclesOnGrids", obstacles);
-    //}
+    public async Task UpdateObstaclesOnGrids(string obstacles)
+    {
+        await Clients.Others.SendAsync("ReceiveObstaclesOnGrids", obstacles);
+    }
 
 
     public async Task ChangeStrategies()

@@ -5,6 +5,7 @@ using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Factory;
 using Shared.Models.Strategy;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WarGame.Forms;
@@ -72,7 +73,7 @@ public partial class GamePlayForm : Form
         OnAllTurnsEnded();
 
         OnReciveGameStart();
-        //OnReceiveObstacless(); //Palikau kad buga parodyt
+        OnReceiveObstacless(); //Palikau kad buga parodyt
 
     }
 
@@ -240,13 +241,14 @@ public partial class GamePlayForm : Form
 
 
     //PLANAS TAIP IMPLEMENTUOT BUVO
-    //private void OnReceiveObstacless()
-    //{
-    //    _ = _battleHub.On<List<Obstacle>>("ReceiveObstaclesOnGrids", (newObstacles) =>
-    //    {
-    //        MessageBox.Show("Received obstacles");
-    //    });
-    //}
+    private void OnReceiveObstacless()
+    {
+        _ = _battleHub.On<string>("ReceiveObstaclesOnGrids", (newObstacles) =>
+        {
+            Obstacle obstacle = JsonSerializer.Deserialize<Lava>(newObstacles);
+            MessageBox.Show(obstacle.ToString());
+        });
+    }
 
 
     //LEBAI BAD IMPLEMENTUOTA NES NENORI PRIIMTI OBSTACLES MASYVO :(((((((((((((((
@@ -772,7 +774,12 @@ public partial class GamePlayForm : Form
 
             Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
 
+            
+            var obstacleJson = JsonSerializer.Serialize(obstacle);
+
+            await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstacleJson);
             obstaclesPlaces.Add(obstacle);
+
             //await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstaclesPlaces); // Neveike taip :( labai idomus bugas nes veikia pries idedant i masyva
 
             await _battleHub.SendAsync("UpdateObstaclesOnGrid", obstacle.X, obstacle.Y, obstacle.GetType().ToString());
