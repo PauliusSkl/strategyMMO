@@ -16,7 +16,7 @@ namespace Shared.Models
             Y = y;
             Damage = damage;
             Image = "Resources/obstacle_lava.png";
-            _effectStrategy = new DebuffEffect();
+            _effectStrategy = new DamageStrategy();
 
         }
 

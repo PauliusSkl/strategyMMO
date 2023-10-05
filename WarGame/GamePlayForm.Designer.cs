@@ -448,9 +448,9 @@
             // 
             ChangeStrategy.Location = new Point(104, 438);
             ChangeStrategy.Name = "ChangeStrategy";
-            ChangeStrategy.Size = new Size(138, 23);
+            ChangeStrategy.Size = new Size(198, 23);
             ChangeStrategy.TabIndex = 358;
-            ChangeStrategy.Text = "ChangeStrategy";
+            ChangeStrategy.Text = "ChangeStrategy FOR TESTING";
             ChangeStrategy.UseVisualStyleBackColor = true;
             ChangeStrategy.Click += ChangeStrategy_Click;
             // 

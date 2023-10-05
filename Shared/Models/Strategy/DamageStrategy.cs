@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Models.Strategy
 {
-    public class DebuffEffect : IEffectStrategy
+    public class DamageStrategy : IEffectStrategy
     {
         public void ApplyEffect(Unit unit)
         {

@@ -20,7 +20,7 @@ namespace Shared.Models
             Y = y;
             SlowLevel = slowLevel;
             Image = "Resources/obstacle_water.png";
-            _effectStrategy = new BuffEffect();
+            _effectStrategy = new HealingStrategy();
         }
 
         public override List<string> DisplayInfo()

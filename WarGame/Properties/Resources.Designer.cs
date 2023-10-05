@@ -123,16 +123,6 @@ namespace WarGame.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap letters {
-            get {
-                object obj = ResourceManager.GetObject("letters", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap mage_blue {
             get {
                 object obj = ResourceManager.GetObject("mage_blue", resourceCulture);
@@ -173,16 +163,6 @@ namespace WarGame.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap numbers {
-            get {
-                object obj = ResourceManager.GetObject("numbers", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap obstacle_lava {
             get {
                 object obj = ResourceManager.GetObject("obstacle_lava", resourceCulture);
@@ -206,16 +186,6 @@ namespace WarGame.Forms.Properties {
         internal static System.Drawing.Bitmap obstacle_water {
             get {
                 object obj = ResourceManager.GetObject("obstacle_water", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Screenshot_2 {
-            get {
-                object obj = ResourceManager.GetObject("Screenshot_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
