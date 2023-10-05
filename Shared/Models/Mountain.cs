@@ -19,14 +19,14 @@ namespace Shared.Models
             Y = y;
             Height = height;
             Image = "Resources/obstacle_mountain.png";
-            _effectStrategy = null;
+            _effectStrategy = new SpeedStrategy();
         }
 
         public override List<string> DisplayInfo()
         {
             List<string> info = new List<string>();
             info.Add("Name: Mountain");
-            info.Add("Strategy: No strategy");
+            info.Add("Strategy: " + _effectStrategy.ToString());
             info.Add("Cords: " + X.ToString() + ";" + Y.ToString());
 
             return info;
@@ -34,12 +34,12 @@ namespace Shared.Models
 
         public override void SetEffectStrategy(IEffectStrategy effectStrategy)
         {
-            return;
+            this._effectStrategy = effectStrategy;
         }
 
         public override void ApplyEffect(Unit unit)
         {
-            return;
+            _effectStrategy.ApplyEffect(unit);
         }
     }
 }

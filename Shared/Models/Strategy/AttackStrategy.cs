@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace Shared.Models.Strategy
 {
-    public class BuffEffect : IEffectStrategy
+    public class AttackStrategy : IEffectStrategy
     {
+
         public void ApplyEffect(Unit unit)
-        {
-            if (unit.Health + 40 > unit.MaxHealth)
+        { 
+            if(!unit.attackRaised)
             {
-                unit.Health = unit.MaxHealth;
-            }
-            else
-            {
-                unit.Health += 40;
+                unit.Attack += 50;
+                unit.attackRaised = true;
             }
         }
     }

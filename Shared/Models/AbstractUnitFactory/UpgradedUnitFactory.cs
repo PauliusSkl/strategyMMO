@@ -15,7 +15,7 @@ namespace Shared.Models.AbstractUnitFactory
                 Health = 50,
                 MaxHealth = 50,
                 Attack = 100,
-                Range = 3,
+                Range = 2,
                 Speed = 3,
                 Kills = 2,
                 Upgraded = true,

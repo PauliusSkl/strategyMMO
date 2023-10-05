@@ -20,7 +20,7 @@ public partial class GamePlayForm : Form
     private List<Unit> warriors = new List<Unit>();
     //--------------------
     bool gameStart = false;
-    //private List<IEffectStrategy> effectStrategies = new List<IEffectStrategy>();
+
 
     //Obstacle stuff
     private List<Obstacle> obstaclesPlaces = new List<Obstacle>();
@@ -32,7 +32,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 2;
+    private int ObstacleCount = 1;
 
     int MovementCount = 0;
 
@@ -225,6 +225,7 @@ public partial class GamePlayForm : Form
         _ = _conn.On("ReceiveNewTurn", () =>
         {
             SetPLayerMoves(_player);
+            ChangeAllStrats();
         });
     }
     private void OnReceiveStrategies()
@@ -245,8 +246,6 @@ public partial class GamePlayForm : Form
     //    });
     //}
 
-
-    //LEBAI BAD IMPLEMENTUOTA NES NENORI PRIIMTI OBSTACLES MASYVO :(((((((((((((((
     private void OnReceiveObstacles()
     {
         _ = _battleHub.On<int, int, string>("ReceiveObstaclesOnGrid", (x, y, type) =>
@@ -276,7 +275,8 @@ public partial class GamePlayForm : Form
             pictureBoxesObstacles.Add(newObstaclePictureBox);
         });
     }
-    //LEBAI BAD IMPLEMENTUOTA NES NENORI PRIIMTI OBSTACLES MASYVO :(((((((((((((((
+    
+
     private Obstacle CreateObstacleFromType(int x, int y, string type)
     {
         ObstacleCreator obstacleCreator;
@@ -330,6 +330,7 @@ public partial class GamePlayForm : Form
                 this.warriors[i].Health = updatedWarriors[i].Health;
                 this.warriors[i].Attack = updatedWarriors[i].Attack;
                 this.warriors[i].Range = updatedWarriors[i].Range;
+                this.warriors[i].Speed = updatedWarriors[i].Speed;
 
                 if (this.warriors[i].Kills == 2 && this.warriors[i].Upgraded == false)
                 {
@@ -635,11 +636,12 @@ public partial class GamePlayForm : Form
             int range = selectedWarrior.Range;
             int kills = selectedWarrior.Kills;
             bool upgraded = selectedWarrior.Upgraded;
+            int speed = selectedWarrior.Speed;
             int X = selectedWarrior.X;
             int Y = selectedWarrior.Y;
 
             healthLabel.Text = $"Health: {health}";
-            attackLabel.Text = $"Attack: {attack}";
+            attackLabel.Text = $"Attack: {attack} Speed: {speed}";
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
             killsLabel.Text = $"Kills: {kills}";
             if (upgraded == true)
@@ -826,22 +828,23 @@ public partial class GamePlayForm : Form
 
     private async void ChangeAllStrats()
     {
-        IEffectStrategy debbuf = new DebuffEffect();
-        IEffectStrategy buff = new BuffEffect();
-
         foreach (var obstacle in obstaclesPlaces)
         {
-            if (obstacle._effectStrategy is null)
+            if (obstacle._effectStrategy is SpeedStrategy)
             {
-                return;
+                obstacle.SetEffectStrategy(new AttackStrategy());
             }
-            else if (obstacle._effectStrategy is DebuffEffect)
+            else if (obstacle._effectStrategy is AttackStrategy)
             {
-                obstacle.SetEffectStrategy(buff);
+                obstacle.SetEffectStrategy(new SpeedStrategy());
+            }
+            else if (obstacle._effectStrategy is DamageStrategy)
+            {
+                obstacle.SetEffectStrategy(new HealingStrategy());
             }
             else
             {
-                obstacle.SetEffectStrategy(debbuf);
+                obstacle.SetEffectStrategy(new DamageStrategy());
             }
         }
 

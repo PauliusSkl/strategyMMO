@@ -16,7 +16,9 @@ public class Unit
 
     public int Speed { get; set; }
 
-    public bool affected { get; set; } = false;
+    public bool speedRaised { get; set; } = false;
+
+    public bool attackRaised { get; set; } = false;
     public bool Upgraded { get; set; } = false;
     public string Color { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
