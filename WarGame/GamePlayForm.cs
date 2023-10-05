@@ -20,7 +20,7 @@ public partial class GamePlayForm : Form
     private List<Unit> warriors = new List<Unit>();
     //--------------------
     bool gameStart = false;
-    //private List<IEffectStrategy> effectStrategies = new List<IEffectStrategy>();
+
 
     //Obstacle stuff
     private List<Obstacle> obstaclesPlaces = new List<Obstacle>();
@@ -246,8 +246,6 @@ public partial class GamePlayForm : Form
     //    });
     //}
 
-
-    //LEBAI BAD IMPLEMENTUOTA NES NENORI PRIIMTI OBSTACLES MASYVO :(((((((((((((((
     private void OnReceiveObstacles()
     {
         _ = _battleHub.On<int, int, string>("ReceiveObstaclesOnGrid", (x, y, type) =>
@@ -277,7 +275,8 @@ public partial class GamePlayForm : Form
             pictureBoxesObstacles.Add(newObstaclePictureBox);
         });
     }
-    //LEBAI BAD IMPLEMENTUOTA NES NENORI PRIIMTI OBSTACLES MASYVO :(((((((((((((((
+    
+
     private Obstacle CreateObstacleFromType(int x, int y, string type)
     {
         ObstacleCreator obstacleCreator;
@@ -829,29 +828,23 @@ public partial class GamePlayForm : Form
 
     private async void ChangeAllStrats()
     {
-        IEffectStrategy damage = new DamageStrategy();
-        IEffectStrategy heal = new HealingStrategy();
-        IEffectStrategy speed = new SpeedStrategy();
-        IEffectStrategy attack = new AttackStrategy();
-
-
         foreach (var obstacle in obstaclesPlaces)
         {
             if (obstacle._effectStrategy is SpeedStrategy)
             {
-                obstacle.SetEffectStrategy(attack);
+                obstacle.SetEffectStrategy(new AttackStrategy());
             }
             else if (obstacle._effectStrategy is AttackStrategy)
             {
-                obstacle.SetEffectStrategy(speed);
+                obstacle.SetEffectStrategy(new SpeedStrategy());
             }
             else if (obstacle._effectStrategy is DamageStrategy)
             {
-                obstacle.SetEffectStrategy(heal);
+                obstacle.SetEffectStrategy(new HealingStrategy());
             }
             else
             {
-                obstacle.SetEffectStrategy(damage);
+                obstacle.SetEffectStrategy(new DamageStrategy());
             }
         }
 
