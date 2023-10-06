@@ -11,6 +11,7 @@ public class ConnectionHub : Hub
     private static int turnsEnded = 0;
     private static int readyCount = 0;
     private static int SentDragonMove = 0;
+    private static int maxReadyCount = 4;
 
 
     private static readonly GameStatusModel _gameStatusModel = new()
@@ -83,6 +84,7 @@ public class ConnectionHub : Hub
 
     public async Task NewTurn()
     {
+        
         turnsEnded++;
         if (turnsEnded == 4)
         {

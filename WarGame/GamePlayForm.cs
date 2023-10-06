@@ -64,7 +64,7 @@ public partial class GamePlayForm : Form
         AddPictureBoxesToList();
         DisplayWarriorsImages();
 
-        SetPLayerMoves(player);
+        SetPLayerMoves();
         SetPLayerInfo(player);
         UpdateObstacleCountLabel();
 
@@ -82,21 +82,26 @@ public partial class GamePlayForm : Form
 
     }
 
-
+  
     private void SetPLayerInfo(Player player)
     {
         label4.Text = "Team: " + player.Color;
         label4.ForeColor = Color.FromName(player.Color);
     }
 
-    private void SetPLayerMoves(Player player)
+    private async void SetPLayerMoves()
     {
+        MovementCount = 0;
         foreach (var warrior in warriors)
         {
-            if (warrior.Color == player.Color)
+            if (warrior.Color == _player.Color)
             {
                 MovementCount += warrior.Speed;
             }
+        }
+        if(MovementCount == 0)
+        {
+            await _conn.SendAsync("NewTurn");
         }
 
         label13.Text = "Moves left: " + MovementCount;
@@ -143,6 +148,22 @@ public partial class GamePlayForm : Form
             await _conn.SendAsync("NewTurn");
         }
 
+    }
+
+    private async void CheckForMyUnits(string color)
+    {
+        int count = 0;
+        foreach (var warrior in warriors)
+        {
+            if (warrior.Color == color)
+            {
+                count++;
+            }
+        }
+        if (count == 1) {
+            await _conn.SendAsync("NewTurn");
+        }
+        
     }
     private void AddPictureBoxesToList()
     {
@@ -247,7 +268,7 @@ public partial class GamePlayForm : Form
     {
         _ = _conn.On("ReceiveNewTurn", () =>
         {
-            SetPLayerMoves(_player);
+            SetPLayerMoves();
             ChangeAllStrats();
         });
     }
@@ -689,6 +710,7 @@ public partial class GamePlayForm : Form
                 defendingWarrior.Health -= attackingWarrior.Attack;
                 if (defendingWarrior.Health <= 0)
                 {
+                    CheckForMyUnits(defendingWarrior.Color);
                     attackingWarrior.Kills = attackingWarrior.Kills + 1;
                 }
                 hasMoved = true;
