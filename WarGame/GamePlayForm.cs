@@ -38,7 +38,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 0;
+    private int ObstacleCount = 1;
 
     int MovementCount = 0;
 
@@ -152,6 +152,10 @@ public partial class GamePlayForm : Form
 
     private async void CheckForMyUnits(string color)
     {
+        if(color == "enemy")
+        {
+            return;
+        }
         int count = 0;
         foreach (var warrior in warriors)
         {
