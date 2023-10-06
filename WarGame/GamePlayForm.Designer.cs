@@ -75,6 +75,7 @@
             label13 = new Label();
             obstacleCountLabel = new Label();
             label14 = new Label();
+            pictureBox18 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -92,6 +93,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox15).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox16).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox17).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox18).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -514,6 +516,14 @@
             label14.TabIndex = 364;
             label14.Text = "label14";
             // 
+            // pictureBox18
+            // 
+            pictureBox18.Location = new Point(627, 214);
+            pictureBox18.Name = "pictureBox18";
+            pictureBox18.Size = new Size(50, 50);
+            pictureBox18.TabIndex = 365;
+            pictureBox18.TabStop = false;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -521,6 +531,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(pictureBox18);
             Controls.Add(label14);
             Controls.Add(obstacleCountLabel);
             Controls.Add(label13);
@@ -592,6 +603,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox15).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox16).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox17).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox18).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -646,5 +658,7 @@
         private Label label13;
         private Label obstacleCountLabel;
         private Label label14;
+        private PictureBox pictureBox18;
+        private PictureBox pictureBox19;
     }
 }

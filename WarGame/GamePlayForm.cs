@@ -3,6 +3,8 @@ using Shared.Models;
 using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Factory;
 using Shared.Models.Strategy;
+using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using WarGame.Forms;
 
@@ -20,7 +22,8 @@ public partial class GamePlayForm : Form
     private List<Unit> warriors = new List<Unit>();
     //--------------------
     bool gameStart = false;
-
+    private Dragon dragon;
+    private PictureBox dragon_box;
 
     //Obstacle stuff
     private List<Obstacle> obstaclesPlaces = new List<Obstacle>();
@@ -32,7 +35,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 1;
+    private int ObstacleCount = 0;
 
     int MovementCount = 0;
 
@@ -54,6 +57,7 @@ public partial class GamePlayForm : Form
 
 
         InitializeWarriors();
+        
         AddPictureBoxesToList();
         DisplayWarriorsImages();
 
@@ -67,11 +71,13 @@ public partial class GamePlayForm : Form
         OnReceiveObstacles();
         OnReceiveStrategies();
         OnAllTurnsEnded();
+        OnDragonMove();
 
         OnReciveGameStart();
         //OnReceiveObstacless(); //Palikau kad buga parodyt
 
     }
+
 
     private void SetPLayerInfo(Player player)
     {
@@ -153,6 +159,7 @@ public partial class GamePlayForm : Form
         pictureBoxes.Add(pictureBox15);
         pictureBoxes.Add(pictureBox16);
         pictureBoxes.Add(pictureBox17);
+        pictureBoxes.Add(pictureBox18);
 
         foreach (var pictureBox in pictureBoxes)
         {
@@ -208,6 +215,11 @@ public partial class GamePlayForm : Form
 
             warriors.Add(tank);
         }
+
+        Dragon drag = new Dragon(0, 0, Path.Combine(imagesFolder, "dragon_npc.png"));
+        this.dragon = drag;
+        warriors.Add(drag);
+
     }
     private void DisplayWarriorsImages()
     {
@@ -227,6 +239,17 @@ public partial class GamePlayForm : Form
             SetPLayerMoves(_player);
             ChangeAllStrats();
         });
+    }
+
+    private void OnDragonMove()
+    {
+        
+        _ = _conn.On<string>("DragonMove", (command) =>
+        {
+            MoveDragon(command);
+
+        });
+
     }
     private void OnReceiveStrategies()
     {
@@ -275,7 +298,7 @@ public partial class GamePlayForm : Form
             pictureBoxesObstacles.Add(newObstaclePictureBox);
         });
     }
-    
+
 
     private Obstacle CreateObstacleFromType(int x, int y, string type)
     {
@@ -331,6 +354,7 @@ public partial class GamePlayForm : Form
                 this.warriors[i].Attack = updatedWarriors[i].Attack;
                 this.warriors[i].Range = updatedWarriors[i].Range;
                 this.warriors[i].Speed = updatedWarriors[i].Speed;
+                this.warriors[i].Kills = updatedWarriors[i].Kills;
 
                 if (this.warriors[i].Kills == 2 && this.warriors[i].Upgraded == false)
                 {
@@ -854,5 +878,27 @@ public partial class GamePlayForm : Form
             initialClient = false;
         }
     }
+
+    private void MoveDragon(string direction)
+    {
+        clickablePictureBox(pictureBox18, EventArgs.Empty);
+        switch (direction)
+        {
+            case "up":
+                upButton_Click(upButton, EventArgs.Empty);
+                break;
+            case "down":
+                downButton_Click(downButton, EventArgs.Empty);
+                break;
+            case "left":
+               leftButton_Click(leftButton, EventArgs.Empty);
+                break;
+            case "right":
+                rightButton_Click(rightButton, EventArgs.Empty);
+                break;
+        }
+    }
+
+
 }
 
