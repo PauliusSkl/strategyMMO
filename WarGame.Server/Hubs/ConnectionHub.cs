@@ -10,6 +10,8 @@ public class ConnectionHub : Hub
     private static int _colorIndex = 0;
     private static int turnsEnded = 0;
     private static int readyCount = 0;
+    private static int SentDragonMove = 0;
+    private static int maxReadyCount = 4;
 
 
     private static readonly GameStatusModel _gameStatusModel = new()
@@ -17,6 +19,7 @@ public class ConnectionHub : Hub
         PlayerCount = 0,
         BattleDuration = DateTime.MinValue,
         MovesCount = 0,
+        
         PlayerNames = new List<string>()
     };
 
@@ -81,11 +84,39 @@ public class ConnectionHub : Hub
 
     public async Task NewTurn()
     {
+        
         turnsEnded++;
         if (turnsEnded == 4)
         {
             await Clients.All.SendAsync("ReceiveNewTurn");
+            if(SentDragonMove == 0)
+            {
+                string command = RandomCommand();
+                await Clients.Client(Context.ConnectionId).SendAsync("DragonMove", command);
+                SentDragonMove = 1;
+            }
             turnsEnded = 0;
+            return;
+        }
+        SentDragonMove = 0;
+    }
+
+    private string RandomCommand()
+    {
+        Random random = new();
+        int randomNumber = random.Next(0, 4);
+        switch (randomNumber)
+        {
+            case 0:
+                return "up";
+            case 1:
+                return "down";
+            case 2:
+                return "left";
+            case 3:
+                return "right";
+            default:
+                return "up";
         }
     }
 }

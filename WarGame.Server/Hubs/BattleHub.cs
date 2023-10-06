@@ -28,9 +28,9 @@ public class BattleHub : Hub
         await Clients.All.SendAsync("ReceivePictureCoordinates", pictureName, x, y);
     }
 
-    public async Task UpdateWarriorsStats(List<Unit> warriors)
+    public async Task UpdateWarriorsStats(List<Unit> warriors, int nests)
     {
-        await Clients.All.SendAsync("ReceiveWarriorsStats", warriors);
+        await Clients.All.SendAsync("ReceiveWarriorsStats", warriors, nests);
     }
 
 
@@ -49,6 +49,11 @@ public class BattleHub : Hub
     public async Task UpdateObstaclesOnGrid(int x, int y, string type)
     {
         await Clients.Others.SendAsync("ReceiveObstaclesOnGrid", x, y, type);
+    }
+
+    public async Task DragonDead()
+    {
+        await Clients.All.SendAsync("ReceiveDragonDead");
     }
 
 

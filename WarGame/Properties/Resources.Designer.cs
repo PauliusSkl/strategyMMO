@@ -123,6 +123,16 @@ namespace WarGame.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap dragon_npc {
+            get {
+                object obj = ResourceManager.GetObject("dragon_npc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mage_blue {
             get {
                 object obj = ResourceManager.GetObject("mage_blue", resourceCulture);
@@ -156,6 +166,16 @@ namespace WarGame.Forms.Properties {
         internal static System.Drawing.Bitmap mage_yellow {
             get {
                 object obj = ResourceManager.GetObject("mage_yellow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap nest_npc {
+            get {
+                object obj = ResourceManager.GetObject("nest_npc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
