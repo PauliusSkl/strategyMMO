@@ -38,7 +38,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 1;
+    private int ObstacleCount = 0;
 
     int MovementCount = 0;
 
@@ -224,6 +224,7 @@ public partial class GamePlayForm : Form
         pictureBox19.Image = Image.FromFile(nest.Image);
         nest.X = pictureBox19.Location.X;
         nest.Y = pictureBox19.Location.Y;
+
         nestList.Add(nest);
 
         Dragon drag = new Dragon(0, 0, Path.Combine(imagesFolder, "dragon_npc.png"), nestList);
@@ -263,6 +264,9 @@ public partial class GamePlayForm : Form
             pictureBoxes.Add(pictureBox19);
             dragonBoxes.Add(pictureBox19);
             pictureBox19.Click += clickablePictureBox;
+
+            nestList[0].X = 0;
+            nestList[0].Y = 0;
             DragonDead = false;
         });
     }
@@ -465,6 +469,8 @@ public partial class GamePlayForm : Form
                         //{
                         //    MessageBox.Show("Shallow clone");
                         //}
+
+                        
                         dragonBoxes.Remove(deadPictureBox);
                         if(deadPictureBox == pictureBox19)
                         {

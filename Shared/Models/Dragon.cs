@@ -29,7 +29,7 @@ namespace Shared.Models
             Dragon clone = (Dragon)this.MemberwiseClone();
             clone.Nest = this.Nest;
             clone.Health = MaxHealth * 2;
-            MaxHealth = Health;
+            clone.Attack = Attack * 2;
             return clone;
         }
 
@@ -43,7 +43,7 @@ namespace Shared.Models
                 clone.Nest.Add(nestas);
             }
             clone.Health = MaxHealth * 2;
-            MaxHealth = Health;
+            clone.Attack = Attack * 2;
             return clone;
         }
     }
