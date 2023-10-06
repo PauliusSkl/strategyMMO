@@ -22,8 +22,11 @@ public partial class GamePlayForm : Form
     private List<Unit> warriors = new List<Unit>();
     //--------------------
     bool gameStart = false;
-    private Dragon dragon;
-    private PictureBox dragon_box;
+    private List<Nest> nestList = new List<Nest>();
+    private bool DragonDead = false;
+    private Dragon dragonClone = null;
+
+    private List<PictureBox> dragonBoxes = new List<PictureBox>();
 
     //Obstacle stuff
     private List<Obstacle> obstaclesPlaces = new List<Obstacle>();
@@ -35,7 +38,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 0;
+    private int ObstacleCount = 1;
 
     int MovementCount = 0;
 
@@ -57,7 +60,7 @@ public partial class GamePlayForm : Form
 
 
         InitializeWarriors();
-        
+
         AddPictureBoxesToList();
         DisplayWarriorsImages();
 
@@ -74,6 +77,7 @@ public partial class GamePlayForm : Form
         OnDragonMove();
 
         OnReciveGameStart();
+        OnReceiveDragonDead();
         //OnReceiveObstacless(); //Palikau kad buga parodyt
 
     }
@@ -160,7 +164,7 @@ public partial class GamePlayForm : Form
         pictureBoxes.Add(pictureBox16);
         pictureBoxes.Add(pictureBox17);
         pictureBoxes.Add(pictureBox18);
-
+        dragonBoxes.Add(pictureBox18);
         foreach (var pictureBox in pictureBoxes)
         {
             pictureBox.Click += clickablePictureBox;
@@ -216,8 +220,14 @@ public partial class GamePlayForm : Form
             warriors.Add(tank);
         }
 
-        Dragon drag = new Dragon(0, 0, Path.Combine(imagesFolder, "dragon_npc.png"));
-        this.dragon = drag;
+        Nest nest = new Nest(0, 0, Path.Combine(imagesFolder, "nest_npc.png"));
+        pictureBox19.Image = Image.FromFile(nest.Image);
+        nest.X = pictureBox19.Location.X;
+        nest.Y = pictureBox19.Location.Y;
+        nestList.Add(nest);
+
+        Dragon drag = new Dragon(0, 0, Path.Combine(imagesFolder, "dragon_npc.png"), nestList);
+        //dragon = drag;
         warriors.Add(drag);
 
     }
@@ -241,12 +251,36 @@ public partial class GamePlayForm : Form
         });
     }
 
+    private void OnReceiveDragonDead()
+    {
+        _ = _battleHub.On("ReceiveDragonDead", () =>
+        {
+            Dragon newDragon = dragonClone;
+            newDragon.X = pictureBox19.Location.X;
+            newDragon.Y = pictureBox19.Location.Y;
+            pictureBox19.Image = Image.FromFile(newDragon.Image);
+            warriors.Add(newDragon);
+            pictureBoxes.Add(pictureBox19);
+            dragonBoxes.Add(pictureBox19);
+            pictureBox19.Click += clickablePictureBox;
+            DragonDead = false;
+        });
+    }
     private void OnDragonMove()
     {
-        
+
         _ = _conn.On<string>("DragonMove", (command) =>
         {
-            MoveDragon(command);
+            if (!DragonDead)
+            {
+                MoveDragon(command);
+            }
+            else if (nestList.Count != 0)
+            {
+                _battleHub.SendAsync("DragonDead");
+
+            }
+
 
         });
 
@@ -346,8 +380,20 @@ public partial class GamePlayForm : Form
     private void OnReceiveWarriorList()
     {
         string imagesFolder = Path.Combine(Application.StartupPath, "Resources");
-        _ = _battleHub.On<List<Unit>>("ReceiveWarriorsStats", (updatedWarriors) =>
+        _ = _battleHub.On<List<Unit>, int>("ReceiveWarriorsStats", (updatedWarriors, nestHp) =>
         {
+            if(nestHp != -999)
+            { 
+            foreach (var nest in nestList)
+            {
+                    nest.Health = nestHp;
+                if (nestHp <= 0)
+                {
+                    nestList.Remove(nest);
+                    this.Controls.Remove(pictureBox19);
+                }
+            }
+            }
             for (int i = this.warriors.Count - 1; i >= 0; i--)
             {
                 this.warriors[i].Health = updatedWarriors[i].Health;
@@ -405,8 +451,29 @@ public partial class GamePlayForm : Form
                 }
                 if (this.warriors[i].Health <= 0)
                 {
-
                     PictureBox deadPictureBox = pictureBoxes[i];
+
+                    //Neziurekit kas cia vyksta :((
+                    if (this.warriors[i] is Dragon dragon && this.warriors[i].Color == "enemy")
+                    {
+                        DragonDead = true;
+                        this.dragonClone = dragon.ShallowClone();
+
+                        //atsiskaitymui
+                        //this.dragonClone = dragon.DeepClone();
+                        //if(dragonClone.Nest == dragon.Nest)
+                        //{
+                        //    MessageBox.Show("Shallow clone");
+                        //}
+                        dragonBoxes.Remove(deadPictureBox);
+                        if(deadPictureBox == pictureBox19)
+                        {
+                            dragonBoxes.Remove(pictureBox19);
+                            this.Controls.Remove(pictureBox19);
+                            nestList.Remove(nestList[0]);
+                        }
+
+                    }
                     this.Controls.Remove(deadPictureBox);
 
 
@@ -490,6 +557,25 @@ public partial class GamePlayForm : Form
         return null;
     }
 
+    private Nest CheckForNest(Unit attacker, int newX, int newY)
+    {
+        foreach (var nest in nestList)
+        {
+            int range = attacker.Range;
+            int attackRange = (range - 1) * 50;
+
+            int distanceX = Math.Abs((newX + 25) - (nest.X + 25));
+            int distanceY = Math.Abs((newY + 25) - (nest.Y + 25));
+
+
+            if ((distanceX <= attackRange + 25 && distanceY <= 25) || (distanceX <= 25 && distanceY <= attackRange + 25))
+            {
+                return nest;
+            }
+        }
+
+        return null;
+    }
     private Unit GetWarriorFromPictureBox(PictureBox pictureBox)
     {
         int selectedIndex = pictureBoxes.IndexOf(pictureBox);
@@ -572,6 +658,7 @@ public partial class GamePlayForm : Form
         Unit attackingWarrior = GetWarriorFromPictureBox(currentWarrior);
         if (attackingWarrior != null)
         {
+            int nestHealth = -999;
             Unit defendingWarrior = CheckForCollision(attackingWarrior, X, Y);
 
             bool team8 = CheckForTeammate(attackingWarrior, X, Y);
@@ -589,6 +676,8 @@ public partial class GamePlayForm : Form
                 hasMoved = true;
             }
 
+            Nest nest = CheckForNest(attackingWarrior, X, Y);
+
             if (defendingWarrior != null)
             {
                 defendingWarrior.Health -= attackingWarrior.Attack;
@@ -598,13 +687,19 @@ public partial class GamePlayForm : Form
                 }
                 hasMoved = true;
             }
-            else if (!team8 && (obstacle == null))
+            else if (!team8 && (obstacle == null) && (nest == null))
             {
                 currentWarrior.Location = new Point(X, Y);
                 hasMoved = true;
             }
-
-            await _battleHub.SendAsync("UpdateWarriorsStats", warriors);
+            else if (nest != null)
+            {
+                nest.Health -= attackingWarrior.Attack;
+                hasMoved = true;
+                nestHealth = nest.Health;
+            }
+            
+            await _battleHub.SendAsync("UpdateWarriorsStats", warriors, nestHealth);
         }
 
         if (hasMoved)
@@ -881,24 +976,39 @@ public partial class GamePlayForm : Form
 
     private void MoveDragon(string direction)
     {
-        clickablePictureBox(pictureBox18, EventArgs.Empty);
-        switch (direction)
+
+        foreach (var pictureBox in dragonBoxes)
         {
-            case "up":
-                upButton_Click(upButton, EventArgs.Empty);
-                break;
-            case "down":
-                downButton_Click(downButton, EventArgs.Empty);
-                break;
-            case "left":
-               leftButton_Click(leftButton, EventArgs.Empty);
-                break;
-            case "right":
-                rightButton_Click(rightButton, EventArgs.Empty);
-                break;
+            clickablePictureBox(pictureBox, EventArgs.Empty);
+            switch (direction)
+            {
+                case "up":
+                    upButton_Click(upButton, EventArgs.Empty);
+                    break;
+                case "down":
+                    downButton_Click(downButton, EventArgs.Empty);
+                    break;
+                case "left":
+                    leftButton_Click(leftButton, EventArgs.Empty);
+                    break;
+                case "right":
+                    rightButton_Click(rightButton, EventArgs.Empty);
+                    break;
+            }
         }
+
     }
 
+    private void pictureBox19_Click(object sender, EventArgs e)
+    {
+        selectedPictureBox = (PictureBox)sender;
 
+        healthLabel.Text = $"Health: {nestList[0].Health}";
+
+
+        healthLabel.Visible = true;
+
+        HandleClickedPicture();
+    }
 }
 

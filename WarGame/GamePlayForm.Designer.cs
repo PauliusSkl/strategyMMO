@@ -76,6 +76,7 @@
             obstacleCountLabel = new Label();
             label14 = new Label();
             pictureBox18 = new PictureBox();
+            pictureBox19 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -94,6 +95,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox16).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox17).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox18).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox19).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -524,6 +526,15 @@
             pictureBox18.TabIndex = 365;
             pictureBox18.TabStop = false;
             // 
+            // pictureBox19
+            // 
+            pictureBox19.Location = new Point(772, 264);
+            pictureBox19.Name = "pictureBox19";
+            pictureBox19.Size = new Size(50, 50);
+            pictureBox19.TabIndex = 366;
+            pictureBox19.TabStop = false;
+            pictureBox19.Click += pictureBox19_Click;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -531,6 +542,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(pictureBox19);
             Controls.Add(pictureBox18);
             Controls.Add(label14);
             Controls.Add(obstacleCountLabel);
@@ -604,6 +616,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox16).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox17).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox18).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox19).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
