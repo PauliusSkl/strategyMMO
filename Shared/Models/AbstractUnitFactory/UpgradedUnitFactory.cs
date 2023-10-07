@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Models.Builder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,74 +11,66 @@ namespace Shared.Models.AbstractUnitFactory
     {
         public Unit CreateArcher(string color, int x, int y)
         {
-            return new Unit
-            {
-                Health = 50,
-                MaxHealth = 50,
-                Attack = 100,
-                Range = 2,
-                Speed = 3,
-                Kills = 2,
-                Upgraded = true,
-                X = x,
-                Y = y,
-                Type = "Archer",
-                Color = color,
-            };
+            return new ArcherBuilder()
+                 .SetHealth(50)
+                 .SetMaxHealth(50)
+                 .SetAttack(100)
+                 .SetRange(2)
+                 .SetSpeed(3)
+                 .SetKills(2)
+                 .SetUpgraded(true)
+                 .SetPosition(x, y)
+                 .SetType("Archer")
+                 .SetColor(color)
+                 .Build();
         }
 
         public Unit CreateWarrior(string color, int x, int y)
         {
-            return new Unit
-            {
-                Health = 300,
-                MaxHealth = 300,
-                Attack = 100,
-                Range = 1,
-                Speed = 2,
-                Kills = 2,
-                Upgraded = true,
-                X = x,
-                Y = y,
-                Type = "Warrior",
-                Color = color,
-            };
+            return new WarriorBuilder()
+                 .SetHealth(300)
+                 .SetMaxHealth(300)
+                 .SetAttack(100)
+                 .SetRange(1)
+                 .SetSpeed(2)
+                 .SetKills(2)
+                 .SetUpgraded(true)
+                 .SetPosition(x, y)
+                 .SetType("Warrior")
+                 .SetColor(color)
+                 .Build();
         }
 
         public Unit CreateMage(string color, int x, int y)
         {
-            return new Unit
-            {
-                Health = 50,
-                MaxHealth = 50,
-                Attack = 200,
-                Range = 2,
-                Speed = 2,
-                Kills = 2,
-                Upgraded = true,
-                X = x,
-                Y = y,
-                Type = "Mage",
-                Color = color,
-            };
+            return new WarriorBuilder()
+                 .SetHealth(50)
+                 .SetMaxHealth(50)
+                 .SetAttack(200)
+                 .SetRange(2)
+                 .SetSpeed(2)
+                 .SetKills(2)
+                 .SetUpgraded(true)
+                 .SetPosition(x, y)
+                 .SetType("Mage")
+                 .SetColor(color)
+                 .Build();
         }
 
         public Unit CreateTank(string color, int x, int y)
         {
-            return new Unit
-            {
-                Health = 500,
-                MaxHealth = 500,
-                Attack = 10,
-                Range = 1,
-                Speed = 1,
-                Kills = 2,
-                Upgraded = true,
-                X = x,
-                Y = y,
-                Type = "Tank",
-                Color = color,
-            };
+            return new TankBuilder()
+                 .SetHealth(500)
+                 .SetMaxHealth(500)
+                 .SetAttack(10)
+                 .SetRange(1)
+                 .SetSpeed(1)
+                 .SetKills(2)
+                 .SetUpgraded(true)
+                 .SetPosition(x, y)
+                 .SetType("Tank")
+                 .SetColor(color)
+                 .Build();
         }
     }
 }
