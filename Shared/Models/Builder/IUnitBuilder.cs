@@ -18,6 +18,16 @@ namespace Shared.Models.Builder
         IUnitBuilder SetPosition(int x, int y);
         IUnitBuilder SetType(string type);
         IUnitBuilder SetColor(string color);
+        IUnitBuilder SetMana(int mana)
+        {
+            // Do nothing by default
+            return this;
+        }
+        IUnitBuilder SetArrows(int mana)
+        {
+            // Do nothing by default
+            return this;
+        }
         Unit Build();
     }
 }

@@ -8,7 +8,7 @@ namespace Shared.Models.Builder
 {
     public class MageBuilder : IUnitBuilder
     {
-        private Unit unit = new Unit();
+        private Mage unit = new Mage();
 
         public IUnitBuilder SetHealth(int health)
         {
@@ -68,6 +68,13 @@ namespace Shared.Models.Builder
         public IUnitBuilder SetColor(string color)
         {
             unit.Color = color;
+            return this;
+        }
+
+
+        public IUnitBuilder SetMana(int mana)
+        {
+            unit.Mana = mana;
             return this;
         }
 

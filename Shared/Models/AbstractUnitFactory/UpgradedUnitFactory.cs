@@ -22,6 +22,7 @@ namespace Shared.Models.AbstractUnitFactory
                  .SetPosition(x, y)
                  .SetType("Archer")
                  .SetColor(color)
+                 .SetArrows(5)
                  .Build();
         }
 
@@ -43,7 +44,7 @@ namespace Shared.Models.AbstractUnitFactory
 
         public Unit CreateMage(string color, int x, int y)
         {
-            return new WarriorBuilder()
+            return new MageBuilder()
                  .SetHealth(50)
                  .SetMaxHealth(50)
                  .SetAttack(200)
@@ -54,6 +55,7 @@ namespace Shared.Models.AbstractUnitFactory
                  .SetPosition(x, y)
                  .SetType("Mage")
                  .SetColor(color)
+                 .SetMana(10)
                  .Build();
         }
 

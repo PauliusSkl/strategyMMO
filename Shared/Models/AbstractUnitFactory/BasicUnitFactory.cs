@@ -22,6 +22,7 @@ namespace Shared.Models.AbstractUnitFactory
                 .SetPosition(x, y)
                 .SetType("Archer")
                 .SetColor(color)
+                .SetArrows(5)
                 .Build();
         }
 
@@ -54,6 +55,7 @@ namespace Shared.Models.AbstractUnitFactory
                  .SetPosition(x, y)
                  .SetType("Mage")
                  .SetColor(color)
+                 .SetMana(5)
                  .Build();
         }
 

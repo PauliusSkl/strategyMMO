@@ -8,7 +8,7 @@ namespace Shared.Models.Builder
 {
     public class ArcherBuilder : IUnitBuilder
     {
-        private Unit unit = new Unit();
+        private Archer unit = new Archer();
 
         public IUnitBuilder SetHealth(int health)
         {
@@ -68,6 +68,12 @@ namespace Shared.Models.Builder
         public IUnitBuilder SetColor(string color)
         {
             unit.Color = color;
+            return this;
+        }
+
+        public IUnitBuilder SetArrows(int arrows)
+        {
+            unit.Arrows = arrows;
             return this;
         }
 
