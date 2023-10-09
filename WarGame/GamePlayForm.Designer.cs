@@ -285,7 +285,7 @@
             // 
             // pictureBox5
             // 
-            pictureBox5.BackgroundImage = Forms.Properties.Resources.warriori_green;
+            pictureBox5.BackgroundImage = Forms.Properties.Resources.warrior_green;
             pictureBox5.Location = new Point(873, 462);
             pictureBox5.Name = "pictureBox5";
             pictureBox5.Size = new Size(50, 50);
