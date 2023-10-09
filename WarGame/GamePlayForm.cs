@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Shared.Models;
 using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Factory;
+using Shared.Models.Observer;
 using Shared.Models.Strategy;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
 using WarGame.Forms;
 
 
@@ -38,10 +40,10 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 1;
+    private int ObstacleCount = 0;
 
     int MovementCount = 0;
-
+    private TurnManager turnManager = new TurnManager();
 
     private readonly HubConnection _battleHub = new BattleHub().GetInstance();
 
@@ -79,7 +81,10 @@ public partial class GamePlayForm : Form
         OnReciveGameStart();
         OnReceiveDragonDead();
         //OnReceiveObstacless(); //Palikau kad buga parodyt
-
+        foreach (var warrior in warriors)
+        {
+            turnManager.RegisterObserver(warrior); 
+        }
     }
 
   
@@ -272,6 +277,7 @@ public partial class GamePlayForm : Form
     {
         _ = _conn.On("ReceiveNewTurn", () =>
         {
+            turnManager.EndTurn();
             SetPLayerMoves();
             ChangeAllStrats();
         });
@@ -443,6 +449,7 @@ public partial class GamePlayForm : Form
                         warrior.Image = Path.Combine(imagesFolder, $"warrior_{color}.png");
 
                         warriors[i] = warrior;
+                        turnManager.RegisterObserver(warrior);
                     }
                     if (warriors[i].Type == "Archer")
                     {
@@ -454,6 +461,7 @@ public partial class GamePlayForm : Form
                         archer.Image = Path.Combine(imagesFolder, $"archer_{color}.png");
 
                         warriors[i] = archer;
+                        turnManager.RegisterObserver(archer);
                     }
                     if (warriors[i].Type == "Mage")
                     {
@@ -465,6 +473,7 @@ public partial class GamePlayForm : Form
                         mage.Image = Path.Combine(imagesFolder, $"mage_{color}.png");
 
                         warriors[i] = mage;
+                        turnManager.RegisterObserver(mage);
                     }
                     if (warriors[i].Type == "Tank")
                     {
@@ -476,6 +485,7 @@ public partial class GamePlayForm : Form
                         tank.Image = Path.Combine(imagesFolder, $"tank_{color}.png");
 
                         warriors[i] = tank;
+                        turnManager.RegisterObserver(tank);
                     }
                 }
                 if (this.warriors[i].Health <= 0)

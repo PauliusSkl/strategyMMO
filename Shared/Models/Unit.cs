@@ -1,7 +1,12 @@
-﻿namespace Shared.Models;
-public class Unit
+﻿using Shared.Models.Observer;
+
+namespace Shared.Models;
+public class Unit : ITurnObserver
 {
-    
+    public void OnTurnEnd()
+    {
+        Health = Math.Min(MaxHealth, Health + 10);
+    }
     public int Health { get; set; }
 
     public int MaxHealth { get; set; }
