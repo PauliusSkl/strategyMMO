@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Shared.Models;
 using WarGame.Forms;
+using WarGame.Forms.Decorator;
 
 namespace WarGame;
 
@@ -17,11 +18,16 @@ public partial class LobbyForm : Form
         var test = new HubConnectionSingleton();
         var conn = test.GetInstance();
 
+        AbstractLabel mainLabel = MainLabel;
+
         conn.SendAsync("GetLastColor");
 
         conn.On<string>("ReceiveColor", (color) =>
         {
             player.Color = color;
+
+            ColorDecorator colorfulLabel = new ColorDecorator(MainLabel, color);
+            mainLabel = colorfulLabel;
         });
 
         await foreach (var model in conn.StreamAsync<GameStatusModel>("GetPlayerCount", player))
@@ -41,7 +47,8 @@ public partial class LobbyForm : Form
             }
             else
             {
-                MainLabel.Text = $"{model.PlayerCount}/4 players connected";
+                PlayerCountDecorator playerCountLabel = new PlayerCountDecorator(mainLabel, model.PlayerCount);
+                playerCountLabel.UpdateText();
             }
         }
     }

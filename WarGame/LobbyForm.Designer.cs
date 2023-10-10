@@ -1,4 +1,6 @@
-﻿namespace WarGame
+﻿using WarGame.Forms.Decorator;
+
+namespace WarGame
 {
     partial class LobbyForm
     {
@@ -28,7 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            MainLabel = new Label();
+            MainLabel = new LobbyLabel();
             button1 = new Button();
             textBox1 = new TextBox();
             playerCountLabel = new Label();
@@ -99,7 +101,7 @@
 
         #endregion
 
-        private Label MainLabel;
+        private AbstractLabel MainLabel;
         private Button button1;
         private TextBox textBox1;
         private Label playerCountLabel;
