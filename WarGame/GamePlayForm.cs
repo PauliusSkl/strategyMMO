@@ -83,11 +83,11 @@ public partial class GamePlayForm : Form
         //OnReceiveObstacless(); //Palikau kad buga parodyt
         foreach (var warrior in warriors)
         {
-            turnManager.RegisterObserver(warrior); 
+            turnManager.RegisterObserver(warrior);
         }
     }
 
-  
+
     private void SetPLayerInfo(Player player)
     {
         label4.Text = "Team: " + player.Color;
@@ -104,7 +104,7 @@ public partial class GamePlayForm : Form
                 MovementCount += warrior.Speed;
             }
         }
-        if(MovementCount == 0)
+        if (MovementCount == 0)
         {
             await _conn.SendAsync("NewTurn");
         }
@@ -157,7 +157,7 @@ public partial class GamePlayForm : Form
 
     private async void CheckForMyUnits(string color)
     {
-        if(color == "enemy")
+        if (color == "enemy")
         {
             return;
         }
@@ -169,10 +169,11 @@ public partial class GamePlayForm : Form
                 count++;
             }
         }
-        if (count == 1) {
+        if (count == 1)
+        {
             await _conn.SendAsync("NewTurn");
         }
-        
+
     }
     private void AddPictureBoxesToList()
     {
@@ -417,17 +418,17 @@ public partial class GamePlayForm : Form
         string imagesFolder = Path.Combine(Application.StartupPath, "Resources");
         _ = _battleHub.On<List<Unit>, int>("ReceiveWarriorsStats", (updatedWarriors, nestHp) =>
         {
-            if(nestHp != -999)
-            { 
-            foreach (var nest in nestList)
+            if (nestHp != -999)
             {
-                    nest.Health = nestHp;
-                if (nestHp <= 0)
+                foreach (var nest in nestList)
                 {
-                    nestList.Remove(nest);
-                    this.Controls.Remove(pictureBox19);
+                    nest.Health = nestHp;
+                    if (nestHp <= 0)
+                    {
+                        nestList.Remove(nest);
+                        this.Controls.Remove(pictureBox19);
+                    }
                 }
-            }
             }
             for (int i = this.warriors.Count - 1; i >= 0; i--)
             {
@@ -446,10 +447,13 @@ public partial class GamePlayForm : Form
                         int y = warriors[i].Y;
                         int kills = warriors[i].Kills;
                         Unit warrior = _upgradedUnitFactory.CreateWarrior(color, x, y);
-                        warrior.Image = Path.Combine(imagesFolder, $"warrior_{color}.png");
+                        warrior.Image = Path.Combine(imagesFolder, $"warrior_upgraded_{color}.png");
 
                         warriors[i] = warrior;
                         turnManager.RegisterObserver(warrior);
+
+                        PictureBox upgradedPictureBox = pictureBoxes[i];
+                        upgradedPictureBox.ImageLocation = warrior.Image;
                     }
                     if (warriors[i].Type == "Archer")
                     {
@@ -458,10 +462,13 @@ public partial class GamePlayForm : Form
                         int y = warriors[i].Y;
                         int kills = warriors[i].Kills;
                         Unit archer = _upgradedUnitFactory.CreateArcher(color, x, y);
-                        archer.Image = Path.Combine(imagesFolder, $"archer_{color}.png");
+                        archer.Image = Path.Combine(imagesFolder, $"archer_upgraded_{color}.png");
 
                         warriors[i] = archer;
                         turnManager.RegisterObserver(archer);
+
+                        PictureBox upgradedPictureBox = pictureBoxes[i];
+                        upgradedPictureBox.ImageLocation = archer.Image;
                     }
                     if (warriors[i].Type == "Mage")
                     {
@@ -474,6 +481,9 @@ public partial class GamePlayForm : Form
 
                         warriors[i] = mage;
                         turnManager.RegisterObserver(mage);
+
+                        PictureBox upgradedPictureBox = pictureBoxes[i];
+                        upgradedPictureBox.ImageLocation = mage.Image;
                     }
                     if (warriors[i].Type == "Tank")
                     {
@@ -486,6 +496,9 @@ public partial class GamePlayForm : Form
 
                         warriors[i] = tank;
                         turnManager.RegisterObserver(tank);
+
+                        PictureBox upgradedPictureBox = pictureBoxes[i];
+                        upgradedPictureBox.ImageLocation = tank.Image;
                     }
                 }
                 if (this.warriors[i].Health <= 0)
@@ -505,9 +518,9 @@ public partial class GamePlayForm : Form
                         //    MessageBox.Show("Shallow clone");
                         //}
 
-                        
+
                         dragonBoxes.Remove(deadPictureBox);
-                        if(deadPictureBox == pictureBox19)
+                        if (deadPictureBox == pictureBox19)
                         {
                             dragonBoxes.Remove(pictureBox19);
                             this.Controls.Remove(pictureBox19);
@@ -740,7 +753,7 @@ public partial class GamePlayForm : Form
                 hasMoved = true;
                 nestHealth = nest.Health;
             }
-            
+
             await _battleHub.SendAsync("UpdateWarriorsStats", warriors, nestHealth);
         }
 
