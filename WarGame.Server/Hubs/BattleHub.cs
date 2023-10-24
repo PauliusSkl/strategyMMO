@@ -26,7 +26,7 @@ public class BattleHub : Hub
 
     public async Task UpdatePictureCoordinates(string pictureName, int x, int y)
     {
-        await Clients.Caller.SendAsync("ReceivePictureCoordinates", pictureName, x, y);
+        await Clients.All.SendAsync("ReceivePictureCoordinates", pictureName, x, y);
     }
 
     public async Task UpdateWarriorsStats(List<Unit> warriors, int nests)
