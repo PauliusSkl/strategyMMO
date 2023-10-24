@@ -163,9 +163,19 @@ namespace WarGame.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dragon_npc {
+        internal static System.Drawing.Bitmap dragon_fire {
             get {
-                object obj = ResourceManager.GetObject("dragon_npc", resourceCulture);
+                object obj = ResourceManager.GetObject("dragon_fire", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap dragon_ice {
+            get {
+                object obj = ResourceManager.GetObject("dragon_ice", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -213,9 +223,19 @@ namespace WarGame.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap nest_npc {
+        internal static System.Drawing.Bitmap nest_fire {
             get {
-                object obj = ResourceManager.GetObject("nest_npc", resourceCulture);
+                object obj = ResourceManager.GetObject("nest_fire", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap nest_ice {
+            get {
+                object obj = ResourceManager.GetObject("nest_ice", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
