@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Shared.Models;
+using Shared.Models.Bridge;
 using Shared.Models.Strategy;
 using System.Runtime.CompilerServices;
 
@@ -25,7 +26,7 @@ public class BattleHub : Hub
 
     public async Task UpdatePictureCoordinates(string pictureName, int x, int y)
     {
-        await Clients.All.SendAsync("ReceivePictureCoordinates", pictureName, x, y);
+        await Clients.Caller.SendAsync("ReceivePictureCoordinates", pictureName, x, y);
     }
 
     public async Task UpdateWarriorsStats(List<Unit> warriors, int nests)
@@ -55,6 +56,5 @@ public class BattleHub : Hub
     {
         await Clients.All.SendAsync("ReceiveDragonDead");
     }
-
 
 }

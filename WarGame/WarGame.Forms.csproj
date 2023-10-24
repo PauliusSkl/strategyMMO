@@ -124,12 +124,12 @@
 	<None Update="Resources\obstacle_water.png">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
-	  <None Update="Resources\dragon_npc.png">
+	  <None Update="Resources\dragon_ice.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Resources\nest_npc.png">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+    <None Update="Resources\dragon_fire.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
    
   </ItemGroup>
 

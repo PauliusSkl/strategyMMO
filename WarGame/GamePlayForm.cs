@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Shared.Models;
 using Shared.Models.AbstractUnitFactory;
+using Shared.Models.Bridge;
 using Shared.Models.Factory;
 using Shared.Models.Observer;
 using Shared.Models.Strategy;
@@ -8,6 +9,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Xml.Linq;
 using WarGame.Forms;
 
 
@@ -27,6 +29,7 @@ public partial class GamePlayForm : Form
     private List<Nest> nestList = new List<Nest>();
     private bool DragonDead = false;
     private Dragon dragonClone = null;
+    private Element element;
 
     private List<PictureBox> dragonBoxes = new List<PictureBox>();
 
@@ -59,8 +62,6 @@ public partial class GamePlayForm : Form
         _upgradedUnitFactory = new UpgradedUnitFactory();
 
         InitializeComponent();
-
-
         InitializeWarriors();
 
         AddPictureBoxesToList();
@@ -250,15 +251,19 @@ public partial class GamePlayForm : Form
 
             warriors.Add(tank);
         }
-
-        Nest nest = new Nest(0, 0, Path.Combine(imagesFolder, "nest_npc.png"));
+        Element fireElement = new FireElement();
+        Element iceElement = new IceElement();
+        Nest nest = new Nest(0, 0, fireElement);
+        nest.ApplyElement();
+        nest.Image = Path.Combine(imagesFolder, $"nest_{nest.Color}.png");
         pictureBox19.Image = Image.FromFile(nest.Image);
         nest.X = pictureBox19.Location.X;
         nest.Y = pictureBox19.Location.Y;
-
         nestList.Add(nest);
 
-        Dragon drag = new Dragon(0, 0, Path.Combine(imagesFolder, "dragon_npc.png"), nestList);
+        Dragon drag = new Dragon(0, 0, nestList, fireElement);
+        drag.ApplyElement();
+        drag.Image = Path.Combine(imagesFolder, $"dragon_{drag.Color}.png");
         //dragon = drag;
         warriors.Add(drag);
 
@@ -368,7 +373,6 @@ public partial class GamePlayForm : Form
             pictureBoxesObstacles.Add(newObstaclePictureBox);
         });
     }
-
 
     private Obstacle CreateObstacleFromType(int x, int y, string type)
     {
@@ -949,7 +953,6 @@ public partial class GamePlayForm : Form
             //await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstaclesPlaces); // Neveike taip :( labai idomus bugas nes veikia pries idedant i masyva
 
             await _battleHub.SendAsync("UpdateObstaclesOnGrid", obstacle.X, obstacle.Y, obstacle.GetType().ToString());
-
 
             newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
 

@@ -1,8 +1,10 @@
-﻿using Shared.Models.Observer;
+﻿using Shared.Models.Bridge;
+using Shared.Models.Observer;
 
 namespace Shared.Models;
 public class Unit : ITurnObserver
 {
+    public Element Element { get; set; }
     public void OnTurnEnd()
     {
         Health = Math.Min(MaxHealth, Health + 10);
