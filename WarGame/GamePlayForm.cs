@@ -4,12 +4,13 @@ using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Factory;
 using Shared.Models.Observer;
 using Shared.Models.Strategy;
+using Shared.Models.Command;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using WarGame.Forms;
-
+using WarGame.Forms.Facade;
 
 namespace WarGame;
 
@@ -40,7 +41,9 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 0;
+    public int ObstacleCount { get; set; } = 2;
+    //Facade
+
 
     int MovementCount = 0;
     private TurnManager turnManager = new TurnManager();
@@ -61,6 +64,9 @@ public partial class GamePlayForm : Form
         InitializeComponent();
 
 
+
+        commandInvoker = new CommandInvoker();
+
         InitializeWarriors();
 
         AddPictureBoxesToList();
@@ -77,6 +83,10 @@ public partial class GamePlayForm : Form
         OnReceiveStrategies();
         OnAllTurnsEnded();
         OnDragonMove();
+
+        OnReceiveGamePaused();
+        OnReceiveGameResumed();
+        //OnReceiveGameEnd();
 
         OnReciveGameStart();
         OnReceiveDragonDead();
@@ -128,9 +138,13 @@ public partial class GamePlayForm : Form
     {
         _ = _conn.On("ReceiveGameStart", () =>
         {
+
             gameStart = true;
 
             label14.Text = "Game started";
+            label1.Text = "Game is unpaused";
+            ResumeButton.Visible = false;
+            PauseButton.Visible = true;
             obstacleCountLabel.Visible = false;
             AddLava.Visible = false;
             AddWater.Visible = false;
@@ -710,51 +724,55 @@ public partial class GamePlayForm : Form
     {
         bool hasMoved = false;
         Unit attackingWarrior = GetWarriorFromPictureBox(currentWarrior);
-        if (attackingWarrior != null)
+        //MessageBox.Show(pauseSubsystem.IsPaused.ToString());
+        if (!pauseSubsystem.IsPaused)
         {
-            int nestHealth = -999;
-            Unit defendingWarrior = CheckForCollision(attackingWarrior, X, Y);
-
-            bool team8 = CheckForTeammate(attackingWarrior, X, Y);
-
-            Obstacle obstacle = CheckForObstacle(attackingWarrior, X, Y);
-
-            List<Obstacle> applyEffect = CheckAroundForObstacles(attackingWarrior);
-
-            if (applyEffect != null)
+            if (attackingWarrior != null)
             {
-                foreach (var item in applyEffect)
+                int nestHealth = -999;
+                Unit defendingWarrior = CheckForCollision(attackingWarrior, X, Y);
+
+                bool team8 = CheckForTeammate(attackingWarrior, X, Y);
+
+                Obstacle obstacle = CheckForObstacle(attackingWarrior, X, Y);
+
+                List<Obstacle> applyEffect = CheckAroundForObstacles(attackingWarrior);
+
+                if (applyEffect != null)
                 {
-                    item.ApplyEffect(attackingWarrior);
+                    foreach (var item in applyEffect)
+                    {
+                        item.ApplyEffect(attackingWarrior);
+                    }
+                    hasMoved = true;
                 }
-                hasMoved = true;
-            }
 
-            Nest nest = CheckForNest(attackingWarrior, X, Y);
+                Nest nest = CheckForNest(attackingWarrior, X, Y);
 
-            if (defendingWarrior != null)
-            {
-                defendingWarrior.Health -= attackingWarrior.Attack;
-                if (defendingWarrior.Health <= 0)
+                if (defendingWarrior != null)
                 {
-                    CheckForMyUnits(defendingWarrior.Color);
-                    attackingWarrior.Kills = attackingWarrior.Kills + 1;
+                    defendingWarrior.Health -= attackingWarrior.Attack;
+                    if (defendingWarrior.Health <= 0)
+                    {
+                        CheckForMyUnits(defendingWarrior.Color);
+                        attackingWarrior.Kills = attackingWarrior.Kills + 1;
+                    }
+                    hasMoved = true;
                 }
-                hasMoved = true;
-            }
-            else if (!team8 && (obstacle == null) && (nest == null))
-            {
-                currentWarrior.Location = new Point(X, Y);
-                hasMoved = true;
-            }
-            else if (nest != null)
-            {
-                nest.Health -= attackingWarrior.Attack;
-                hasMoved = true;
-                nestHealth = nest.Health;
-            }
+                else if (!team8 && (obstacle == null) && (nest == null))
+                {
+                    currentWarrior.Location = new Point(X, Y);
+                    hasMoved = true;
+                }
+                else if (nest != null)
+                {
+                    nest.Health -= attackingWarrior.Attack;
+                    hasMoved = true;
+                    nestHealth = nest.Health;
+                }
 
-            await _battleHub.SendAsync("UpdateWarriorsStats", warriors, nestHealth);
+                await _battleHub.SendAsync("UpdateWarriorsStats", warriors, nestHealth);
+            }
         }
 
         if (hasMoved)
@@ -909,7 +927,14 @@ public partial class GamePlayForm : Form
         }
 
     }
+
     private PictureBox selectedGridPictureBox;
+    private Stack<Obstacle> addedObstaclesStack = new Stack<Obstacle>();
+    private CommandInvoker commandInvoker = new CommandInvoker();
+
+    private Obstacle currentObstacle;
+    private PictureBox currentObstaclePictureBox;
+
     private async void pictureBox1_Click(object sender, EventArgs e)
     {
         if (AddingObstacles)
@@ -919,9 +944,9 @@ public partial class GamePlayForm : Form
             int nearestX = (clickPosition.X - selectedGridPictureBox.Location.X) / gridSize * gridSize + selectedGridPictureBox.Location.X;
             int nearestY = (clickPosition.Y - selectedGridPictureBox.Location.Y) / gridSize * gridSize + selectedGridPictureBox.Location.Y;
 
-            PictureBox newObstaclePictureBox = new PictureBox();
-            newObstaclePictureBox.Size = new Size(50, 50);
-            newObstaclePictureBox.Location = new Point(nearestX + 1, nearestY + 3);
+            currentObstaclePictureBox = new PictureBox();
+            currentObstaclePictureBox.Size = new Size(50, 50);
+            currentObstaclePictureBox.Location = new Point(nearestX + 1, nearestY + 3);
 
             ObstacleCreator obstacleCreator;
 
@@ -941,31 +966,60 @@ public partial class GamePlayForm : Form
                 AddingMountain = false;
             }
 
-            newObstaclePictureBox.Click += Obstacle_Click;
+            currentObstaclePictureBox.Click += Obstacle_Click;
 
-            Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
+            currentObstacle = obstacleCreator.CreateObstacle(currentObstaclePictureBox.Location.X, currentObstaclePictureBox.Location.Y);
 
-            obstaclesPlaces.Add(obstacle);
-            //await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstaclesPlaces); // Neveike taip :( labai idomus bugas nes veikia pries idedant i masyva
+            obstaclesPlaces.Add(currentObstacle);
 
-            await _battleHub.SendAsync("UpdateObstaclesOnGrid", obstacle.X, obstacle.Y, obstacle.GetType().ToString());
+            await _battleHub.SendAsync("UpdateObstaclesOnGrid", currentObstacle.X, currentObstacle.Y, currentObstacle.GetType().ToString());
 
-
-            newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
-
-
-
-            Controls.Add(newObstaclePictureBox);
-            newObstaclePictureBox.BringToFront();
-
-            pictureBoxesObstacles.Add(newObstaclePictureBox);
+            currentObstaclePictureBox.Image = Image.FromFile(currentObstacle.Image);
+            Controls.Add(currentObstaclePictureBox);
+            currentObstaclePictureBox.BringToFront();
+            pictureBoxesObstacles.Add(currentObstaclePictureBox);
 
             AddingObstacles = false;
             ObstacleCount--;
+
+            addedObstaclesStack.Push(currentObstacle);
+            currentObstaclePictureBox.Tag = currentObstacle;
+
+            ICommand addObstacleCommand = new AddObstacleCommand(obstaclesPlaces, currentObstacle);
+            commandInvoker.ExecuteCommand(addObstacleCommand);
+
             UpdateObstacleCountLabel();
         }
-
     }
+
+    private void UndoButton_Click(object sender, EventArgs e)
+    {
+        ICommand lastCommand = commandInvoker.GetLastCommand();
+
+        if (lastCommand != null)
+        {
+            lastCommand.Undo();
+
+            commandInvoker.UndoLastCommand();
+
+            if (lastCommand is AddObstacleCommand addObstacleCommand)
+            {
+                Obstacle removedObstacle = addObstacleCommand.Obstacle;
+
+                PictureBox pictureBoxToRemove = pictureBoxesObstacles.FirstOrDefault(p => p.Tag == removedObstacle);
+
+                if (pictureBoxToRemove != null)
+                {
+                    pictureBoxesObstacles.Remove(pictureBoxToRemove);
+                    Controls.Remove(pictureBoxToRemove);
+                }
+
+                ObstacleCount++;
+                UpdateObstacleCountLabel();
+            }
+        }
+    }
+
 
     private void DisplayObstacleInfo(int index)
     {
@@ -1065,5 +1119,69 @@ public partial class GamePlayForm : Form
 
         HandleClickedPicture();
     }
+    private PauseSubsystem pauseSubsystem = new PauseSubsystem();
+    //private ResumeSubsystem resumeSubsystem;
+
+    private async void PauseButton_Click(object sender, EventArgs e)
+    {
+        if (!pauseSubsystem.IsPaused)
+        {
+            pauseSubsystem.Pause();
+            label1.Text = "Game is paused";
+            PauseButton.Visible = false;
+            ResumeButton.Visible = true;
+            //MessageBox.Show("Paused");
+            await _battleHub.SendAsync("PauseGame");
+        }
+    }
+
+    private void OnReceiveGamePaused()
+    {
+        _ = _battleHub.On("GamePaused", () =>
+        {
+            //MessageBox.Show("Game paused received");
+            pauseSubsystem.Pause();
+            label1.Text = "Game is paused";
+            PauseButton.Visible = false;
+            ResumeButton.Visible = true;
+        });
+    }
+
+    private async void ResumeButton_Click(object sender, EventArgs e)
+    {
+        //MessageBox.Show(pauseSubsystem.IsPaused.ToString());
+        if (pauseSubsystem.IsPaused)
+        {
+            pauseSubsystem.Resume();
+            label1.Text = "Game is unpaused";
+            PauseButton.Visible = true;
+            ResumeButton.Visible = false;
+            //MessageBox.Show("here");
+            await _battleHub.SendAsync("ResumeGame");
+        }
+    }
+    private void OnReceiveGameResumed()
+    {
+        _ = _battleHub.On("GameResumed", () =>
+        {
+            //MessageBox.Show("Game resume received");
+            pauseSubsystem.Resume();
+            label1.Text = "Game is unpaused";
+            PauseButton.Visible = true;
+            ResumeButton.Visible = false;
+        });
+    }
+
+    //private void OnReceiveGameEnd()
+    //{
+    //    _ = _battleHub.On("GameEnd", () =>
+    //    {
+    //        endSubnsystem.End();
+    //        label1.Text = "Game is unpaused";
+    //        PauseButton.Visible = true;
+    //        ResumeButton.Visible = false;
+    //    });
+    //}
+
 }
 

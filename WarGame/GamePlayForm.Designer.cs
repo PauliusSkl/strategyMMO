@@ -77,6 +77,9 @@
             label14 = new Label();
             pictureBox18 = new PictureBox();
             pictureBox19 = new PictureBox();
+            UndoButton = new Button();
+            PauseButton = new Button();
+            ResumeButton = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -535,6 +538,36 @@
             pictureBox19.TabStop = false;
             pictureBox19.Click += pictureBox19_Click;
             // 
+            // UndoButton
+            // 
+            UndoButton.Location = new Point(104, 397);
+            UndoButton.Name = "UndoButton";
+            UndoButton.Size = new Size(198, 23);
+            UndoButton.TabIndex = 367;
+            UndoButton.Text = "Undo";
+            UndoButton.UseVisualStyleBackColor = true;
+            UndoButton.Click += UndoButton_Click;
+            // 
+            // PauseButton
+            // 
+            PauseButton.Location = new Point(1233, 5);
+            PauseButton.Name = "PauseButton";
+            PauseButton.Size = new Size(69, 23);
+            PauseButton.TabIndex = 368;
+            PauseButton.Text = "Pause";
+            PauseButton.UseVisualStyleBackColor = true;
+            PauseButton.Click += PauseButton_Click;
+            // 
+            // ResumeButton
+            // 
+            ResumeButton.Location = new Point(1233, 6);
+            ResumeButton.Name = "ResumeButton";
+            ResumeButton.Size = new Size(69, 23);
+            ResumeButton.TabIndex = 369;
+            ResumeButton.Text = "Resume";
+            ResumeButton.UseVisualStyleBackColor = true;
+            ResumeButton.Click += ResumeButton_Click;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -542,6 +575,9 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(ResumeButton);
+            Controls.Add(PauseButton);
+            Controls.Add(UndoButton);
             Controls.Add(pictureBox19);
             Controls.Add(pictureBox18);
             Controls.Add(label14);
@@ -673,5 +709,8 @@
         private Label label14;
         private PictureBox pictureBox18;
         private PictureBox pictureBox19;
+        private Button UndoButton;
+        private Button PauseButton;
+        private Button ResumeButton;
     }
 }

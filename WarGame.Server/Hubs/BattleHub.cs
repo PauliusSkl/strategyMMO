@@ -56,5 +56,17 @@ public class BattleHub : Hub
         await Clients.All.SendAsync("ReceiveDragonDead");
     }
 
+    public async Task PauseGame()
+    {
+        await Clients.All.SendAsync("GamePaused");
+    }
+    public async Task ResumeGame()
+    {
+        await Clients.All.SendAsync("GameResumed");
+    }
+    public async Task EndGame()
+    {
+        await Clients.All.SendAsync("GameEnded");
+    }
 
 }

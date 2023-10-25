@@ -7,4 +7,9 @@ public partial class GameEndForm : Form
         InitializeComponent();
         label1.Text = message;
     }
+
+    private void GameEndForm_Load(object sender, EventArgs e)
+    {
+
+    }
 }

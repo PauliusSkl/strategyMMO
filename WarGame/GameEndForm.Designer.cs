@@ -28,33 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
+            label1 = new Label();
+            GG = new Label();
+            SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(345, 104);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 20);
-            this.label1.TabIndex = 0;
+            label1.AutoSize = true;
+            label1.Location = new Point(302, 78);
+            label1.Name = "label1";
+            label1.Size = new Size(0, 15);
+            label1.TabIndex = 0;
             // 
-            // Form4
+            // GG
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label1);
-            this.Name = "Form4";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form4";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            GG.AutoSize = true;
+            GG.BackColor = Color.Transparent;
+            GG.Location = new Point(324, 164);
+            GG.Name = "GG";
+            GG.Size = new Size(23, 15);
+            GG.TabIndex = 1;
+            GG.Text = "GG";
+            // 
+            // GameEndForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(700, 338);
+            Controls.Add(GG);
+            Controls.Add(label1);
+            Margin = new Padding(3, 2, 3, 2);
+            Name = "GameEndForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Form4";
+            Load += GameEndForm_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Label label1;
+        private Label GG;
     }
 }
