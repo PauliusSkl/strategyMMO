@@ -37,9 +37,33 @@ namespace Shared.Models
             this._effectStrategy = effectStrategy;
         }
 
-        public override void ApplyEffect(Unit unit)
+        //public override void ApplyEffect(Unit unit)
+        //{
+        //    _effectStrategy.ApplyEffect(unit);
+        //}
+        protected override void ApplyEffectStrategy(Unit unit)
         {
             _effectStrategy.ApplyEffect(unit);
+        }
+
+        protected sealed override bool ValidateObstacle(Unit unit)
+        {
+            if (unit == null)
+            {
+                return false;
+            }
+
+            if(_effectStrategy.GetName() == "Attack" && unit.attackRaised)
+            {
+                return false;
+            }
+
+            if (_effectStrategy.GetName() == "Speed" && unit.speedRaised)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

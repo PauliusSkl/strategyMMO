@@ -43,7 +43,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 0;
+    private int ObstacleCount = 1;
 
     int MovementCount = 0;
     private TurnManager turnManager = new TurnManager();

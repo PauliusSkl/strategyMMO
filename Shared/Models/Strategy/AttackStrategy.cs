@@ -11,11 +11,10 @@ namespace Shared.Models.Strategy
 
         public void ApplyEffect(Unit unit)
         { 
-            if(!unit.attackRaised)
-            {
-                unit.Attack += 50;
-                unit.attackRaised = true;
-            }
+            unit.Attack += 50;
+            unit.attackRaised = true;
         }
+
+        public string GetName() => "Attack";
     }
 }

@@ -38,12 +38,18 @@ namespace Shared.Models
            this._effectStrategy = effectStrategy;
         }
 
-        public override void ApplyEffect(Unit unit)
+        //public override void ApplyEffect(Unit unit)
+        //{
+        //    if (_effectStrategy != null)
+        //    {
+        //        this._effectStrategy.ApplyEffect(unit);
+        //    }
+        //}
+
+        protected override void ApplyEffectStrategy(Unit unit)
         {
-            if (_effectStrategy != null)
-            {
-                this._effectStrategy.ApplyEffect(unit);
-            }
+            _effectStrategy.ApplyEffect(unit);
         }
+
     }
 }

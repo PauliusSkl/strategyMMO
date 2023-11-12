@@ -23,6 +23,32 @@ namespace Shared.Models
         public IEffectStrategy _effectStrategy { get; set; }
         public abstract void SetEffectStrategy(IEffectStrategy effectStrategy);
 
-        public abstract void ApplyEffect(Unit unit);
+        //public abstract void ApplyEffect(Unit unit);
+
+        public void ApplyEffect(Unit unit)
+        {
+            if(ValidateObstacle(unit))
+            {
+                ApplyEffectStrategy(unit);
+            }
+            
+            LogEffectApplied();
+        }
+
+        protected virtual bool ValidateObstacle(Unit unit)
+        {
+            if (unit == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        protected abstract void ApplyEffectStrategy(Unit unit);
+
+        private void LogEffectApplied()
+        {
+           
+        }
     }
 }

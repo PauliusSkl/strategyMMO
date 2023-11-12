@@ -19,5 +19,6 @@ namespace Shared.Models.Strategy
                 unit.Health += 40;
             }
         }
+        public string GetName() => "Heal";
     }
 }

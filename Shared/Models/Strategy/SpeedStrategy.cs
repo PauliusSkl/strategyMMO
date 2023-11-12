@@ -10,11 +10,15 @@ namespace Shared.Models.Strategy
     {
         public void ApplyEffect(Unit unit)
         {
-            if (!unit.speedRaised)
-            {
-                unit.Speed += 1;
-                unit.speedRaised = true;
-            }
+            //if (!unit.speedRaised)
+            //{
+            //    unit.Speed += 1;
+            //    unit.speedRaised = true;
+            //}
+            unit.Speed += 1;
+            unit.speedRaised = true;
         }
+
+        public string GetName() => "Speed";
     }
 }
