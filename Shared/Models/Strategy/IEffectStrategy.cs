@@ -9,5 +9,7 @@ namespace Shared.Models.Strategy
     public interface IEffectStrategy
     {
         void ApplyEffect(Unit unit);
+        string GetName();
     }
+
 }

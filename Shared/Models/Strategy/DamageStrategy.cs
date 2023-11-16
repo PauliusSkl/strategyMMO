@@ -19,5 +19,7 @@ namespace Shared.Models.Strategy
                 unit.Health -= 30;
             }
         }
+
+        public string GetName() => "Damage";
     }
 }

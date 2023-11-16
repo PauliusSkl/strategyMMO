@@ -1,17 +1,10 @@
 ﻿using Shared.Models.Strategy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 
 namespace Shared.Models
 {
     public class Water : Obstacle
     {
-
         public int SlowLevel { get; set; }
 
         public Water(int x, int y, int slowLevel)
@@ -37,13 +30,19 @@ namespace Shared.Models
         {
            this._effectStrategy = effectStrategy;
         }
-
-        public override void ApplyEffect(Unit unit)
+ 
+        protected sealed override void ApplyEffectStrategy(Unit unit)
         {
-            if (_effectStrategy != null)
+            _effectStrategy.ApplyEffect(unit);
+        }
+        protected sealed override bool ValidateObstacle(Unit unit)
+        {
+            if (unit == null)
             {
-                this._effectStrategy.ApplyEffect(unit);
+                return false;
             }
+
+            return true;
         }
     }
 }

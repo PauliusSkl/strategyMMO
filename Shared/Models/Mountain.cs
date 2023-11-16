@@ -1,10 +1,4 @@
 ﻿using Shared.Models.Strategy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shared.Models
 {
@@ -37,9 +31,29 @@ namespace Shared.Models
             this._effectStrategy = effectStrategy;
         }
 
-        public override void ApplyEffect(Unit unit)
+        protected sealed override void ApplyEffectStrategy(Unit unit)
         {
             _effectStrategy.ApplyEffect(unit);
+        }
+
+        protected sealed override bool ValidateObstacle(Unit unit)
+        {
+            if (unit == null)
+            {
+                return false;
+            }
+
+            if(_effectStrategy.GetName() == "Attack" && unit.attackRaised)
+            {
+                return false;
+            }
+
+            if (_effectStrategy.GetName() == "Speed" && unit.speedRaised)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
