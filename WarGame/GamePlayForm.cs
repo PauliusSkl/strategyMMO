@@ -597,24 +597,6 @@ public partial class GamePlayForm : Form
         return false;
     }
 
-    private Obstacle CheckForObstacle(Unit attacker, int newX, int newY)
-    {
-        foreach (var obstacle in obstaclesPlaces)
-        {
-
-            Rectangle attackerBounds = new Rectangle(newX, newY, 40, 40);
-
-            Rectangle obstacleBounds = new Rectangle(obstacle.X, obstacle.Y, 40, 40);
-
-            if (attackerBounds.IntersectsWith(obstacleBounds))
-            {
-                return obstacle;
-            }
-        }
-
-        return null;
-    }
-
     private Nest CheckForNest(Unit attacker, int newX, int newY)
     {
         foreach (var nest in nestList)
@@ -677,7 +659,6 @@ public partial class GamePlayForm : Form
         }
 
     }
-
     private async void leftButton_Click(object sender, EventArgs e)
     {
         if (selectedPictureBox != null)
@@ -721,16 +702,19 @@ public partial class GamePlayForm : Form
 
             bool team8 = CheckForTeammate(attackingWarrior, X, Y);
 
-            Obstacle obstacle = CheckForObstacle(attackingWarrior, X, Y);
-
-            List<Obstacle> applyEffect = CheckAroundForObstacles(attackingWarrior);
-
-            if (applyEffect != null)
+            bool obstacle = false;
+            foreach (var obs in obstaclesPlaces)
             {
-                foreach (var item in applyEffect)
+                obs.ApplyEffect(attackingWarrior);
+
+                if (!obstacle)
                 {
-                    item.ApplyEffect(attackingWarrior);
+                    obstacle = obs.ValidateIfIntersects(X, Y);
                 }
+            }
+
+            if(obstacle)
+            {
                 hasMoved = true;
             }
 
@@ -746,7 +730,7 @@ public partial class GamePlayForm : Form
                 }
                 hasMoved = true;
             }
-            else if (!team8 && (obstacle == null) && (nest == null))
+            else if (!team8 && !obstacle && (nest == null))
             {
                 currentWarrior.Location = new Point(X, Y);
                 hasMoved = true;
@@ -767,41 +751,7 @@ public partial class GamePlayForm : Form
         }
     }
 
-    private List<Obstacle> CheckAroundForObstacles(Unit warrior)
-    {
-        int gridSize = 50;
-        Obstacle obstacle;
-        List<Obstacle> obstaclesAround = new List<Obstacle>();
-
-        obstacle = CheckForObstacle(warrior, warrior.X, warrior.Y - gridSize);
-        if (obstacle != null)
-        {
-            obstaclesAround.Add(obstacle);
-        }
-
-
-        obstacle = CheckForObstacle(warrior, warrior.X, warrior.Y + gridSize);
-        if (obstacle != null)
-        {
-            obstaclesAround.Add(obstacle);
-        }
-
-        obstacle = CheckForObstacle(warrior, warrior.X - gridSize, warrior.Y);
-        if (obstacle != null)
-        {
-            obstaclesAround.Add(obstacle);
-        }
-
-        obstacle = CheckForObstacle(warrior, warrior.X + gridSize, warrior.Y);
-        if (obstacle != null)
-        {
-            obstaclesAround.Add(obstacle);
-        }
-
-        return obstaclesAround;
-
-    }
-
+ 
     private void DisplayStats(int index)
     {
 

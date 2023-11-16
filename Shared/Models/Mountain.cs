@@ -1,10 +1,4 @@
 ﻿using Shared.Models.Strategy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shared.Models
 {
@@ -37,11 +31,7 @@ namespace Shared.Models
             this._effectStrategy = effectStrategy;
         }
 
-        //public override void ApplyEffect(Unit unit)
-        //{
-        //    _effectStrategy.ApplyEffect(unit);
-        //}
-        protected override void ApplyEffectStrategy(Unit unit)
+        protected sealed override void ApplyEffectStrategy(Unit unit)
         {
             _effectStrategy.ApplyEffect(unit);
         }

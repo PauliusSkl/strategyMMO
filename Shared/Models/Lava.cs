@@ -1,9 +1,4 @@
 ﻿using Shared.Models.Strategy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 namespace Shared.Models
 {
     public class Lava : Obstacle
@@ -35,16 +30,19 @@ namespace Shared.Models
             _effectStrategy = effectStrategy;
         }
 
-        //public override void ApplyEffect(Unit unit)
-        //{
-        //    if (_effectStrategy != null)
-        //    {
-        //        _effectStrategy.ApplyEffect(unit);
-        //    }
-        //}
-        protected override void ApplyEffectStrategy(Unit unit)
+        protected sealed override void ApplyEffectStrategy(Unit unit)
         {
             _effectStrategy.ApplyEffect(unit);
+        }
+
+        protected sealed override bool ValidateObstacle(Unit unit)
+        {
+            if (unit == null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

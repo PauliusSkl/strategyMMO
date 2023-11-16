@@ -1,10 +1,5 @@
 ﻿using Shared.Models.Strategy;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 
 
 namespace Shared.Models
@@ -23,11 +18,9 @@ namespace Shared.Models
         public IEffectStrategy _effectStrategy { get; set; }
         public abstract void SetEffectStrategy(IEffectStrategy effectStrategy);
 
-        //public abstract void ApplyEffect(Unit unit);
-
         public void ApplyEffect(Unit unit)
         {
-            if(ValidateObstacle(unit))
+            if(ValidateObstacle(unit) && ValidateIfClose(unit))
             {
                 ApplyEffectStrategy(unit);
             }
@@ -35,16 +28,51 @@ namespace Shared.Models
             LogEffectApplied();
         }
 
-        protected virtual bool ValidateObstacle(Unit unit)
+        protected abstract bool ValidateObstacle(Unit unit);
+        protected abstract void ApplyEffectStrategy(Unit unit);
+        protected virtual bool ValidateIfClose(Unit unit)
         {
-            if (unit == null)
+            int gridSize = 50;
+
+            if(ValidateIfIntersects(unit.X, unit.Y - gridSize))
             {
-                return false;
+                return true;
             }
-            return true;
+
+            if (ValidateIfIntersects(unit.X, unit.Y + gridSize))
+            {
+                return true;
+            }
+
+            if (ValidateIfIntersects(unit.X - gridSize, unit.Y))
+            {
+                return true;
+            }
+
+            if(ValidateIfIntersects(unit.X + gridSize, unit.Y))
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        protected abstract void ApplyEffectStrategy(Unit unit);
+        public bool ValidateIfIntersects(int newX, int newY)
+        {
+
+            Rectangle attackerBounds = new Rectangle(newX, newY, 40, 40);
+
+            Rectangle obstacleBounds = new Rectangle(this.X, this.Y, 40, 40);
+
+            if (attackerBounds.IntersectsWith(obstacleBounds))
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+        
 
         private void LogEffectApplied()
         {
