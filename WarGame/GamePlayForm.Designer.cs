@@ -77,6 +77,7 @@
             label14 = new Label();
             pictureBox18 = new PictureBox();
             pictureBox19 = new PictureBox();
+            StateLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -461,7 +462,7 @@
             // killsLabel
             // 
             killsLabel.AutoSize = true;
-            killsLabel.Location = new Point(1054, 122);
+            killsLabel.Location = new Point(1054, 140);
             killsLabel.Name = "killsLabel";
             killsLabel.Size = new Size(55, 15);
             killsLabel.TabIndex = 359;
@@ -471,7 +472,7 @@
             // upgradedLabel
             // 
             upgradedLabel.AutoSize = true;
-            upgradedLabel.Location = new Point(1054, 148);
+            upgradedLabel.Location = new Point(1054, 166);
             upgradedLabel.Name = "upgradedLabel";
             upgradedLabel.Size = new Size(86, 15);
             upgradedLabel.TabIndex = 360;
@@ -535,6 +536,16 @@
             pictureBox19.TabStop = false;
             pictureBox19.Click += pictureBox19_Click;
             // 
+            // StateLabel
+            // 
+            StateLabel.AutoSize = true;
+            StateLabel.Location = new Point(1054, 117);
+            StateLabel.Name = "StateLabel";
+            StateLabel.Size = new Size(61, 15);
+            StateLabel.TabIndex = 367;
+            StateLabel.Text = "StateLabel";
+            StateLabel.Visible = false;
+            // 
             // GamePlayForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -542,6 +553,7 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1386, 646);
+            Controls.Add(StateLabel);
             Controls.Add(pictureBox19);
             Controls.Add(pictureBox18);
             Controls.Add(label14);
@@ -673,5 +685,6 @@
         private Label label14;
         private PictureBox pictureBox18;
         private PictureBox pictureBox19;
+        private Label StateLabel;
     }
 }

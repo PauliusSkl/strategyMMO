@@ -1,5 +1,6 @@
 ﻿using Shared.Models.Bridge;
 using Shared.Models.Observer;
+using Shared.Models.State;
 
 namespace Shared.Models;
 public class Unit : ITurnObserver
@@ -7,8 +8,19 @@ public class Unit : ITurnObserver
     public Element Element { get; set; }
     public void OnTurnEnd()
     {
-        Health = Math.Min(MaxHealth, Health + 10);
+        if(this.GetState() is Damaged)
+        {
+            this.SetHp(this.Health + 10);
+        }
+
+        if(this.GetState() is Stunned)
+        {
+            this.receivedDamageTimes --;
+            this.SetHp(this.Health);
+        }
     }
+
+    private IState State { get; set; } = new FullHp();
     public int Health { get; set; }
 
     public int MaxHealth { get; set; }
@@ -32,5 +44,30 @@ public class Unit : ITurnObserver
     public string Type { get; set; } = string.Empty;
     public int Kills { get; set; }
 
+    public int receivedDamageTimes { get; set; } = 0;
 
+
+    public void SetState(IState state)
+    {
+        State = state;
+    }
+
+    public IState GetState()
+    {
+        return State;
+    }
+
+    public void ReceiveDamage(int damage)
+    {
+        Health -= damage;
+        receivedDamageTimes++;
+       
+        State.HandleChange(this);
+    }
+
+    public void SetHp(int hp)
+    {
+        this.Health = hp;
+        State.HandleChange(this);
+    }
 }
