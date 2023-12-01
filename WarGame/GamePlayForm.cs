@@ -4,6 +4,7 @@ using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Bridge;
 using Shared.Models.Factory;
 using Shared.Models.Observer;
+using Shared.Models.State;
 using Shared.Models.Strategy;
 using System;
 using System.Drawing;
@@ -43,7 +44,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 1;
+    private int ObstacleCount = 0;
 
     int MovementCount = 0;
     private TurnManager turnManager = new TurnManager();
@@ -436,11 +437,14 @@ public partial class GamePlayForm : Form
             }
             for (int i = this.warriors.Count - 1; i >= 0; i--)
             {
-                this.warriors[i].Health = updatedWarriors[i].Health;
+                this.warriors[i].receivedDamageTimes = updatedWarriors[i].receivedDamageTimes;
+                this.warriors[i].SetHp(updatedWarriors[i].Health);
+                //this.warriors[i].Health = updatedWarriors[i].Health;
                 this.warriors[i].Attack = updatedWarriors[i].Attack;
                 this.warriors[i].Range = updatedWarriors[i].Range;
                 this.warriors[i].Speed = updatedWarriors[i].Speed;
                 this.warriors[i].Kills = updatedWarriors[i].Kills;
+                
 
                 if (this.warriors[i].Kills == 2 && this.warriors[i].Upgraded == false)
                 {
@@ -505,7 +509,7 @@ public partial class GamePlayForm : Form
                         upgradedPictureBox.ImageLocation = tank.Image;
                     }
                 }
-                if (this.warriors[i].Health <= 0)
+                if (this.warriors[i].GetState() is Dead)
                 {
                     PictureBox deadPictureBox = pictureBoxes[i];
 
@@ -631,7 +635,11 @@ public partial class GamePlayForm : Form
     {
         if (selectedPictureBox != null)
         {
-
+            Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
+            if (unit.GetState() is Stunned)
+            {
+                return;
+            }
             int currentY = selectedPictureBox.Location.Y;
             int currentX = selectedPictureBox.Location.X;
             if (currentY - 50 >= 10)
@@ -647,7 +655,11 @@ public partial class GamePlayForm : Form
     {
         if (selectedPictureBox != null)
         {
-
+            Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
+            if (unit.GetState() is Stunned)
+            {
+                return;
+            }
             int currentY = selectedPictureBox.Location.Y;
             int currentX = selectedPictureBox.Location.X;
             if (currentY + 50 <= 470)
@@ -663,6 +675,11 @@ public partial class GamePlayForm : Form
     {
         if (selectedPictureBox != null)
         {
+            Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
+            if (unit.GetState() is Stunned)
+            {
+                return;
+            }
             int currentX = selectedPictureBox.Location.X;
             int currentY = selectedPictureBox.Location.Y;
             if (currentX - 50 >= 420)
@@ -677,9 +694,14 @@ public partial class GamePlayForm : Form
     }
 
     private async void rightButton_Click(object sender, EventArgs e)
-    {
+    {   
         if (selectedPictureBox != null)
         {
+            Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
+            if(unit.GetState() is Stunned)
+            {
+                return;
+            }
             int currentX = selectedPictureBox.Location.X;
             int currentY = selectedPictureBox.Location.Y;
             if (currentX + 50 <= 920)
@@ -713,7 +735,7 @@ public partial class GamePlayForm : Form
                 }
             }
 
-            if(obstacle)
+            if (obstacle)
             {
                 hasMoved = true;
             }
@@ -722,8 +744,10 @@ public partial class GamePlayForm : Form
 
             if (defendingWarrior != null)
             {
-                defendingWarrior.Health -= attackingWarrior.Attack;
-                if (defendingWarrior.Health <= 0)
+                defendingWarrior.ReceiveDamage(attackingWarrior.Attack);
+                //defendingWarrior.Health -= attackingWarrior.Attack;
+                //if (defendingWarrior.Health <= 0)
+                if(defendingWarrior.GetState() is Dead)
                 {
                     CheckForMyUnits(defendingWarrior.Color);
                     attackingWarrior.Kills = attackingWarrior.Kills + 1;
@@ -751,7 +775,7 @@ public partial class GamePlayForm : Form
         }
     }
 
- 
+
     private void DisplayStats(int index)
     {
 
@@ -765,6 +789,7 @@ public partial class GamePlayForm : Form
             int kills = selectedWarrior.Kills;
             bool upgraded = selectedWarrior.Upgraded;
             int speed = selectedWarrior.Speed;
+            IState state = selectedWarrior.GetState();
             int X = selectedWarrior.X;
             int Y = selectedWarrior.Y;
 
@@ -772,6 +797,7 @@ public partial class GamePlayForm : Form
             attackLabel.Text = $"Attack: {attack} Speed: {speed}";
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
             killsLabel.Text = $"Kills: {kills}";
+            StateLabel.Text = $"State: {state.GetType().ToString()}";
             if (upgraded == true)
             {
                 upgradedLabel.Text = "Upgraded";
@@ -786,6 +812,7 @@ public partial class GamePlayForm : Form
             rangeLabel.Visible = true;
             killsLabel.Visible = true;
             upgradedLabel.Visible = true;
+            StateLabel.Visible = true;
         }
     }
 
@@ -819,7 +846,7 @@ public partial class GamePlayForm : Form
 
         Unit warrior = GetWarriorFromPictureBox(selectedPictureBox);
 
-        if (warrior.Color == _player.Color && MovementCount > 0 && gameStart)
+        if (warrior.Color == _player.Color && MovementCount > 0 && gameStart && (warrior.GetState() is not Stunned))
         {
             upButton.Visible = true;
             downButton.Visible = true;
@@ -1018,5 +1045,6 @@ public partial class GamePlayForm : Form
 
         HandleClickedPicture();
     }
+
 }
 
