@@ -439,7 +439,6 @@ public partial class GamePlayForm : Form
             {
                 this.warriors[i].receivedDamageTimes = updatedWarriors[i].receivedDamageTimes;
                 this.warriors[i].SetHp(updatedWarriors[i].Health);
-                //this.warriors[i].Health = updatedWarriors[i].Health;
                 this.warriors[i].Attack = updatedWarriors[i].Attack;
                 this.warriors[i].Range = updatedWarriors[i].Range;
                 this.warriors[i].Speed = updatedWarriors[i].Speed;
@@ -745,8 +744,7 @@ public partial class GamePlayForm : Form
             if (defendingWarrior != null)
             {
                 defendingWarrior.ReceiveDamage(attackingWarrior.Attack);
-                //defendingWarrior.Health -= attackingWarrior.Attack;
-                //if (defendingWarrior.Health <= 0)
+
                 if(defendingWarrior.GetState() is Dead)
                 {
                     CheckForMyUnits(defendingWarrior.Color);
