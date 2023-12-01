@@ -130,6 +130,9 @@
     <None Update="Resources\dragon_fire.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+	  <None Update="Resources\nest_fire.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
    
   </ItemGroup>
 

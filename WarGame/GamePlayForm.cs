@@ -3,6 +3,7 @@ using Shared.Models;
 using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Bridge;
 using Shared.Models.Factory;
+using Shared.Models.Interpreter;
 using Shared.Models.Observer;
 using Shared.Models.State;
 using Shared.Models.Strategy;
@@ -12,7 +13,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Xml.Linq;
 using WarGame.Forms;
-
+using WarGame.Forms.Interpreter;
+using static System.Windows.Forms.AxHost;
 
 namespace WarGame;
 
@@ -55,6 +57,12 @@ public partial class GamePlayForm : Form
     [return: MarshalAs(UnmanagedType.Bool)]
     static extern bool AllocConsole();
 
+    [DllImport("kernel32.dll")]
+    static extern IntPtr GetConsoleWindow();
+
+    [DllImport("user32.dll")]
+    static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
     public GamePlayForm(HubConnection conn, Player player)
     {
         _conn = conn;
@@ -87,9 +95,43 @@ public partial class GamePlayForm : Form
         {
             turnManager.RegisterObserver(warrior);
         }
+
+
+        AllocConsole();
+
+        Console.WriteLine("YOU ARE " + player.Color + " TO MOVE WRITE `color class direction`");
+        ThreadPool.QueueUserWorkItem(HandleConsole, SynchronizationContext.Current);
     }
 
+    void HandleConsole(object state)
+    {
+        var contextas = (SynchronizationContext)state;
 
+        while (true)
+        {
+            var line = Console.ReadLine();
+            if (line == null)
+            {
+                break;
+            }
+            string[] parts = line.Split(' ');
+            if (parts.Length == 3)
+            {
+                string color = parts[0];
+                string type = parts[1];
+                string direction = parts[2];
+                InterpreterContext context = new InterpreterContext();
+                context.Parameter1 = color;
+                context.Parameter2 = type;
+                context.Parameter3 = direction;
+
+                InterpreterExpression moveUnit = new MoveUnit();
+
+                moveUnit.Interpret(context, contextas, this);
+            }
+
+           }
+    }
     private void SetPLayerInfo(Player player)
     {
         label4.Text = "Team: " + player.Color;
@@ -630,7 +672,7 @@ public partial class GamePlayForm : Form
     }
     private PictureBox selectedPictureBox;
 
-    private async void upButton_Click(object sender, EventArgs e)
+    public async void upButton_Click(object sender, EventArgs e)
     {
         if (selectedPictureBox != null)
         {
@@ -650,7 +692,7 @@ public partial class GamePlayForm : Form
         }
 
     }
-    private async void downButton_Click(object sender, EventArgs e)
+    public async void downButton_Click(object sender, EventArgs e)
     {
         if (selectedPictureBox != null)
         {
@@ -670,7 +712,7 @@ public partial class GamePlayForm : Form
         }
 
     }
-    private async void leftButton_Click(object sender, EventArgs e)
+    public async void leftButton_Click(object sender, EventArgs e)
     {
         if (selectedPictureBox != null)
         {
@@ -692,7 +734,7 @@ public partial class GamePlayForm : Form
 
     }
 
-    private async void rightButton_Click(object sender, EventArgs e)
+    public async void rightButton_Click(object sender, EventArgs e)
     {   
         if (selectedPictureBox != null)
         {
@@ -829,7 +871,7 @@ public partial class GamePlayForm : Form
         }
     }
 
-    private void clickablePictureBox(object sender, EventArgs e)
+    public void clickablePictureBox(object sender, EventArgs e)
     {
         upButton.Visible = false;
         downButton.Visible = false;
