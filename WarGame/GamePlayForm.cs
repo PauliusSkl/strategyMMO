@@ -57,12 +57,6 @@ public partial class GamePlayForm : Form
     [return: MarshalAs(UnmanagedType.Bool)]
     static extern bool AllocConsole();
 
-    [DllImport("kernel32.dll")]
-    static extern IntPtr GetConsoleWindow();
-
-    [DllImport("user32.dll")]
-    static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
     public GamePlayForm(HubConnection conn, Player player)
     {
         _conn = conn;
@@ -99,7 +93,8 @@ public partial class GamePlayForm : Form
 
         AllocConsole();
 
-        Console.WriteLine("YOU ARE " + player.Color + " TO MOVE WRITE `color class direction`");
+        Console.WriteLine("YOU ARE " + player.Color + " TO MOVE WRITE `class direction` 'warrior downn'");
+        Console.WriteLine("To surrender type 'ff'");
         ThreadPool.QueueUserWorkItem(HandleConsole, SynchronizationContext.Current);
     }
 
@@ -115,12 +110,13 @@ public partial class GamePlayForm : Form
                 break;
             }
             string[] parts = line.Split(' ');
-            if (parts.Length == 3)
+            InterpreterContext context = new InterpreterContext();
+            if (parts.Length == 2)
             {
-                string color = parts[0];
-                string type = parts[1];
-                string direction = parts[2];
-                InterpreterContext context = new InterpreterContext();
+                string color = this._player.Color;
+                string type = parts[0];
+                string direction = parts[1];
+                
                 context.Parameter1 = color;
                 context.Parameter2 = type;
                 context.Parameter3 = direction;
@@ -130,8 +126,25 @@ public partial class GamePlayForm : Form
                 moveUnit.Interpret(context, contextas, this);
             }
 
+            if (parts.Length == 1)
+            {
+                string color = this._player.Color;
+                string command = parts[0];
+                if (command == "ff")
+                {
+                    context.Parameter1 = color;
+                    context.Parameter2 = command;
+
+                    InterpreterExpression surrender = new Surrender();
+
+                    surrender.Interpret(context, contextas, this);
+                }
+            }
            }
     }
+
+
+
     private void SetPLayerInfo(Player player)
     {
         label4.Text = "Team: " + player.Color;
@@ -213,6 +226,7 @@ public partial class GamePlayForm : Form
                 count++;
             }
         }
+        Console.WriteLine(count);
         if (count == 1)
         {
             await _conn.SendAsync("NewTurn");
@@ -467,15 +481,15 @@ public partial class GamePlayForm : Form
         {
             if (nestHp != -999)
             {
-                foreach (var nest in nestList)
-                {
-                    nest.Health = nestHp;
+                //foreach (var nest in nestList)
+                //{
+                    //nest.Health = nestHp;
                     if (nestHp <= 0)
                     {
-                        nestList.Remove(nest);
+                        nestList.Remove(nestList[0]);
                         this.Controls.Remove(pictureBox19);
                     }
-                }
+               // }
             }
             for (int i = this.warriors.Count - 1; i >= 0; i--)
             {
@@ -1084,6 +1098,23 @@ public partial class GamePlayForm : Form
         healthLabel.Visible = true;
 
         HandleClickedPicture();
+    }
+
+    public void KillUnits(string color)
+    {
+        if(_player.Color == color)
+        {
+            foreach (var warrior in warriors)
+            {
+                if (warrior.Color == color)
+                {
+                    warrior.ReceiveDamage(1000);
+
+                }
+            }
+            _battleHub.SendAsync("UpdateWarriorsStats", warriors, -999);
+            _conn.SendAsync("NewTurn");
+        }
     }
 
 }
