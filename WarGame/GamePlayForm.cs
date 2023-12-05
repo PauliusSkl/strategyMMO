@@ -7,6 +7,7 @@ using Shared.Models.Interpreter;
 using Shared.Models.Observer;
 using Shared.Models.State;
 using Shared.Models.Strategy;
+using Shared.Models.Visitor;
 using System.Runtime.InteropServices;
 using WarGame.Forms;
 using WarGame.Forms.Interpreter;
@@ -21,7 +22,7 @@ public partial class GamePlayForm : Form
     private readonly UnitFactory _upgradedUnitFactory;
     //WARRIORS STUFF -------
     private List<PictureBox> pictureBoxes = new List<PictureBox>();
-    private List<Unit> warriors = new List<Unit>();
+    private List<Unit> units = new List<Unit>();
     //--------------------
     bool gameStart = false;
     private List<Nest> nestList = new List<Nest>();
@@ -80,7 +81,7 @@ public partial class GamePlayForm : Form
         OnReciveGameStart();
         OnReceiveDragonDead();
         //OnReceiveObstacless(); //Palikau kad buga parodyt
-        foreach (var warrior in warriors)
+        foreach (var warrior in units)
         {
             turnManager.RegisterObserver(warrior);
         }
@@ -149,7 +150,7 @@ public partial class GamePlayForm : Form
     private async void SetPLayerMoves()
     {
         MovementCount = 0;
-        foreach (var warrior in warriors)
+        foreach (var warrior in units)
         {
             if (warrior.Color == _player.Color)
             {
@@ -214,7 +215,7 @@ public partial class GamePlayForm : Form
             return;
         }
         int count = 0;
-        foreach (var warrior in warriors)
+        foreach (var warrior in units)
         {
             if (warrior.Color == color)
             {
@@ -257,54 +258,25 @@ public partial class GamePlayForm : Form
     private void InitializeWarriors()
     {
         string[] pngs = { "green", "blue", "yellow", "pink" };
-
         string imagesFolder = Path.Combine(Application.StartupPath, "Resources");
-        //Basic Warriors
+
         for (int i = 0; i < pngs.Length; i++)
         {
-            string color = pngs[i];
-            int x = 0;
-            int y = 0;
-            Unit warrior = _basicUnitFactory.CreateWarrior(color, x, y);
-            warrior.Image = Path.Combine(imagesFolder, $"warrior_{color}.png");
+            var unitCreationVisitor = new UnitCreationVisitor(pngs[i], units);
 
-            warriors.Add(warrior);
-        }
-        //Basic Archers
-        for (int i = 0; i < pngs.Length; i++)
-        {
-            string color = pngs[i];
-            int x = 0;
-            int y = 0;
-            Unit archer = _basicUnitFactory.CreateArcher(color, x, y);
-            archer.Image = Path.Combine(imagesFolder, $"archer_{color}.png");
+            Warrior warrior = new Warrior();
+            Archer archer = new Archer();
+            Mage mage = new Mage();
+            Tank tank = new Tank();
 
-            warriors.Add(archer);
+            warrior.Accept(unitCreationVisitor);
+            archer.Accept(unitCreationVisitor);
+            mage.Accept(unitCreationVisitor);
+            tank.Accept(unitCreationVisitor);
         }
-        //Basic Mages
-        for (int i = 0; i < pngs.Length; i++)
-        {
-            string color = pngs[i];
-            int x = 0;
-            int y = 0;
-            Unit mage = _basicUnitFactory.CreateMage(color, x, y);
-            mage.Image = Path.Combine(imagesFolder, $"mage_{color}.png");
 
-            warriors.Add(mage);
-        }
-        //Basic Tanks
-        for (int i = 0; i < pngs.Length; i++)
-        {
-            string color = pngs[i];
-            int x = 0;
-            int y = 0;
-            Unit tank = _basicUnitFactory.CreateTank(color, x, y);
-            tank.Image = Path.Combine(imagesFolder, $"tank_{color}.png");
-
-            warriors.Add(tank);
-        }
         Element fireElement = new FireElement();
-        Element iceElement = new IceElement();
+        _ = new IceElement();
         Nest nest = new Nest(0, 0, fireElement);
         nest.ApplyElement();
         nest.Image = Path.Combine(imagesFolder, $"nest_{nest.Color}.png");
@@ -317,16 +289,16 @@ public partial class GamePlayForm : Form
         drag.ApplyElement();
         drag.Image = Path.Combine(imagesFolder, $"dragon_{drag.Color}.png");
         //dragon = drag;
-        warriors.Add(drag);
+        units.Add(drag);
 
     }
     private void DisplayWarriorsImages()
     {
         for (int i = 0; i < pictureBoxes.Count; i++)
         {
-            pictureBoxes[i].Image = Image.FromFile(warriors[i].Image);
-            warriors[i].X = pictureBoxes[i].Location.X;
-            warriors[i].Y = pictureBoxes[i].Location.Y;
+            pictureBoxes[i].Image = Image.FromFile(units[i].Image);
+            units[i].X = pictureBoxes[i].Location.X;
+            units[i].Y = pictureBoxes[i].Location.Y;
         }
     }
 
@@ -349,7 +321,7 @@ public partial class GamePlayForm : Form
             newDragon.X = pictureBox19.Location.X;
             newDragon.Y = pictureBox19.Location.Y;
             pictureBox19.Image = Image.FromFile(newDragon.Image);
-            warriors.Add(newDragon);
+            units.Add(newDragon);
             pictureBoxes.Add(pictureBox19);
             dragonBoxes.Add(pictureBox19);
             pictureBox19.Click += clickablePictureBox;
@@ -471,6 +443,7 @@ public partial class GamePlayForm : Form
 
     private void OnReceiveWarriorList()
     {
+        var upgradeVisitor = new UnitUpgradeVisitor();
         string imagesFolder = Path.Combine(Application.StartupPath, "Resources");
         _ = _battleHub.On<List<Unit>, int>("ReceiveWarriorsStats", (updatedWarriors, nestHp) =>
         {
@@ -486,85 +459,32 @@ public partial class GamePlayForm : Form
                 }
                 // }
             }
-            for (int i = this.warriors.Count - 1; i >= 0; i--)
+            for (int i = this.units.Count - 1; i >= 0; i--)
             {
-                this.warriors[i].receivedDamageTimes = updatedWarriors[i].receivedDamageTimes;
-                this.warriors[i].SetHp(updatedWarriors[i].Health);
-                this.warriors[i].Attack = updatedWarriors[i].Attack;
-                this.warriors[i].Range = updatedWarriors[i].Range;
-                this.warriors[i].Speed = updatedWarriors[i].Speed;
-                this.warriors[i].Kills = updatedWarriors[i].Kills;
+                this.units[i].receivedDamageTimes = updatedWarriors[i].receivedDamageTimes;
+                this.units[i].SetHp(updatedWarriors[i].Health);
+                this.units[i].Attack = updatedWarriors[i].Attack;
+                this.units[i].Range = updatedWarriors[i].Range;
+                this.units[i].Speed = updatedWarriors[i].Speed;
+                this.units[i].Kills = updatedWarriors[i].Kills;
 
 
-                if (this.warriors[i].Kills == 2 && this.warriors[i].Upgraded == false)
+                if (this.units[i].Kills == 2 && this.units[i].Upgraded == false)
                 {
-                    if (warriors[i].Type == "Warrior")
-                    {
-                        string color = warriors[i].Color;
-                        int x = warriors[i].X;
-                        int y = warriors[i].Y;
-                        int kills = warriors[i].Kills;
-                        Unit warrior = _upgradedUnitFactory.CreateWarrior(color, x, y);
-                        warrior.Image = Path.Combine(imagesFolder, $"warrior_upgraded_{color}.png");
+                    if (units[i].Type == "Warrior") (units[i] as Warrior).Accept(upgradeVisitor);
+                    if (units[i].Type == "Archer") (units[i] as Archer).Accept(upgradeVisitor);
+                    if (units[i].Type == "Mage") (units[i] as Mage).Accept(upgradeVisitor);
+                    if (units[i].Type == "Tank") (units[i] as Tank).Accept(upgradeVisitor);
 
-                        warriors[i] = warrior;
-                        turnManager.RegisterObserver(warrior);
-
-                        PictureBox upgradedPictureBox = pictureBoxes[i];
-                        upgradedPictureBox.ImageLocation = warrior.Image;
-                    }
-                    if (warriors[i].Type == "Archer")
-                    {
-                        string color = warriors[i].Color;
-                        int x = warriors[i].X;
-                        int y = warriors[i].Y;
-                        int kills = warriors[i].Kills;
-                        Unit archer = _upgradedUnitFactory.CreateArcher(color, x, y);
-                        archer.Image = Path.Combine(imagesFolder, $"archer_upgraded_{color}.png");
-
-                        warriors[i] = archer;
-                        turnManager.RegisterObserver(archer);
-
-                        PictureBox upgradedPictureBox = pictureBoxes[i];
-                        upgradedPictureBox.ImageLocation = archer.Image;
-                    }
-                    if (warriors[i].Type == "Mage")
-                    {
-                        string color = warriors[i].Color;
-                        int x = warriors[i].X;
-                        int y = warriors[i].Y;
-                        int kills = warriors[i].Kills;
-                        Unit mage = _upgradedUnitFactory.CreateMage(color, x, y);
-                        mage.Image = Path.Combine(imagesFolder, $"mage_{color}.png");
-
-                        warriors[i] = mage;
-                        turnManager.RegisterObserver(mage);
-
-                        PictureBox upgradedPictureBox = pictureBoxes[i];
-                        upgradedPictureBox.ImageLocation = mage.Image;
-                    }
-                    if (warriors[i].Type == "Tank")
-                    {
-                        string color = warriors[i].Color;
-                        int x = warriors[i].X;
-                        int y = warriors[i].Y;
-                        int kills = warriors[i].Kills;
-                        Unit tank = _upgradedUnitFactory.CreateTank(color, x, y);
-                        tank.Image = Path.Combine(imagesFolder, $"tank_{color}.png");
-
-                        warriors[i] = tank;
-                        turnManager.RegisterObserver(tank);
-
-                        PictureBox upgradedPictureBox = pictureBoxes[i];
-                        upgradedPictureBox.ImageLocation = tank.Image;
-                    }
+                    turnManager.RegisterObserver(units[i]);
+                    pictureBoxes[i].ImageLocation = units[i].Image;
                 }
-                if (this.warriors[i].GetState() is Dead)
+                if (this.units[i].GetState() is Dead)
                 {
                     PictureBox deadPictureBox = pictureBoxes[i];
 
                     //Neziurekit kas cia vyksta :((
-                    if (this.warriors[i] is Dragon dragon && this.warriors[i].Color == "enemy")
+                    if (this.units[i] is Dragon dragon && this.units[i].Color == "enemy")
                     {
                         DragonDead = true;
                         this.dragonClone = dragon.ShallowClone();
@@ -589,7 +509,7 @@ public partial class GamePlayForm : Form
                     this.Controls.Remove(deadPictureBox);
 
 
-                    this.warriors.RemoveAt(i);
+                    this.units.RemoveAt(i);
 
                     this.pictureBoxes.RemoveAt(i);
                 }
@@ -606,7 +526,7 @@ public partial class GamePlayForm : Form
 
     private Unit CheckForCollision(Unit attacker, int newX, int newY)
     {
-        foreach (var enemy in warriors)
+        foreach (var enemy in units)
         {
             if (attacker == enemy || enemy.Color == attacker.Color)
             {
@@ -631,7 +551,7 @@ public partial class GamePlayForm : Form
 
     private bool CheckForTeammate(Unit attacker, int newX, int newY)
     {
-        foreach (var obstacle in warriors)
+        foreach (var obstacle in units)
         {
             if (obstacle.Color != attacker.Color)
             {
@@ -673,9 +593,9 @@ public partial class GamePlayForm : Form
     private Unit GetWarriorFromPictureBox(PictureBox pictureBox)
     {
         int selectedIndex = pictureBoxes.IndexOf(pictureBox);
-        if (selectedIndex >= 0 && selectedIndex < warriors.Count)
+        if (selectedIndex >= 0 && selectedIndex < units.Count)
         {
-            return warriors[selectedIndex];
+            return units[selectedIndex];
         }
         return null;
     }
@@ -815,7 +735,7 @@ public partial class GamePlayForm : Form
                 nestHealth = nest.Health;
             }
 
-            await _battleHub.SendAsync("UpdateWarriorsStats", warriors, nestHealth);
+            await _battleHub.SendAsync("UpdateWarriorsStats", units, nestHealth);
         }
 
         if (hasMoved)
@@ -828,9 +748,9 @@ public partial class GamePlayForm : Form
     private void DisplayStats(int index)
     {
 
-        if (index >= 0 && index < warriors.Count)
+        if (index >= 0 && index < units.Count)
         {
-            Unit selectedWarrior = warriors[index];
+            Unit selectedWarrior = units[index];
 
             int health = selectedWarrior.Health;
             int attack = selectedWarrior.Attack;
@@ -1099,7 +1019,7 @@ public partial class GamePlayForm : Form
     {
         if (_player.Color == color)
         {
-            foreach (var warrior in warriors)
+            foreach (var warrior in units)
             {
                 if (warrior.Color == color)
                 {
@@ -1107,7 +1027,7 @@ public partial class GamePlayForm : Form
 
                 }
             }
-            _battleHub.SendAsync("UpdateWarriorsStats", warriors, -999);
+            _battleHub.SendAsync("UpdateWarriorsStats", units, -999);
             _conn.SendAsync("NewTurn");
         }
     }

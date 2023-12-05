@@ -1,15 +1,10 @@
 ﻿using Shared.Models.Builder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shared.Models.AbstractUnitFactory
 {
     public class BasicUnitFactory : UnitFactory
     {
-        public Unit CreateArcher(string color, int x, int y)
+        public Archer CreateArcher(string color, int x, int y)
         {
             return new ArcherBuilder()
                 .SetHealth(50)
@@ -26,7 +21,7 @@ namespace Shared.Models.AbstractUnitFactory
                 .Build();
         }
 
-        public Unit CreateWarrior(string color, int x, int y)
+        public Warrior CreateWarrior(string color, int x, int y)
         {
             return new WarriorBuilder()
                  .SetHealth(200)
@@ -42,7 +37,7 @@ namespace Shared.Models.AbstractUnitFactory
                  .Build();
         }
 
-        public Unit CreateMage(string color, int x, int y)
+        public Mage CreateMage(string color, int x, int y)
         {
             return new MageBuilder()
                  .SetHealth(50)
@@ -59,7 +54,7 @@ namespace Shared.Models.AbstractUnitFactory
                  .Build();
         }
 
-        public Unit CreateTank(string color, int x, int y)
+        public Tank CreateTank(string color, int x, int y)
         {
             return new TankBuilder()
                  .SetHealth(300)
