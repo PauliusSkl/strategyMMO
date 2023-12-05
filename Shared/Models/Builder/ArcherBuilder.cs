@@ -1,83 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shared.Models.Builder
+﻿namespace Shared.Models.Builder
 {
-    public class ArcherBuilder : IUnitBuilder
+    public class ArcherBuilder : IUnitBuilder<Archer>
     {
         private Archer unit = new Archer();
 
-        public IUnitBuilder SetHealth(int health)
+        public IUnitBuilder<Archer> SetHealth(int health)
         {
             unit.Health = health;
             return this;
         }
 
-        public IUnitBuilder SetMaxHealth(int maxHealth)
+        public IUnitBuilder<Archer> SetMaxHealth(int maxHealth)
         {
             unit.MaxHealth = maxHealth;
             return this;
         }
 
-        public IUnitBuilder SetAttack(int attack)
+        public IUnitBuilder<Archer> SetAttack(int attack)
         {
             unit.Attack = attack;
             return this;
         }
 
-        public IUnitBuilder SetRange(int range)
+        public IUnitBuilder<Archer> SetRange(int range)
         {
             unit.Range = range;
             return this;
         }
 
-        public IUnitBuilder SetSpeed(int speed)
+        public IUnitBuilder<Archer> SetSpeed(int speed)
         {
             unit.Speed = speed;
             return this;
         }
 
-        public IUnitBuilder SetKills(int kills)
+        public IUnitBuilder<Archer> SetKills(int kills)
         {
             unit.Kills = kills;
             return this;
         }
 
-        public IUnitBuilder SetUpgraded(bool upgraded)
+        public IUnitBuilder<Archer> SetUpgraded(bool upgraded)
         {
             unit.Upgraded = upgraded;
             return this;
         }
 
-        public IUnitBuilder SetPosition(int x, int y)
+        public IUnitBuilder<Archer> SetPosition(int x, int y)
         {
             unit.X = x;
             unit.Y = y;
             return this;
         }
 
-        public IUnitBuilder SetType(string type)
+        public IUnitBuilder<Archer> SetType(string type)
         {
             unit.Type = type;
             return this;
         }
 
-        public IUnitBuilder SetColor(string color)
+        public IUnitBuilder<Archer> SetColor(string color)
         {
             unit.Color = color;
             return this;
         }
 
-        public IUnitBuilder SetArrows(int arrows)
+        public IUnitBuilder<Archer> SetArrows(int arrows)
         {
             unit.Arrows = arrows;
             return this;
         }
 
-        public Unit Build()
+        public Archer Build()
         {
             return unit;
         }

@@ -1,33 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shared.Models.Builder
+﻿namespace Shared.Models.Builder
 {
-    public interface IUnitBuilder
+    public interface IUnitBuilder<T> where T : Unit
     {
-        IUnitBuilder SetHealth(int health);
-        IUnitBuilder SetMaxHealth(int maxHealth);
-        IUnitBuilder SetAttack(int attack);
-        IUnitBuilder SetRange(int range);
-        IUnitBuilder SetSpeed(int speed);
-        IUnitBuilder SetKills(int kills);
-        IUnitBuilder SetUpgraded(bool upgraded);
-        IUnitBuilder SetPosition(int x, int y);
-        IUnitBuilder SetType(string type);
-        IUnitBuilder SetColor(string color);
-        IUnitBuilder SetMana(int mana)
+        IUnitBuilder<T> SetHealth(int health);
+        IUnitBuilder<T> SetMaxHealth(int maxHealth);
+        IUnitBuilder<T> SetAttack(int attack);
+        IUnitBuilder<T> SetRange(int range);
+        IUnitBuilder<T> SetSpeed(int speed);
+        IUnitBuilder<T> SetKills(int kills);
+        IUnitBuilder<T> SetUpgraded(bool upgraded);
+        IUnitBuilder<T> SetPosition(int x, int y);
+        IUnitBuilder<T> SetType(string type);
+        IUnitBuilder<T> SetColor(string color);
+        IUnitBuilder<T> SetMana(int mana)
         {
             // Do nothing by default
             return this;
         }
-        IUnitBuilder SetArrows(int mana)
+        IUnitBuilder<T> SetArrows(int mana)
         {
             // Do nothing by default
             return this;
         }
-        Unit Build();
+        T Build();
     }
 }

@@ -6,16 +6,17 @@ namespace Shared.Models;
 public class Unit : ITurnObserver
 {
     public Element Element { get; set; }
+
     public void OnTurnEnd()
     {
-        if(this.GetState() is Damaged)
+        if (this.GetState() is Damaged)
         {
             this.SetHp(this.Health + 10);
         }
 
-        if(this.GetState() is Stunned)
+        if (this.GetState() is Stunned)
         {
-            this.receivedDamageTimes --;
+            this.receivedDamageTimes--;
             this.SetHp(this.Health);
         }
     }
@@ -61,7 +62,7 @@ public class Unit : ITurnObserver
     {
         Health -= damage;
         receivedDamageTimes++;
-       
+
         State.HandleChange(this);
     }
 
