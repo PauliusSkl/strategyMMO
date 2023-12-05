@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Shared.Models;
 using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Bridge;
+using Shared.Models.Composite;
 using Shared.Models.Factory;
 using Shared.Models.Interpreter;
 using Shared.Models.Observer;
@@ -29,6 +30,7 @@ public partial class GamePlayForm : Form
     private bool DragonDead = false;
     private Dragon dragonClone = null;
     private Element element;
+    HealthPotion healthPotion = new HealthPotion();
 
     private List<PictureBox> dragonBoxes = new List<PictureBox>();
 
@@ -720,6 +722,10 @@ public partial class GamePlayForm : Form
                 {
                     CheckForMyUnits(defendingWarrior.Color);
                     attackingWarrior.Kills = attackingWarrior.Kills + 1;
+                    if (attackingWarrior.Upgraded == true)
+                    {
+                        attackingWarrior.AddItem(healthPotion);
+                    }
                 }
                 hasMoved = true;
             }
@@ -756,6 +762,7 @@ public partial class GamePlayForm : Form
             int attack = selectedWarrior.Attack;
             int range = selectedWarrior.Range;
             int kills = selectedWarrior.Kills;
+            int items = Math.Max(selectedWarrior.Kills - 2, 0);
             bool upgraded = selectedWarrior.Upgraded;
             int speed = selectedWarrior.Speed;
             IState state = selectedWarrior.GetState();
@@ -765,7 +772,7 @@ public partial class GamePlayForm : Form
             healthLabel.Text = $"Health: {health}";
             attackLabel.Text = $"Attack: {attack} Speed: {speed}";
             rangeLabel.Text = $"Range: {range}, X: {X}, Y: {Y}";
-            killsLabel.Text = $"Kills: {kills}";
+            killsLabel.Text = $"Kills: {kills}, Items: {items}";
             StateLabel.Text = $"State: {state.GetType().ToString()}";
             if (upgraded == true)
             {
