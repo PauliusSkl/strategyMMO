@@ -1,21 +1,21 @@
 ﻿namespace WarGame.API.Iterator;
 
-public class Iterator : IAbstractIterator
+public class Iterator<T> : IAbstractIterator<T> where T : class
 {
-    readonly GameObjAggregate _aggregate;
+    readonly GameObjAggregate<T> _aggregate;
     int current = 0;
 
-    public Iterator(GameObjAggregate aggregate)
+    public Iterator(GameObjAggregate<T> aggregate)
     {
         _aggregate = aggregate;
     }
 
-    public object CurrentItem()
+    public T CurrentItem()
     {
         return _aggregate[current];
     }
 
-    public object First()
+    public T First()
     {
         return _aggregate[0];
     }
@@ -25,11 +25,11 @@ public class Iterator : IAbstractIterator
         return current >= _aggregate.Count;
     }
 
-    public object Next()
+    public T? Next()
     {
-        object item = null;
+        T? item = null;
 
-        if(current < _aggregate.Count - 1)
+        if (current < _aggregate.Count - 1)
         {
             item = _aggregate[++current];
         }

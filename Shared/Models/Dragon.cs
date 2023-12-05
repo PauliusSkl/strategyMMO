@@ -1,11 +1,6 @@
 ﻿using Shared.Models.Bridge;
 using Shared.Models.Prototype;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WarGame.API.Iterator;
 
 namespace Shared.Models
 {
@@ -45,11 +40,16 @@ namespace Shared.Models
         {
             Dragon clone = (Dragon)this.MemberwiseClone();
             clone.Nest = new List<Nest>();
-            foreach (var nest in this.Nest)
+            var nests = new GameObjAggregate<Nest>(Nest);
+            var iterator = nests.CreateIterator();
+
+            while (!iterator.IsDone())
             {
-                Nest nestas = new Nest(nest.X, nest.Y, nest.Element);
+                var oldNest = iterator.Next();
+                Nest nestas = new Nest(oldNest!.X, oldNest!.Y, oldNest!.Element);
                 clone.Nest.Add(nestas);
             }
+
             clone.Element = this.Element;
             clone.Health = MaxHealth * 2;
             clone.Attack = Attack * 2;

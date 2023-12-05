@@ -7,14 +7,9 @@ using Shared.Models.Interpreter;
 using Shared.Models.Observer;
 using Shared.Models.State;
 using Shared.Models.Strategy;
-using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Xml.Linq;
 using WarGame.Forms;
 using WarGame.Forms.Interpreter;
-using static System.Windows.Forms.AxHost;
 
 namespace WarGame;
 
@@ -116,7 +111,7 @@ public partial class GamePlayForm : Form
                 string color = this._player.Color;
                 string type = parts[0];
                 string direction = parts[1];
-                
+
                 context.Parameter1 = color;
                 context.Parameter2 = type;
                 context.Parameter3 = direction;
@@ -140,7 +135,7 @@ public partial class GamePlayForm : Form
                     surrender.Interpret(context, contextas, this);
                 }
             }
-           }
+        }
     }
 
 
@@ -483,13 +478,13 @@ public partial class GamePlayForm : Form
             {
                 //foreach (var nest in nestList)
                 //{
-                    //nest.Health = nestHp;
-                    if (nestHp <= 0)
-                    {
-                        nestList.Remove(nestList[0]);
-                        this.Controls.Remove(pictureBox19);
-                    }
-               // }
+                //nest.Health = nestHp;
+                if (nestHp <= 0)
+                {
+                    nestList.Remove(nestList[0]);
+                    this.Controls.Remove(pictureBox19);
+                }
+                // }
             }
             for (int i = this.warriors.Count - 1; i >= 0; i--)
             {
@@ -499,7 +494,7 @@ public partial class GamePlayForm : Form
                 this.warriors[i].Range = updatedWarriors[i].Range;
                 this.warriors[i].Speed = updatedWarriors[i].Speed;
                 this.warriors[i].Kills = updatedWarriors[i].Kills;
-                
+
 
                 if (this.warriors[i].Kills == 2 && this.warriors[i].Upgraded == false)
                 {
@@ -749,11 +744,11 @@ public partial class GamePlayForm : Form
     }
 
     public async void rightButton_Click(object sender, EventArgs e)
-    {   
+    {
         if (selectedPictureBox != null)
         {
             Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
-            if(unit.GetState() is Stunned)
+            if (unit.GetState() is Stunned)
             {
                 return;
             }
@@ -801,7 +796,7 @@ public partial class GamePlayForm : Form
             {
                 defendingWarrior.ReceiveDamage(attackingWarrior.Attack);
 
-                if(defendingWarrior.GetState() is Dead)
+                if (defendingWarrior.GetState() is Dead)
                 {
                     CheckForMyUnits(defendingWarrior.Color);
                     attackingWarrior.Kills = attackingWarrior.Kills + 1;
@@ -1102,7 +1097,7 @@ public partial class GamePlayForm : Form
 
     public void KillUnits(string color)
     {
-        if(_player.Color == color)
+        if (_player.Color == color)
         {
             foreach (var warrior in warriors)
             {
