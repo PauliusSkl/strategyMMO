@@ -1,10 +1,12 @@
 ﻿using Shared.Models.Bridge;
+using Shared.Models.Composite;
 using Shared.Models.Observer;
 using Shared.Models.State;
 
 namespace Shared.Models;
-public class Unit : ITurnObserver
+public class Unit : IUnitComponent, ITurnObserver
 {
+    private readonly List<IUnitComponent> items = new List<IUnitComponent>();
     public Element Element { get; set; }
     public void OnTurnEnd()
     {
@@ -18,6 +20,24 @@ public class Unit : ITurnObserver
             this.receivedDamageTimes --;
             this.SetHp(this.Health);
         }
+    }
+
+    public void AddItem(IUnitComponent item)
+    {
+        items.Add(item);
+        this.Health += item.Health;
+        this.Attack += item.Attack;
+        this.MaxHealth += item.MaxHealth;
+        this.Range += item.Range;
+    }
+
+    public void RemoveItem(IUnitComponent item)
+    {
+        items.Remove(item);
+        this.Health -= item.Health;
+        this.Attack -= item.Attack;
+        this.MaxHealth -= item.MaxHealth;
+        this.Range -= item.Range;
     }
 
     private IState State { get; set; } = new FullHp();
