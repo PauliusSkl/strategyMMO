@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using WarGame.API.Iterator;
 
 namespace Shared.Models.Observer
 {
@@ -22,9 +18,12 @@ namespace Shared.Models.Observer
 
         public void EndTurn()
         {
-            foreach (var observer in observers)
+            var observersAggregate = new GameObjAggregate<ITurnObserver>(observers);
+            var iterator = observersAggregate.CreateIterator();
+
+            while (iterator.IsDone())
             {
-                observer.OnTurnEnd(); //siunčia eventa 
+                iterator.Next()!.OnTurnEnd();
             }
         }
     }
