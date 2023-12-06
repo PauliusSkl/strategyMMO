@@ -2,10 +2,10 @@
 
 public class Iterator<T> : IAbstractIterator<T> where T : class
 {
-    readonly GameObjAggregate<T> _aggregate;
+    readonly IAggregate<T> _aggregate;
     int current = 0;
 
-    public Iterator(GameObjAggregate<T> aggregate)
+    public Iterator(IAggregate<T> aggregate)
     {
         _aggregate = aggregate;
     }

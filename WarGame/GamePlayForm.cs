@@ -10,6 +10,7 @@ using Shared.Models.State;
 using Shared.Models.Strategy;
 using Shared.Models.Visitor;
 using System.Runtime.InteropServices;
+using WarGame.API.Iterator;
 using WarGame.Forms;
 using WarGame.Forms.Interpreter;
 
@@ -575,8 +576,12 @@ public partial class GamePlayForm : Form
 
     private Nest CheckForNest(Unit attacker, int newX, int newY)
     {
-        foreach (var nest in nestList)
+        var nests = new ListAggregate<Nest>(nestList);
+        var iterator = nests.CreateIterator();
+
+        while (!iterator.IsDone())
         {
+            var nest = iterator.Next();
             int range = attacker.Range;
             int attackRange = (range - 1) * 50;
 

@@ -18,7 +18,7 @@ namespace Shared.Models.Observer
 
         public void EndTurn()
         {
-            var observersAggregate = new GameObjAggregate<ITurnObserver>(observers);
+            var observersAggregate = new ListAggregate<ITurnObserver>(observers);
             var iterator = observersAggregate.CreateIterator();
 
             while (iterator.IsDone())

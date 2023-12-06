@@ -1,10 +1,12 @@
-﻿namespace WarGame.API.Iterator;
+﻿using System.Collections;
+using WarGame.API.Iterator;
 
-public class GameObjAggregate<T> : IAggregate<T> where T : class
+namespace Shared.Models.Iterator;
+public class ArrayListAggregate<T> : IAggregate<T> where T : class
 {
-    readonly List<T> items = new();
+    readonly ArrayList items = new();
 
-    public GameObjAggregate(List<T> objects)
+    public ArrayListAggregate(List<T> objects)
     {
         foreach (var obj in objects)
             if (obj != null) items.Add(obj);
@@ -22,7 +24,8 @@ public class GameObjAggregate<T> : IAggregate<T> where T : class
 
     public T this[int index]
     {
-        get { return items[index]; }
+        get { return items[index] as T; }
         set { items.Insert(index, value); }
     }
 }
+
