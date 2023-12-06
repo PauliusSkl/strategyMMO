@@ -20,21 +20,21 @@ namespace Shared.Models
 
         public void ApplyEffect(Unit unit)
         {
-            if(ValidateObstacle(unit) && ValidateIfClose(unit))
+            if (ValidateObstacle(unit) && ValidateIfClose(unit))
             {
                 ApplyEffectStrategy(unit);
             }
-            
+
             LogEffectApplied();
         }
 
         protected abstract bool ValidateObstacle(Unit unit);
         protected abstract void ApplyEffectStrategy(Unit unit);
-        protected virtual bool ValidateIfClose(Unit unit)
+        protected bool ValidateIfClose(Unit unit)
         {
             int gridSize = 50;
 
-            if(ValidateIfIntersects(unit.X, unit.Y - gridSize))
+            if (ValidateIfIntersects(unit.X, unit.Y - gridSize))
             {
                 return true;
             }
@@ -49,7 +49,7 @@ namespace Shared.Models
                 return true;
             }
 
-            if(ValidateIfIntersects(unit.X + gridSize, unit.Y))
+            if (ValidateIfIntersects(unit.X + gridSize, unit.Y))
             {
                 return true;
             }
@@ -72,11 +72,11 @@ namespace Shared.Models
             return false;
 
         }
-        
+
 
         private void LogEffectApplied()
         {
-           
+
         }
     }
 }

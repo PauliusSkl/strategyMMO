@@ -29,9 +29,9 @@ public class Iterator<T> : IAbstractIterator<T> where T : class
     {
         T? item = null;
 
-        if (current < _aggregate.Count - 1)
+        if (current < _aggregate.Count)
         {
-            item = _aggregate[++current];
+            item = _aggregate[current++];
         }
 
         return item;

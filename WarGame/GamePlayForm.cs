@@ -266,15 +266,25 @@ public partial class GamePlayForm : Form
         for (int i = 0; i < pngs.Length; i++)
         {
             var unitCreationVisitor = new UnitCreationVisitor(pngs[i], units);
-
             Warrior warrior = new Warrior();
-            Archer archer = new Archer();
-            Mage mage = new Mage();
-            Tank tank = new Tank();
-
             warrior.Accept(unitCreationVisitor);
+        }
+        for (int i = 0; i < pngs.Length; i++)
+        {
+            var unitCreationVisitor = new UnitCreationVisitor(pngs[i], units);
+            Archer archer = new Archer();
             archer.Accept(unitCreationVisitor);
+        }
+        for (int i = 0; i < pngs.Length; i++)
+        {
+            var unitCreationVisitor = new UnitCreationVisitor(pngs[i], units);
+            Mage mage = new Mage();
             mage.Accept(unitCreationVisitor);
+        }
+        for (int i = 0; i < pngs.Length; i++)
+        {
+            var unitCreationVisitor = new UnitCreationVisitor(pngs[i], units);
+            Tank tank = new Tank();
             tank.Accept(unitCreationVisitor);
         }
 
@@ -826,6 +836,7 @@ public partial class GamePlayForm : Form
         DisplayStats(selectedIndex);
 
         Unit warrior = GetWarriorFromPictureBox(selectedPictureBox);
+
 
         if (warrior.Color == _player.Color && MovementCount > 0 && gameStart && (warrior.GetState() is not Stunned))
         {
