@@ -576,7 +576,7 @@ public partial class GamePlayForm : Form
 
     private Nest CheckForNest(Unit attacker, int newX, int newY)
     {
-        var nests = new GameObjAggregate<Nest>(nestList);
+        var nests = new ListAggregate<Nest>(nestList);
         var iterator = nests.CreateIterator();
 
         while (!iterator.IsDone())

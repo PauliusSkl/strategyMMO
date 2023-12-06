@@ -7,7 +7,7 @@ public class PlayerNames : IStrategy
 {
     public GameStatusModel DoOperation(GameStatusModel model)
     {
-        var playerList = new GameObjAggregate<Player>(PlayersList.GetPlayers());
+        var playerList = new ListAggregate<Player>(PlayersList.GetPlayers());
         var iterator = playerList.CreateIterator();
         var names = new List<string>();
 

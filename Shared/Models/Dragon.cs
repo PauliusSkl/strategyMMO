@@ -40,7 +40,7 @@ namespace Shared.Models
         {
             Dragon clone = (Dragon)this.MemberwiseClone();
             clone.Nest = new List<Nest>();
-            var nests = new GameObjAggregate<Nest>(Nest);
+            var nests = new ListAggregate<Nest>(Nest);
             var iterator = nests.CreateIterator();
 
             while (!iterator.IsDone())
