@@ -6,6 +6,7 @@ using Shared.Models.Composite;
 using Shared.Models.Factory;
 using Shared.Models.Interpreter;
 using Shared.Models.Observer;
+using Shared.Models.Proxy;
 using Shared.Models.State;
 using Shared.Models.Strategy;
 using Shared.Models.Visitor;
@@ -836,9 +837,10 @@ public partial class GamePlayForm : Form
         DisplayStats(selectedIndex);
 
         Unit warrior = GetWarriorFromPictureBox(selectedPictureBox);
+        var warriorMovement = new WarriorMovement(warrior, _player, MovementCount, gameStart);
+        var warriorMovementProxy = new WarriorMovementProxy(warriorMovement);
 
-
-        if (warrior.Color == _player.Color && MovementCount > 0 && gameStart && (warrior.GetState() is not Stunned))
+        if (warriorMovementProxy.CanEnableMovement())
         {
             upButton.Visible = true;
             downButton.Visible = true;
