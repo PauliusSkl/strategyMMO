@@ -1,18 +1,19 @@
 ﻿using Shared.Models.Strategy;
+using System.Drawing;
 
 namespace Shared.Models
 {
     public class Mountain : Obstacle
     {
         public int Height { get; set; }
-        
 
-        public Mountain(int x, int y, int height)
+
+        public Mountain(int x, int y, int height, Image image)
         {
             X = x;
             Y = y;
             Height = height;
-            Image = "Resources/obstacle_mountain.png";
+            Image = image;
             _effectStrategy = new SpeedStrategy();
         }
 
@@ -43,7 +44,7 @@ namespace Shared.Models
                 return false;
             }
 
-            if(_effectStrategy.GetName() == "Attack" && unit.attackRaised)
+            if (_effectStrategy.GetName() == "Attack" && unit.attackRaised)
             {
                 return false;
             }
