@@ -1,16 +1,18 @@
 ﻿using Shared.Models.Strategy;
+using System.Drawing;
+
 namespace Shared.Models
 {
     public class Lava : Obstacle
     {
 
         public int Damage { get; set; }
-        public Lava(int x, int y, int damage)
+        public Lava(int x, int y, int damage, Image image)
         {
             X = x;
             Y = y;
             Damage = damage;
-            Image = "Resources/obstacle_lava.png";
+            Image = image;
             _effectStrategy = new DamageStrategy();
 
         }

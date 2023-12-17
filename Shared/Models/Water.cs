@@ -1,5 +1,5 @@
 ﻿using Shared.Models.Strategy;
-
+using System.Drawing;
 
 namespace Shared.Models
 {
@@ -7,12 +7,12 @@ namespace Shared.Models
     {
         public int SlowLevel { get; set; }
 
-        public Water(int x, int y, int slowLevel)
+        public Water(int x, int y, int slowLevel, Image image)
         {
             X = x;
             Y = y;
             SlowLevel = slowLevel;
-            Image = "Resources/obstacle_water.png";
+            Image = image;
             _effectStrategy = new HealingStrategy();
         }
 
@@ -28,9 +28,9 @@ namespace Shared.Models
 
         public override void SetEffectStrategy(IEffectStrategy effectStrategy)
         {
-           this._effectStrategy = effectStrategy;
+            this._effectStrategy = effectStrategy;
         }
- 
+
         protected sealed override void ApplyEffectStrategy(Unit unit)
         {
             _effectStrategy.ApplyEffect(unit);

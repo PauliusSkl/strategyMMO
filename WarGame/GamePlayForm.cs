@@ -4,6 +4,7 @@ using Shared.Models.AbstractUnitFactory;
 using Shared.Models.Bridge;
 using Shared.Models.Composite;
 using Shared.Models.Factory;
+using Shared.Models.Flyweight;
 using Shared.Models.Interpreter;
 using Shared.Models.Observer;
 using Shared.Models.Proxy;
@@ -23,6 +24,9 @@ public partial class GamePlayForm : Form
     private readonly Player _player;
     private readonly UnitFactory _basicUnitFactory;
     private readonly UnitFactory _upgradedUnitFactory;
+
+    private ObstacleImageFactory _obstacleImageFactory = new ObstacleImageFactory();
+
     //WARRIORS STUFF -------
     private List<PictureBox> pictureBoxes = new List<PictureBox>();
     private List<Unit> units = new List<Unit>();
@@ -46,7 +50,7 @@ public partial class GamePlayForm : Form
     private bool AddingMountain = false;
     private bool AddingLava = false;
 
-    private int ObstacleCount = 0;
+    private int ObstacleCount = 2;
 
     int MovementCount = 0;
     private TurnManager turnManager = new TurnManager();
@@ -398,7 +402,7 @@ public partial class GamePlayForm : Form
 
             newObstaclePictureBox.Location = new Point(x, y);
 
-            newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
+            newObstaclePictureBox.Image = obstacle.Image;
 
             newObstaclePictureBox.Click += Obstacle_Click;
 
@@ -432,7 +436,7 @@ public partial class GamePlayForm : Form
                 break;
         }
 
-        return obstacleCreator.CreateObstacle(x, y);
+        return obstacleCreator.CreateObstacle(x, y, _obstacleImageFactory);
     }
 
     private void OnReceivePictureCoordinates()
@@ -918,16 +922,14 @@ public partial class GamePlayForm : Form
 
             newObstaclePictureBox.Click += Obstacle_Click;
 
-            Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y);
+            Obstacle obstacle = obstacleCreator.CreateObstacle(newObstaclePictureBox.Location.X, newObstaclePictureBox.Location.Y, _obstacleImageFactory);
 
             obstaclesPlaces.Add(obstacle);
             //await _battleHub.SendAsync("UpdateObstaclesOnGrids", obstaclesPlaces); // Neveike taip :( labai idomus bugas nes veikia pries idedant i masyva
 
             await _battleHub.SendAsync("UpdateObstaclesOnGrid", obstacle.X, obstacle.Y, obstacle.GetType().ToString());
 
-            newObstaclePictureBox.Image = Image.FromFile(obstacle.Image);
-
-
+            newObstaclePictureBox.Image = obstacle.Image;
 
             Controls.Add(newObstaclePictureBox);
             newObstaclePictureBox.BringToFront();

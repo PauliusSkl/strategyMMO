@@ -6,12 +6,11 @@ namespace Shared.Models
 {
     public abstract class Obstacle
     {
-
         public int X { get; set; }
 
         public int Y { get; set; }
 
-        public string Image { get; set; } = string.Empty;
+        public Image Image { get; set; }
 
         public abstract List<string> DisplayInfo();
 
