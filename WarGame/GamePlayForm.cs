@@ -14,6 +14,7 @@ using Shared.Models.Visitor;
 using System.Runtime.InteropServices;
 using WarGame.API.Iterator;
 using WarGame.Forms;
+using WarGame.Forms.ChainOfResponsibility;
 using WarGame.Forms.Interpreter;
 
 namespace WarGame;
@@ -24,7 +25,6 @@ public partial class GamePlayForm : Form
     private readonly Player _player;
     private readonly UnitFactory _basicUnitFactory;
     private readonly UnitFactory _upgradedUnitFactory;
-
     private ObstacleImageFactory _obstacleImageFactory = new ObstacleImageFactory();
 
     //WARRIORS STUFF -------
@@ -49,13 +49,13 @@ public partial class GamePlayForm : Form
     private bool AddingWater = false;
     private bool AddingMountain = false;
     private bool AddingLava = false;
-
-    private int ObstacleCount = 2;
+    public bool MovementHandled { get; set; }
+    private int ObstacleCount = 0;
 
     int MovementCount = 0;
     private TurnManager turnManager = new TurnManager();
 
-    private readonly HubConnection _battleHub = new BattleHub().GetInstance();
+    public readonly HubConnection _battleHub = new BattleHub().GetInstance();
 
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -70,7 +70,6 @@ public partial class GamePlayForm : Form
 
         InitializeComponent();
         InitializeWarriors();
-
         AddPictureBoxesToList();
         DisplayWarriorsImages();
 
@@ -85,6 +84,15 @@ public partial class GamePlayForm : Form
         OnReceiveStrategies();
         OnAllTurnsEnded();
         OnDragonMove();
+
+        IMovementHandler moveUpHandler = new MoveUpHandler(this);
+        IMovementHandler moveDownHandler = new MoveDownHandler(this);
+        IMovementHandler moveLeftHandler = new MoveLeftHandler(this);
+        IMovementHandler moveRightHandler = new MoveRightHandler(this);
+
+        moveUpHandler.SetSuccessor(moveDownHandler);
+        moveDownHandler.SetSuccessor(moveLeftHandler);
+        moveLeftHandler.SetSuccessor(moveRightHandler);
 
         OnReciveGameStart();
         OnReceiveDragonDead();
@@ -101,7 +109,6 @@ public partial class GamePlayForm : Form
         Console.WriteLine("To surrender type 'ff'");
         ThreadPool.QueueUserWorkItem(HandleConsole, SynchronizationContext.Current);
     }
-
     void HandleConsole(object state)
     {
         var contextas = (SynchronizationContext)state;
@@ -155,7 +162,7 @@ public partial class GamePlayForm : Form
         label4.ForeColor = Color.FromName(player.Color);
     }
 
-    private async void SetPLayerMoves()
+    public async void SetPLayerMoves()
     {
         MovementCount = 0;
         foreach (var warrior in units)
@@ -172,7 +179,7 @@ public partial class GamePlayForm : Form
 
         label13.Text = "Moves left: " + MovementCount;
     }
-    private void UpdateObstacleCountLabel()
+    public void UpdateObstacleCountLabel()
     {
         label14.Text = "Game not started";
         obstacleCountLabel.Text = "Obstacles to place: " + ObstacleCount;
@@ -199,7 +206,7 @@ public partial class GamePlayForm : Form
         });
     }
 
-    private async void UpdateLabelInfo()
+    public async void UpdateLabelInfo()
     {
         MovementCount--;
         label13.Text = "Moves left: " + MovementCount;
@@ -612,7 +619,7 @@ public partial class GamePlayForm : Form
 
         return null;
     }
-    private Unit GetWarriorFromPictureBox(PictureBox pictureBox)
+    public Unit GetWarriorFromPictureBox(PictureBox pictureBox)
     {
         int selectedIndex = pictureBoxes.IndexOf(pictureBox);
         if (selectedIndex >= 0 && selectedIndex < units.Count)
@@ -621,91 +628,33 @@ public partial class GamePlayForm : Form
         }
         return null;
     }
-    private PictureBox selectedPictureBox;
+    public PictureBox selectedPictureBox;
+    public PictureBox SelectedPictureBox { get; set; }
 
     public async void upButton_Click(object sender, EventArgs e)
     {
-        if (selectedPictureBox != null)
-        {
-            Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
-            if (unit.GetState() is Stunned)
-            {
-                return;
-            }
-            int currentY = selectedPictureBox.Location.Y;
-            int currentX = selectedPictureBox.Location.X;
-            if (currentY - 50 >= 10)
-            {
-                int newY = currentY - 50;
-                handleBattle(selectedPictureBox, currentX, newY);
-            }
-            await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
-        }
-
+        IMovementHandler moveUpHandler = new MoveUpHandler(this);
+        await moveUpHandler.HandleMovement("upButton", this, selectedPictureBox);
     }
     public async void downButton_Click(object sender, EventArgs e)
     {
-        if (selectedPictureBox != null)
-        {
-            Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
-            if (unit.GetState() is Stunned)
-            {
-                return;
-            }
-            int currentY = selectedPictureBox.Location.Y;
-            int currentX = selectedPictureBox.Location.X;
-            if (currentY + 50 <= 470)
-            {
-                int newY = currentY + 50;
-                handleBattle(selectedPictureBox, currentX, newY);
-            }
-            await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
-        }
+        IMovementHandler moveUpHandler = new MoveUpHandler(this);
+        await moveUpHandler.HandleMovement("downButton", this, selectedPictureBox);
 
     }
     public async void leftButton_Click(object sender, EventArgs e)
     {
-        if (selectedPictureBox != null)
-        {
-            Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
-            if (unit.GetState() is Stunned)
-            {
-                return;
-            }
-            int currentX = selectedPictureBox.Location.X;
-            int currentY = selectedPictureBox.Location.Y;
-            if (currentX - 50 >= 420)
-            {
-                int newX = currentX - 50;
-
-                handleBattle(selectedPictureBox, newX, currentY);
-            }
-            await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
-        }
-
+        IMovementHandler moveUpHandler = new MoveUpHandler(this);
+        await moveUpHandler.HandleMovement("leftButton", this, selectedPictureBox);
     }
 
     public async void rightButton_Click(object sender, EventArgs e)
     {
-        if (selectedPictureBox != null)
-        {
-            Unit unit = GetWarriorFromPictureBox(selectedPictureBox);
-            if (unit.GetState() is Stunned)
-            {
-                return;
-            }
-            int currentX = selectedPictureBox.Location.X;
-            int currentY = selectedPictureBox.Location.Y;
-            if (currentX + 50 <= 920)
-            {
-                int newX = currentX + 50;
-                handleBattle(selectedPictureBox, newX, currentY);
-            }
-            await _battleHub.SendAsync("UpdatePictureCoordinates", selectedPictureBox.Name, selectedPictureBox.Location.X, selectedPictureBox.Location.Y);
-        }
+        IMovementHandler moveUpHandler = new MoveUpHandler(this);
+        await moveUpHandler.HandleMovement("rightButton", this, selectedPictureBox);
     }
 
-    private async void handleBattle(PictureBox currentWarrior, int X, int Y)
+    public async void handleBattle(PictureBox currentWarrior, int X, int Y)
     {
         bool hasMoved = false;
         Unit attackingWarrior = GetWarriorFromPictureBox(currentWarrior);
@@ -976,7 +925,7 @@ public partial class GamePlayForm : Form
         ChangeAllStrats();
     }
 
-    private async void ChangeAllStrats()
+    public async void ChangeAllStrats()
     {
         foreach (var obstacle in obstaclesPlaces)
         {
