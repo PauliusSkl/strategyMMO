@@ -19,5 +19,9 @@ namespace Shared.Models.Proxy
         {
             return realMovement.CanEnableMovement();
         }
+        public bool PerformAdditionalCheck()
+        {
+            return true; 
+        }
     }
 }

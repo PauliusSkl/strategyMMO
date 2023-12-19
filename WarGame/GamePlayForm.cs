@@ -793,7 +793,7 @@ public partial class GamePlayForm : Form
         var warriorMovement = new WarriorMovement(warrior, _player, MovementCount, gameStart);
         var warriorMovementProxy = new WarriorMovementProxy(warriorMovement);
 
-        if (warriorMovementProxy.CanEnableMovement())
+        if (warriorMovementProxy.CanEnableMovement() && warriorMovementProxy.PerformAdditionalCheck())
         {
             upButton.Visible = true;
             downButton.Visible = true;
